@@ -6,7 +6,7 @@
 		<li><a href="index.php?route=product/product&product_id=222"><span class="product2"></span>Product 2</a></li>
 	</ul>
 </div>
-
+<!-- Hey Yoonseo -->
 
 
 <?php echo $footer; ?>
