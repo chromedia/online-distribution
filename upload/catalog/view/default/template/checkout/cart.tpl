@@ -69,7 +69,7 @@ $_SESSION['shipping_address'] = array(
 	<!-- Cart Block -->
 	<div id="block-cart">
 
-		<div id="title-cart" class="title-cart">Items</div><br/>
+		<div id="title-cart" class="title-cart">Current Order</div><br/>
 
 	  <!-- Cart -->
 	  <form action="" method="post" enctype="multipart/form-data" id="cart">
@@ -156,7 +156,6 @@ $_SESSION['shipping_address'] = array(
 	</div>	
 
 	<div id="block-cart-buttons">
-		<button id="button-review" type="button">Review Order</button>
 		<button id="button-checkout" type="button">Place Order</button>
 	</div>
 

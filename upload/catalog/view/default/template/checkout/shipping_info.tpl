@@ -89,6 +89,8 @@
 
 	<div id="title-shipping-speeds" class="title-cart">Shipping Speeds</div>
 
+	<div>Please enter your shipping information in order to retrieve speeds and rates</div>
+
 	<form id="form-shipping-speeds">
 		<div></div>
 	</form>

@@ -12,17 +12,28 @@
 jQuery(function($) {
   $('.field-payment').on('change', function(e) {
 
-  	// Loading GIF
+  	// Get values of payment fields
+  	var empty = $('.field-payment').filter(function() {
+        return $(this).value === "";
+    });    
+
+    // If at least one input is empty, stop function
+    if(empty.length) {
+        return;
+    }    
+
+	// Loading GIF
 	$('#title-payment-info').append('&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />');
 
 	// Set Form
 	var $form = $('#payment-form');
-     
+	 
 	// Send Form to Stripe and Activate Stripe Response Handler
 	Stripe.card.createToken($form, stripeResponseHandler);
-     
+	 
 	// Prevent the form from submitting with the default action
 	return false;
+
   });
 });
 
