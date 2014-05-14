@@ -36,16 +36,21 @@
 		<!-- Product Images -->
 		<?php if ($thumb || $images) { ?>
 		<div class="left">
+
+			<!-- Thumbnail Image -->
 			<?php if ($thumb) { ?>
-			<div class="image"><a href="<?php echo $popup; ?>" title="<?php echo $heading_title; ?>" class="colorbox"><img src="<?php echo $thumb; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" id="image" /></a></div>
+				<div class="image"><a href="<?php echo $popup; ?>" title="<?php echo $heading_title; ?>" class="colorbox"><img src="<?php echo $thumb; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" id="image" /></a></div>
 			<?php } ?>
+
+			<!-- Images Gallery -->
 			<?php if ($images) { ?>
-			<div class="image-additional">
-			<?php foreach ($images as $image) { ?>
-			<a href="<?php echo $image['popup']; ?>" title="<?php echo $heading_title; ?>" class="colorbox"><img src="<?php echo $image['thumb']; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" /></a>
+				<div class="image-additional">
+				<?php foreach ($images as $image) { ?>
+				<a href="<?php echo $image['popup']; ?>" title="<?php echo $heading_title; ?>" class="colorbox"><img src="<?php echo $image['thumb']; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" /></a>
+				<?php } ?>
+				</div>
 			<?php } ?>
-			</div>
-			<?php } ?>
+
 		</div>
 		<?php } ?>
 

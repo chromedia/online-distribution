@@ -261,6 +261,8 @@ class ControllerProductProduct extends Controller {
 				$this->data['stock'] = $this->language->get('text_instock');
 			}
 
+
+			// Image
 			$this->load->model('tool/image');
 
 			if ($product_info['image']) {
@@ -275,6 +277,7 @@ class ControllerProductProduct extends Controller {
 				$this->data['thumb'] = '';
 			}
 
+			// Images
 			$this->data['images'] = array();
 
 			$results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
@@ -285,6 +288,8 @@ class ControllerProductProduct extends Controller {
 					'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'))
 				);
 			}	
+
+			// Custom Prices
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
 				$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
