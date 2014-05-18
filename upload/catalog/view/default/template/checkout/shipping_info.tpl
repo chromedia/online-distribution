@@ -42,42 +42,52 @@
 		<form action="" method="POST" id="shipping-form-new">
 			<input type="hidden" name="shipping_address" value="1"/>
 
-			<!-- Name Column -->
-			<div id="column-shipping-name">
-				<div><?php echo "Name"; ?></div>
-				<div><input id="field-shipping-name" type="text" name="name" value="Anon Tuni" size="25" /></div>
+			<div class="field-shipping">
+
+				<!-- Name Column -->
+				<div id="column-shipping-name">
+					<div><?php echo "Name"; ?></div>
+					<div><input id="field-shipping-name" type="text" name="name" value="Anon Tuni" size="25" /></div>
+				</div>	
+
+				<!-- Street Address Column -->
+				<div id="column-shipping-street-address">
+					<?php echo "Street Address"; ?>
+					<input id="field-shipping-street-address" type="text" name="address" value="3002 York St" size="25" />
+				</div>	
+
+				<!-- City -->
+				<div id="column-shipping-city">
+					<div><?php echo 'City'; ?></div>
+					<div><input id="field-shipping-city" type="text" name="city" value="Denver" size="25" /></div>
+				</div>
+
+				<!-- State/Province -->
+				<div id="column-shipping-region">
+					<div><?php echo "State/Province"; ?></div>
+					<input id="field-shipping-region" type="text" name="region" value="CO" maxlength="2"/>
+				</div>		
+
+				<!-- Postal Code -->
+				<div id="column-shipping-postcode">
+					<div><?php echo "Postal Code"; ?></div>
+					<div><input id="field-shipping-postcode" type="text" name="postcode" value="80205" size="10" /></div>
+				</div>
+				
+
+				<!-- Country and Postal Code -->
+				<div id="column-shipping-country">
+					<div><?php echo "Country"; ?></div>
+					<div><input id="field-shipping-country" type="text" name="country" value="US" size="25" /></div>
+				</div>
+
+				<!-- Email Column -->
+				<div id="column-shipping-email">
+					<div><?php echo "Email"; ?></div>
+					<div><input id="field-shipping-email" type="text" name="email" value="ykang404@gmail.com" size="25" /></div>
+				</div>				
+
 			</div>	
-
-			<!-- Street Address Column -->
-			<div id="column-shipping-street-address">
-				<?php echo "Street Address"; ?>
-				<input id="field-shipping-street-address" type="text" name="address" value="3002 York St" size="25" />
-			</div>	
-
-			<!-- City -->
-			<div id="column-shipping-city">
-				<div><?php echo 'City'; ?></div>
-				<div><input id="field-shipping-city" type="text" name="city" value="Denver" size="25" /></div>
-			</div>
-
-			<!-- State/Province -->
-			<div id="column-shipping-region">
-				<div><?php echo "State/Province"; ?></div>
-				<input id="field-shipping-region" type="text" name="region" value="CO" size="15"/>
-			</div>		
-
-			<!-- Postal Code -->
-			<div id="column-shipping-postcode">
-				<div><?php echo "Postal Code"; ?></div>
-				<div><input id="field-shipping-postcode" type="text" name="postcode" value="80205" size="10" /></div>
-			</div>
-			
-
-			<!-- Country and Postal Code -->
-			<div id="column-shipping-country">
-				<div><?php echo "Country"; ?></div>
-				<div><input id="field-shipping-country" type="text" name="country" value="US" size="25" /></div>
-			</div>
 
 		</form>
 	</div>
@@ -130,7 +140,26 @@
 <!-- Get shipping address -->
 <script type="text/javascript"><!--
 jQuery(function($) {
-  $('#button-shipping-address').on('click', function(event) {
+  $('.field-shipping').on('change', function(event) {
+
+  	shipping_info = false;
+ 
+  	// If any shipping fields are empty, stop trigger
+  	var index;
+  	var ship_array = [
+  		$('#field-shipping-name'),
+  		$('#field-shipping-street-address'),
+  		$('#field-shipping-city'),
+  		$('#field-shipping-region'),
+  		$('#field-shipping-postcode'),
+  		$('#field-shipping-country'),
+  		$('#field-shipping-email')
+  	];
+  	for (index = 0; index < ship_array.length; ++index) {
+  		if (ship_array[index].val().length == 0) {
+  			return;
+  		}
+  	}
 
 	// Select shipping address form
 	if (address=='new') {
@@ -164,8 +193,10 @@ jQuery(function($) {
 				if(success == 1){
 					// Show successful confirmation
 					$('#title-shipping-address').html(show_success);
+					// Set Shipping Success
+					shipping_info = true;
 					// Calculate Packages
-									
+					$('#button-cart').click();				
 				}
 				else {
 					// Show error

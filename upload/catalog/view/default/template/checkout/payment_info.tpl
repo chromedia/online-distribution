@@ -12,15 +12,17 @@
 jQuery(function($) {
   $('.field-payment').on('change', function(e) {
 
-  	// Get values of payment fields
-  	var empty = $('.field-payment').filter(function() {
-        return $(this).value === "";
-    });    
-
-    // If at least one input is empty, stop function
-    if(empty.length) {
-        return;
-    }    
+  	// If any payment fields empty, stop trigger
+  	var index;
+  	var payment_array = [
+	  	$('#field-card-number'),
+	  	$('#field-card-code')
+  	];
+  	for (index = 0; index < payment_array.length; ++index) {
+  		if (payment_array[index].val().length == 0) {
+  			return;
+  		}
+  	}
 
 	// Loading GIF
 	$('#title-payment-info').append('&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />');
@@ -129,7 +131,7 @@ var stripeResponseHandler = function(status, response) {
     <form action="" method="POST" id="payment-form">
     <span class="payment-errors" id="payment-errors"></span>
 
-     <!-- Card Number -->
+     	<!-- Card Number -->
     	<div id="column-card-number">
     		<div>Credit Card Number</div>
     		<div><input type="text" id="field-card-number" maxlength="16" data-stripe="number" autocomplete="off" class="card-number input-medium field-payment" value="4242424242424242"></div>
@@ -167,12 +169,12 @@ var stripeResponseHandler = function(status, response) {
     	<div id="error-expiry-month" class="error-payment"></div>
     	<div id="error-expiry-year" class="error-payment"></div>
 
-    	<!-- Security Code -->
-     <div id="column-card-security">
-    		<div>Security Code</div>
-    		<div><input type="text" id="field-card-code" maxlength="4" data-stripe="cvc" autocomplete="off" class="card-cvc input-mini field-payment" value="424"></div>
-     </div>
-     <div id="error-security-code" class="error-payment"></div>
+	    <!-- Security Code -->
+		<div id="column-card-security">
+			<div>Security Code</div>
+			<div><input type="text" id="field-card-code" maxlength="4" data-stripe="cvc" autocomplete="off" class="card-cvc input-mini field-payment" value="424"></div>
+		</div>
+		<div id="error-security-code" class="error-payment"></div>
 
     </form>
 

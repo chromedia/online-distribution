@@ -268,7 +268,7 @@ class Cart {
 			$postcode = $this->request->post['postcode'];
 			$region = $this->request->post['region'];
 			$country = $this->request->post['country'];	
-			$country = $this->request->post['email'];	
+			$email = $this->request->post['email'];	
 
 			// Sessionize shipping address
 			$_SESSION['shipping_address'] = array(

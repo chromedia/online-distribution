@@ -52,6 +52,14 @@ $_SESSION['shipping_address'] = array(
 <!-- Selector Element -->
 <div id="selector"></div>
 
+<script type="text/javascript">
+// Set status variables
+var shipping_info = false;
+var packages = false;
+var shipping_speeds = false;
+var payment_info = false;
+</script>
+
 <!-- Left Column -->
 <div id="content-left">
 
@@ -162,18 +170,6 @@ $_SESSION['shipping_address'] = array(
 </div>
 
 <script type="text/javascript">
-// Validate Info Process
-	$('#button-review').on('click', function(event) {
-		$('#button-shipping-address').click();
-		$('#button-payment-info').click();
-		$('#button-cart').click();
-		
-	});
-</script>
-
-
-
-<script type="text/javascript">
 // Quantity Change Process
 jQuery(function($) {
 	// Quantity Changed Response
@@ -214,6 +210,11 @@ jQuery(function($) {
 					// Update subtotal
 					$('#subtotal').text(subtotal);
 
+					// If Shipping Info Filled, Recalculate Packages
+					if (shipping_info == true) {
+						$('#button-cart').click();
+					}					
+
 				}
 			});	
 		});	
@@ -249,6 +250,11 @@ jQuery(function($) {
 					// Remove deleted item from page view
 					$('#' + product_id).remove();	
 
+					// If Shipping Info Filled, Recalculate Packages
+					if (shipping_info == true) {
+						$('#button-cart').click();
+					}
+					
 				}
 			}); 
 		});	
@@ -291,8 +297,12 @@ jQuery(function($) {
 				if(success == 1){
 					// Show successful confirmation
 					$('#title-cart').html(show_success);
-					// Get Shipping Rates				
-					$('#button-shipping-speeds').click();
+
+
+					// If Shipping Info Filled, Get Shipping Rates	
+					if(shipping_info == true) {
+						$('#button-shipping-speeds').click();
+					}				
 				}
 				else {
 					// Show error
