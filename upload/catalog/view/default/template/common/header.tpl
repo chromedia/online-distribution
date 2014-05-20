@@ -20,6 +20,7 @@
 <!-- Stylesheet CSS -->
 <link rel="stylesheet" type="text/css" href="catalog/view/default/stylesheet/stylesheet.css" />
 <link rel="stylesheet" type="text/css" href="catalog/view/default/stylesheet/header.css" />
+<link rel="stylesheet" type="text/css" href="catalog/view/default/stylesheet/cart.css" />
 <!-- JQuery Custom UI CSS -->
 <link rel="stylesheet" type="text/css" href="catalog/view/javascript/jquery/ui/themes/ui-lightness/jquery-ui-1.8.16.custom.css" />
 <!-- Other CSS -->

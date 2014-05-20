@@ -24,8 +24,8 @@ jQuery(function($) {
   		}
   	}
 
-	// Loading GIF
-	$('#title-payment-info').append('&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />');
+	// Show Loading GIF
+	$('#status-payment-info').html(loading_text);
 
 	// Set Form
 	var $form = $('#payment-form');
@@ -51,9 +51,8 @@ var stripeResponseHandler = function(status, response) {
 
 	if (response.error) {
     
-		// Show error mark
-		show_error = 'Payment Info   <div class="inline-error">✖</div>';
-		$('#title-payment-info').html(show_error);
+		// Show error status
+		$('#status-payment-info').html(error_text);
 
 		// Error: incorrect or invalid card number
 		if (response.error.code == "incorrect_number" || response.error.code == "incorrect_number") {
@@ -104,8 +103,7 @@ var stripeResponseHandler = function(status, response) {
 		      $form.find('.payment-errors').text('');
 
 		      // Show Successful Confirmation
-		      show_success = 'Payment Info   <div class="inline-success">✔</div>';
-		      $('#title-payment-info').html(show_success);
+		      $('#status-payment-info').html(success_text);
 
 		      // Show jsdata in page
 		      //$('#token-received2').html(token);
@@ -113,8 +111,6 @@ var stripeResponseHandler = function(status, response) {
 		    }
 		  });
 		});
-
-   
 
     // Prevent page from refreshing
     return false;
@@ -126,6 +122,9 @@ var stripeResponseHandler = function(status, response) {
 <div id="block-payment-info">
 
     <div id="title-payment-info" class="title-cart">Payment Info</div>
+    <div id="status-payment-info" class="title-cart"></div>
+    <br/>
+    <br/>
      
      <!-- Payment Form -->
     <form action="" method="POST" id="payment-form">

@@ -3,6 +3,8 @@
 <div id="block-shipping-info">
 
 	<div id="title-shipping-address" class="title-cart">Ship To Address</div>
+	<div id="status-shipping-address" class="title-cart"></div>
+	<br/>
 
 	<?php if($addresses) { ?>
 
@@ -97,12 +99,13 @@
 <!-- Shipping Speeds Block -->
 <div id="block-shipping-speeds">
 
-	<div id="title-shipping-speeds" class="title-cart">Shipping Speeds</div>
-
-	<div>Please enter your shipping information in order to retrieve speeds and rates</div>
+	<div id="title-shipping-speeds" class="title-cart" >Shipping Speeds</div>
+	<div id="status-shipping-speeds" class="title-cart"></div>
+	<br/>
+	<br/>
 
 	<form id="form-shipping-speeds">
-		<div></div>
+		<div>Please enter your shipping information in order to retrieve speeds and rates</div>
 	</form>
 
 </div>	
@@ -180,27 +183,26 @@ jQuery(function($) {
 			data: data,
 			dataType: 'json',
 			beforeSend: function() {
-				$('#title-shipping-address').append('&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />');
+				$('#status-shipping-address').html(loading_text);
 			},				
 			success: function(jsondata) {   
 
 				success = jsondata.success;
 				yes = jsondata.yes;
-
-				show_success = 'Ship To Address   <div class="inline-success">✔</div>';
-				show_error = 'Ship To Address   <div class="inline-error">✖</div>';
 				
 				if(success == 1){
 					// Show successful confirmation
-					$('#title-shipping-address').html(show_success);
+					$('#status-shipping-address').html(success_text);
 					// Set Shipping Success
 					shipping_info = true;
-					// Calculate Packages
-					$('#button-cart').click();				
+					// If Shipping Info Filled, Recalculate Packages
+					if (shipping_info == true && $('#cart-table').children().length != 0) {
+						$('#button-cart').click();
+					}				
 				}
 				else {
 					// Show error
-					$('#title-shipping-address').html(show_error);
+					$('#status-shipping-address').html(error_text);
 				}
 
 			}

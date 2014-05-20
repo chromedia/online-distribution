@@ -43,21 +43,34 @@ $_SESSION['shipping_address'] = array(
 <script src="catalog/view/template/default/checkout/cart.js" type="text/javascript"></script>
 -->
 
+<!-- Index
+
+- Trigger Buttons
+- Status Variables
+- Success and Error Text
+
+
+-->
+
 <!-- Trigger Buttons -->
 <div id="button-cart"></div>
 <div id="button-payment-info"></div>
 <div id="button-shipping-address"></div>
 <div id="button-shipping-speeds"></div>				
-
-<!-- Selector Element -->
 <div id="selector"></div>
 
+<!-- JS Variables -->
 <script type="text/javascript">
 // Set status variables
 var shipping_info = false;
 var packages = false;
 var shipping_speeds = false;
 var payment_info = false;
+
+// Set Success and Error Text
+var success_text = '<div class="inline-success">✔</div>';
+var error_text = '<div class="inline-error">✖</div>';
+var loading_text = '&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />';
 </script>
 
 <!-- Left Column -->
@@ -77,10 +90,13 @@ var payment_info = false;
 	<!-- Cart Block -->
 	<div id="block-cart">
 
-		<div id="title-cart" class="title-cart">Current Order</div><br/>
+		<div id="title-cart" class="title-cart">Current Order</div>
+		<div id="status-cart" class="title-cart"></div>
+		<br/>
+		<br/>
 
-	  <!-- Cart -->
-	  <form action="" method="post" enctype="multipart/form-data" id="cart">
+		<!-- Cart -->
+		<form action="" method="post" enctype="multipart/form-data" id="cart">
 
 	    <div class="cart-info">
 	      <table>
@@ -99,7 +115,8 @@ var payment_info = false;
 	        </thead>
 
 	        <!-- Product Rows -->
-	        <tbody>
+	        <tbody id="cart-table">
+
 	        	<!-- For Each Product -->	
 	          <?php foreach ($products as $product) { ?>
 
@@ -130,6 +147,7 @@ var payment_info = false;
 		            <td class="total delete_button"><image type="image" src="catalog/view/default/image/remove.png" id="delete-button" name="<?php echo $product['model']; ?>"></image></td>
 		        </tr>
 	          <?php } ?>
+
 	        </tbody>
 
 	      </table>
@@ -138,6 +156,7 @@ var payment_info = false;
 
 	</div>
 
+	<!-- Totals Block -->
 	<div id="block-totals">
 
 		<div id="column-totals">
@@ -149,11 +168,7 @@ var payment_info = false;
 			  <tr>
 			    <td ><b>Shipping: </b></td>
 			    <td  id="shipcost"> </td>
-			  </tr>      
-			  <tr>
-			    <td ><b>Tax: </b></td>
-			    <td  id="tax"> </td>
-			  </tr>       
+			  </tr>            
 			  <tr>
 			    <td ><b>Total: </b></td>
 			    <td  id="total"> </td>
@@ -211,9 +226,9 @@ jQuery(function($) {
 					$('#subtotal').text(subtotal);
 
 					// If Shipping Info Filled, Recalculate Packages
-					if (shipping_info == true) {
+					if (shipping_info == true && $('#cart-table').children().length != 0) {
 						$('#button-cart').click();
-					}					
+					}				
 
 				}
 			});	
@@ -251,9 +266,9 @@ jQuery(function($) {
 					$('#' + product_id).remove();	
 
 					// If Shipping Info Filled, Recalculate Packages
-					if (shipping_info == true) {
+					if (shipping_info == true && $('#cart-table').children().length != 0) {
 						$('#button-cart').click();
-					}
+					}	
 					
 				}
 			}); 
@@ -285,28 +300,27 @@ jQuery(function($) {
 			data: data,
 			dataType: 'json',
 			beforeSend: function() {
-				$('#title-cart').append('&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />');
+				// Show loading gif
+				$('#status-cart').html(loading_text);
 			},				
 			success: function(jsondata) {   
 
 				success = jsondata.success;
 
-				show_success = 'Cart   <div class="inline-success">✔</div>';
-				show_error = 'Cart   <div class="inline-error">✖</div>';
+				//show_success = 'Current Order' + success_text;
+				//show_error = 'Current Order' + error_text;
 				
 				if(success == 1){
 					// Show successful confirmation
-					$('#title-cart').html(show_success);
+					$('#status-cart').html(success_text);
 
-
-					// If Shipping Info Filled, Get Shipping Rates	
-					if(shipping_info == true) {
-						$('#button-shipping-speeds').click();
-					}				
+					// Retrieve shipping rates
+					$('#button-shipping-speeds').click();
+								
 				}
 				else {
 					// Show error
-					$('#title-cart').html(show_error);
+					$('#status-cart').html(error_text);
 				}
 
 			}
@@ -336,22 +350,20 @@ jQuery(function($) {
 			data: data,
 			dataType: 'json',
 			beforeSend: function() {
-				$('#title-shipping-speeds').append('&nbsp;<img src="catalog/view/default/image/loading.gif" alt="" />');
+				// Show loading gif
+				$('#status-shipping-speeds').html(loading_text);
 			},	
 			success: function(jsondata) {   
 
 				success = jsondata.success;
-
-				show_success = 'Shipping Speeds   <div class="inline-success">✔</div>';
-				show_error = 'Shipping Speeds   <div class="inline-error">✖</div>';
 				
 				if(success == 1){
 					// Show successful confirmation
-					$('#title-shipping-speeds').html(show_success);
+					$('#status-shipping-speeds').html(success_text);
 				}
 				else {
 					// Show error
-					$('#title-shipping-speeds').html(show_error);
+					$('#status-shipping-speeds').html(error_text);
 				}
 
 				rates = jsondata.rates;
@@ -361,10 +373,51 @@ jQuery(function($) {
 			}
 
 		}); 
-	}); 
+	});     
 
-	// Reset form by removing input elements
-	//$('#sendform').children().remove();     
+  });
+});
+//--></script> 
+
+<!-- Select Shipping Speed -->
+<script type="text/javascript"><!--
+jQuery(function($) {
+  $('#form-shipping-speeds').on('change', function(event) {
+
+  	// Set POST data
+  	var sendform = $('<input type="hidden" name="select_shipping_speed" value="1"/>');  	
+
+	// Serialize form
+	var data = sendform.serialize();    
+
+	// Send POST data to server
+	$(function() {
+		$.ajax({
+			type: "POST",
+			url: "<?php echo HTTPS_SERVER; ?>index.php",
+			data: data,
+			dataType: 'json',
+			beforeSend: function() {
+				// Show loading gif
+				$('#status-shipping-speeds').html(loading_text);
+			},	
+			success: function(jsondata) {   
+
+				success = jsondata.success;
+				
+				if(success == 1){
+					// Show successful confirmation
+					$('#status-shipping-speeds').html(success_text);
+				}
+				else {
+					// Show error
+					$('#status-shipping-speeds').html(error_text);
+				}
+
+			}
+
+		}); 
+	});     
 
   });
 });
@@ -372,8 +425,6 @@ jQuery(function($) {
 
 <!-- Place Order-->
 <script type="text/javascript">
-// Disable Place Order Button
-	//$('#button_checkout').prop('disabled', true);
 
 // Place Order Call
 jQuery(function($) {
