@@ -26,7 +26,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
      inkscape:cx="403.23013"
-     inkscape:cy="767.4665"
+     inkscape:cy="710.32364"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -243,5 +243,49 @@
          x="467.85715"
          y="454.50504"
          style="font-weight:bold">User places order</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="439.28571"
+       y="508.07648"
+       id="text3055"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3057"
+         x="439.28571"
+         y="508.07648">If shipping details success</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="439.28571"
+       y="534.505"
+       id="text3059"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3061"
+         x="439.28571"
+         y="534.505">If shipping speed selected</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="438.57141"
+       y="560.93359"
+       id="text3063"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3065"
+         x="438.57141"
+         y="560.93359">If packages calculated</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="440"
+       y="480.21933"
+       id="text3067"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3069"
+         x="440"
+         y="480.21933">If payment details success</tspan></text>
   </g>
 </svg>

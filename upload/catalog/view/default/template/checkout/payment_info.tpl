@@ -12,6 +12,12 @@
 jQuery(function($) {
   $('.field-payment').on('change', function(e) {
 
+  	// Remove Status Text
+  	$('#status-payment-info').empty();
+
+  	// Reset Status
+  	payment_info = false; 
+
   	// If any payment fields empty, stop trigger
   	var index;
   	var payment_array = [
@@ -102,12 +108,12 @@ var stripeResponseHandler = function(status, response) {
 		      // Clear errors
 		      $form.find('.payment-errors').text('');
 
-		      // Show Successful Confirmation
+		      // Show Success Text
 		      $('#status-payment-info').html(success_text);
 
-		      // Show jsdata in page
-		      //$('#token-received2').html(token);
-		      //$('#token-received2').text(jsdata);
+		      // Success Status
+		      payment_info = true;
+
 		    }
 		  });
 		});

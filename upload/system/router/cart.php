@@ -47,10 +47,18 @@ if (isset($_POST['package_logic'])) {
 
 }
 
-// Calculate Packages
+// Retrieve Shipping Speeds
 if (isset($_POST['shipping_speeds'])) {
 
 	$cart->ship_speeds();
+	exit;
+
+}
+
+// Select Another Shipping Speed
+if (isset($_POST['select_shipping_speed'])) {
+
+	$cart->select_ship_speed();
 	exit;
 
 }

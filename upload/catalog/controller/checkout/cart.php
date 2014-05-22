@@ -190,11 +190,14 @@ class ControllerCheckoutCart extends Controller {
 				);
 			}
 
-			$_SESSION['subtotal'] = Cart::subtotal($_SESSION['xcart']);
+			// Calculate and Store Subtotal
+			$subtotal = Cart::subtotal($_SESSION['xcart']);
 
-
+			$order = array(
+				'subtotal' => $subtotal
+			);
 			
-
+			$_SESSION['order'] = $order;
 
 
 			$this->data['checkout_buttons'] = array();

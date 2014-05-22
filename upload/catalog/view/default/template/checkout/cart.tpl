@@ -286,6 +286,8 @@ jQuery(function($) {
 jQuery(function($) {
   $('#button-cart').on('click', function(event) {   
 
+  	packages = false;
+
   	// Set POST data
   	var sendform = $('<input type="hidden" name="package_logic" value="1"/>');
 
@@ -314,6 +316,9 @@ jQuery(function($) {
 					// Show successful confirmation
 					$('#status-cart').html(success_text);
 
+					// Success Status
+					packages = true;
+
 					// Retrieve shipping rates
 					$('#button-shipping-speeds').click();
 								
@@ -336,6 +341,9 @@ jQuery(function($) {
 jQuery(function($) {
   $('#button-shipping-speeds').on('click', function(event) {
 
+  	// Reset Status
+  	shipping_speeds = false;
+
   	// Set POST data
   	var sendform = $('<input type="hidden" name="shipping_speeds" value="1"/>');  	
 
@@ -356,19 +364,24 @@ jQuery(function($) {
 			success: function(jsondata) {   
 
 				success = jsondata.success;
-				
+				cost = jsondata.cost;
+				total = jsondata.total;
+				rates = jsondata.rates;
+
 				if(success == 1){
-					// Show successful confirmation
+					// Show rates
+					$('#form-shipping-speeds').html(rates);
+					// Show success
 					$('#status-shipping-speeds').html(success_text);
+					// Success status
+					shipping_speeds = true;
+					// Trigger shipping speed selection
+					select_shipping_speed();
 				}
 				else {
 					// Show error
 					$('#status-shipping-speeds').html(error_text);
 				}
-
-				rates = jsondata.rates;
-
-				$('#form-shipping-speeds').html(rates);
 
 			}
 
@@ -381,11 +394,25 @@ jQuery(function($) {
 
 <!-- Select Shipping Speed -->
 <script type="text/javascript"><!--
+
+// Respond to Change
 jQuery(function($) {
-  $('#form-shipping-speeds').on('change', function(event) {
+	$('#form-shipping-speeds').on('change', function(event) {
+		select_shipping_speed();
+	});
+});	
+
+function select_shipping_speed () {
+  	// Reset Status
+  	shipping_speeds = false;
+
+  	// Set selected shipping speed
+  	var rate = $('input[name=service]:checked', '#form-shipping-speeds').val();
 
   	// Set POST data
-  	var sendform = $('<input type="hidden" name="select_shipping_speed" value="1"/>');  	
+  	var sendform = $('<form></form>');
+  	sendform.append($('<input type="hidden" name="select_shipping_speed" value="1"/>'));  	
+	sendform.append($('<input type="hidden" name="rate" />').val(rate));	
 
 	// Serialize form
 	var data = sendform.serialize();    
@@ -404,10 +431,17 @@ jQuery(function($) {
 			success: function(jsondata) {   
 
 				success = jsondata.success;
+				cost = jsondata.cost;
+				total = jsondata.total;
 				
 				if(success == 1){
 					// Show successful confirmation
 					$('#status-shipping-speeds').html(success_text);
+					// Success Status
+					shipping_speeds = true;
+					// Show Shipping Cost
+					$('#shipcost').text(cost);
+					$('#total').text(total);
 				}
 				else {
 					// Show error
@@ -418,9 +452,11 @@ jQuery(function($) {
 
 		}); 
 	});     
+}
+  
 
-  });
-});
+
+
 //--></script> 
 
 <!-- Place Order-->
@@ -430,21 +466,40 @@ jQuery(function($) {
 jQuery(function($) {
 	$('#button-checkout').on('click', function(e) {
 
+		// If cart incomplete, stop trigger
+		error = false;
+		if(payment_info == false) {
+			$('#status-payment-info').html(error_text);
+			error = true;
+		}
+		if(shipping_info == false) {
+			$('#status-shipping-address').html(error_text);
+			error = true;
+		}
+		if(packages == false) {
+			$('#status-cart').html(error_text);
+			error = true;
+		}
+		if(shipping_speeds == false) {
+			$('#status-shipping-speeds').html(error_text);
+			error = true;
+		}
+		if(error == true) {
+			return;
+		}
+
+		// Disable Button
 		$('#button-checkout').prop('disabled', true);
 
-		// Get selected rate
-		var rate = $('input[name=service]:checked', '#form-shipping-speeds').val();
+		// Loading GIF
+		$('#button-checkout').html(loading_text);
 
-		// Append update data into form
-		var sendform = $('<form></form>');
-		sendform.append($('<input type="hidden" name="checkout" />').val('1'));	
-		sendform.append($('<input type="hidden" name="rate" />').val(rate));	
+		// Set Form	and Append Data
+		var sendform = $('<form></form>');	
+		sendform.append($('<input type="hidden" name="checkout" />').val('1'));		
 
 		// Serialize form
-		var data = sendform.serialize();	
-
-		// Reset form by removing input elements
-		//$('#sendform').children().remove();			
+		var data = sendform.serialize();		
 
 		// Send POST data to server
 		$(function() {
@@ -454,9 +509,14 @@ jQuery(function($) {
 				data: data,
 				dataType: 'json',
 				success: function(jsoncheckout) {	
-					$('#button-checkout').prop('disabled', false);
+
+					// Enable Button
+					// $('#button-checkout').prop('disabled', false);
+
 					var state = jsoncheckout.state;
+
 					$('#button-checkout').html(state);		
+
 				}
 			});	
 		});			

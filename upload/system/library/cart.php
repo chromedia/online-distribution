@@ -21,6 +21,7 @@ class Cart {
 		confirm_address
 		package_logic
 		ship_speeds
+		select_ship_speed
 
 		*Checkout*
 		checkout
@@ -279,7 +280,8 @@ class Cart {
 				'city' => $city,
 				'postcode' => $postcode,
 				'region' => $region,
-				'country' => $country
+				'country' => $country,
+				'email' => $email
 
 			);
 
@@ -451,6 +453,7 @@ class Cart {
 	// Make Parcel Call and Shipment Call to Shippo, then Get Shipping Rates
 	public function ship_speeds () {
 
+		$order = $_SESSION['order'];
 		$packages = $_SESSION['packages'];
 		$to_address = $_SESSION['to_address'];
 		$from_address = $_SESSION['from_address'];
@@ -542,7 +545,7 @@ class Cart {
 			$rate_array = array();
 		}	
 
-		// Get rates using each rate url
+		// Get rates for each package
 		for($i=0; $i<$count; $i++) {
 
 			// Get current package data
@@ -667,13 +670,10 @@ class Cart {
 	
 		}
 
-		// Sessionize rates array
-
-		// Debug 
-		//var_dump($rate_array);
-
-		// Sessionize package array with rates
+		// Sessionize updated arrays
 		$_SESSION['packages'] = $packages;
+		$_SESSION['rate_array'] = $rate_array;
+		$_SESSION['order'] = $order;
 
 		// Send data back to browser
 		$update = array(
@@ -686,6 +686,41 @@ class Cart {
 		echo json_encode($update);		
 
 	}
+
+	public function select_ship_speed () {	
+
+		// Get selected rate
+		$selected_service = $this->request->post['rate'];
+
+		// Get order array
+		$order = $_SESSION['order'];
+		$rate_array = $_SESSION['rate_array'];
+
+		// Store selected rate
+		$order['rate'] = $selected_service;
+
+		// Get rate total cost
+		$cost = $rate_array[$selected_service]['total'];
+
+		// Calculate new total
+		$order['total'] = $order['subtotal'] + $cost;
+
+		// Update order array
+		$_SESSION['order'] = $order;
+
+		// Set response array
+		$order = array(
+
+			"success" => '1',
+			"total" => $order['total'],
+			"cost" => $cost
+
+		);
+
+		// Encode into JSON
+		echo json_encode($order);	
+
+	}		
 
 	// Total rates for each service level
 	// error on no common service level
@@ -713,15 +748,15 @@ class Cart {
 		$this->contact_user();
 
 		// Set response array
-		$order = array(
+		$response = array(
 
-			"state" => $_SESSION['order'],
+			"state" => 'Success',
 			"state2"=> 'hello'
 
 		);
 
 		// Encode into JSON
-		echo json_encode($order);		
+		echo json_encode($response);		
 
 
 	}
@@ -746,7 +781,7 @@ class Cart {
 		        // Check that it was paid:
 		        if ($charge->paid == true) {
 
-		                $_SESSION['order']= rand();
+		                
 
 		        } else { // Charge was not paid!	
 		                echo '<div class="alert alert-error"><h4>Payment System Error!</h4>Your payment could NOT be processed (i.e., you have not been charged) because the payment system rejected the transaction. You can try again or use another card.</div>';
@@ -772,17 +807,20 @@ class Cart {
 
 	public function request_shipping(){
 
-		// Get selected shipping service
-		$selected_service = $this->request->post['rate'];
-
-		// Get packages array
+		// Get order and package arrays
+		$order = $_SESSION['order'];
 		$packages = $_SESSION['packages'];
+
+		// Get selected shipping service
+		$selected_service = $order['rate'];
 
 		// For each package, purchase shipping label for selected service
 		foreach($packages as $package){
 
 			// Set list of rates for package
 			$rates = $package['rates'];
+
+
 
 			// In the package rate array, find rate id of selected service
 			foreach($rates as $rate){
