@@ -163,7 +163,7 @@ var loading_text = '&nbsp;<img src="catalog/view/default/image/loading.gif" alt=
 			<table>
 			  <tr>
 			    <td ><b>Sub-Total: </b></td>
-			    <td  id="subtotal"><?php echo $_SESSION['subtotal']; ?></td>
+			    <td  id="subtotal"><?php echo $_SESSION['order']['subtotal']; ?></td>
 			  </tr>
 			  <tr>
 			    <td ><b>Shipping: </b></td>
