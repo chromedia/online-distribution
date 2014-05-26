@@ -55,6 +55,8 @@ $(document).ready(function(){
 
 <div id="header">
 
+    
+	
     <!-- Menu -->
     <?php if ($logged) { ?>
     <div id="menu">
@@ -63,6 +65,9 @@ $(document).ready(function(){
 
     <!-- Dashboard -->    
     <li id="dashboard"><a href="<?php echo $home; ?>" class="top"><?php echo $text_dashboard; ?></a></li>
+
+    <!-- Storefront -->
+	<li id="storefront"><a href="<?php echo $store; ?>" target="_blank" class="top"><?php echo $text_front; ?></a></li>
 
     <!-- Users -->
     <li id="sale"><a class="top">Users</a>
@@ -98,16 +103,13 @@ $(document).ready(function(){
         </ul>
       </li>
 
-    <!-- Sales -->
-    <li id="sale"><a class="top"><?php echo $text_sale; ?></a>
+    <!-- Orders -->
+    <li id="orders"><a class="top" href="<?php echo $order; ?>"><?php echo $text_order; ?></a>
         <ul>
           <li><a href="<?php echo $recurring_profile; ?>"><?php echo $text_recurring_profile; ?></a></li>
           <li><a href="<?php echo $return; ?>"><?php echo $text_return; ?></a></li>  
-        </ul>
-    </li>
-
-    <!-- Contact -->  
-    <li><a class="top" href="<?php echo $contact; ?>">Contact</a></li>
+        </ul>	
+    </li>      
 
     <!-- System -->
       <li id="system"><a class="top"><?php echo $text_system; ?></a>
@@ -147,51 +149,48 @@ $(document).ready(function(){
           </li>
           <li><a href="<?php echo $error_log; ?>"><?php echo $text_error_log; ?></a></li>
           <li><a href="<?php echo $backup; ?>"><?php echo $text_backup; ?></a></li>
-        </ul>
-      </li>
-      <li id="reports"><a class="top"><?php echo $text_reports; ?></a>
-        <ul>
-          <li><a class="parent"><?php echo $text_sale; ?></a>
+
+          <li id="reports"><a class="parent"><?php echo 'Reports'; ?></a>
             <ul>
-              <li><a href="<?php echo $report_sale_order; ?>"><?php echo $text_report_sale_order; ?></a></li>
-              <li><a href="<?php echo $report_sale_tax; ?>"><?php echo $text_report_sale_tax; ?></a></li>
-              <li><a href="<?php echo $report_sale_shipping; ?>"><?php echo $text_report_sale_shipping; ?></a></li>
-              <li><a href="<?php echo $report_sale_return; ?>"><?php echo $text_report_sale_return; ?></a></li>
-            </ul>
-          </li>
-          <li><a class="parent"><?php echo $text_product; ?></a>
-            <ul>
-              <li><a href="<?php echo $report_product_viewed; ?>"><?php echo $text_report_product_viewed; ?></a></li>
-              <li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>
-            </ul>
-          </li>
-          <li><a class="parent"><?php echo $text_customer; ?></a>
-            <ul>
-              <li><a href="<?php echo $report_customer_online; ?>"><?php echo $text_report_customer_online; ?></a></li>
-              <li><a href="<?php echo $report_customer_order; ?>"><?php echo $text_report_customer_order; ?></a></li>
+				<li><a class="parent"><?php echo $text_sale; ?></a>
+					<ul>
+					  <li><a href="<?php echo $report_sale_order; ?>"><?php echo $text_report_sale_order; ?></a></li>
+					  <li><a href="<?php echo $report_sale_tax; ?>"><?php echo $text_report_sale_tax; ?></a></li>
+					  <li><a href="<?php echo $report_sale_shipping; ?>"><?php echo $text_report_sale_shipping; ?></a></li>
+					  <li><a href="<?php echo $report_sale_return; ?>"><?php echo $text_report_sale_return; ?></a></li>
+					</ul>
+				</li>
+				<li><a class="parent"><?php echo $text_product; ?></a>
+					<ul>
+					  <li><a href="<?php echo $report_product_viewed; ?>"><?php echo $text_report_product_viewed; ?></a></li>
+					  <li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>
+					</ul>
+				</li>
+				<li><a class="parent"><?php echo $text_customer; ?></a>
+					<ul>
+					  <li><a href="<?php echo $report_customer_online; ?>"><?php echo $text_report_customer_online; ?></a></li>
+					  <li><a href="<?php echo $report_customer_order; ?>"><?php echo $text_report_customer_order; ?></a></li>
+					</ul>
+				</li>
             </ul>
           </li>
         </ul>
       </li>
 
-      <li id="help"><a class="top"><?php echo $text_help; ?></a>
-      </li>
+	<li id="help"><a class="top"><?php echo $text_help; ?></a>
+	</li>
+
+    <!-- Contact -->  
+    <li><a class="top" href="<?php echo $contact; ?>">Contact</a></li>      
 
     </ul>
 
-    <!-- Storefront -->
-    <ul style="display: none;">
-      <li id="store"><a href="<?php echo $store; ?>" target="_blank" class="top"><?php echo $text_front; ?></a>
-        <ul>
-          <?php foreach ($stores as $stores) { ?>
-          <li><a href="<?php echo $stores['href']; ?>" target="_blank"><?php echo $stores['name']; ?></a></li>
-          <?php } ?>
-        </ul>
-      </li>
-    </ul>
 
-    <!-- Orders -->
-    <a class="top" href="<?php echo $order; ?>"><?php echo $text_order; ?></a>
+
+
+
+
+<!-- Right Side -->
 
     <!-- Admin Login -->
     <?php if (!$logged) { ?>

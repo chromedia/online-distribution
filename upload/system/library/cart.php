@@ -453,10 +453,21 @@ class Cart {
 	// Make Parcel Call and Shipment Call to Shippo, then Get Shipping Rates
 	public function ship_speeds () {
 
+		// Get order info
 		$order = $_SESSION['order'];
 		$packages = $_SESSION['packages'];
 		$to_address = $_SESSION['to_address'];
 		$from_address = $_SESSION['from_address'];
+
+		// Set rate array
+		if(!isset($rate_array)){
+			$rate_array = array();
+		}			
+
+		// Define rates_html variable
+		if(!isset($rates_html)) {
+			$rates_html = '';
+		}		
 
 		// Count number of packages
 		$count = count($packages);
@@ -540,11 +551,6 @@ class Cart {
 		// Give time for rates to be generated at Shippo for each shipment
 		sleep(2);
 
-		// Set rate array
-		if(!isset($rate_array)){
-			$rate_array = array();
-		}	
-
 		// Get rates for each package
 		for($i=0; $i<$count; $i++) {
 
@@ -571,29 +577,23 @@ class Cart {
 			// Set rates object
 			$rates = $object->results;			
 
-			// Go through rates
+			// Go through rates of current package and add rates to rates array by service level
 			foreach($rates as $rate) {
 
-				// Set rate provider
+				// Get rate provider
 				$provider = $rate->provider;
 
-				// Filter by Carrier
+				// Filter by rate provider
 				if($provider == "UPS"){
 
-					// Set rate data
+					// Get rate data
+					$rate_id = (string)$rate->object_id;
+					$shipment_id = (string)$rate->shipment;					
 					$service = (string)$rate->servicelevel_name;
 					$amount = (float)$rate->amount;	
 
-					$rate_id = (string)$rate->object_id;	
-					$shipment_id = (string)$rate->shipment;
-
-					// Set package rates array if needed
-					if(!isset($package_rates)){
-						$package_rates = array();
-					}
-
-					// Store rate data into package array
-					$packages[$i]['rates'][] = array(
+					// Store rate data into package array on next available index
+					$package['rates'][] = array(
 						"rate_id" => $rate_id,
 						"service" => $service
 					);
@@ -605,7 +605,7 @@ class Cart {
 					$rate_array[$service]['rate_id'][] = $rate_id;
 					$rate_array[$service]['shipment_id'][] = $shipment_id;
 
-					// Set total if needed
+					// Update total cost for this rate service from all packages
 					if(!isset($rate_array[$service]['total'])) {
 						// Set new total
 						$rate_array[$service]['total'] = (float)$amount;
@@ -616,12 +616,16 @@ class Cart {
 					}
 				}
 			}
+
+			// Update packages array
+			$packages[$i] = $package;
 		}
 
-		// Find cheapest rate
+		// Find cheapest total cost for rate services from all packages
 		foreach($rate_array as $service){
 
-			$new_amount = $service['amount'];
+			// Get current service cost and service level
+			$new_amount = $service['total'];
 			$new_service = $service['service'];
 
 			// Set low amount
@@ -639,11 +643,6 @@ class Cart {
 		}
 		// Record cheapest to rate array
 		$rate_array[$low_service]['checked'] = true;
-
-		// Define rates_html variable
-		if(!isset($rates_html)) {
-			$rates_html = '';
-		}
 
 		// Generate Service HTML for each service level
 		foreach($rate_array as $service){
@@ -815,15 +814,14 @@ class Cart {
 		$selected_service = $order['rate'];
 
 		// For each package, purchase shipping label for selected service
-		foreach($packages as $package){
+		$count = count($packages);
+		for($i=0; $i<$count; $i++){
 
-			// Set list of rates for package
-			$rates = $package['rates'];
-
-
+			// Set current package
+			$package = $packages[$i];
 
 			// In the package rate array, find rate id of selected service
-			foreach($rates as $rate){
+			foreach($package['rates'] as $rate){
 				if($selected_service == $rate['service']){
 					$rate_id = $rate['rate_id'];
 					break;
@@ -844,30 +842,108 @@ class Cart {
 			$method = 'POST';
 			$credentials = SHIPPO_AUTHORIZATION;
 
-			// Run call
+			// Run call (label purchase request)
 			$response = $this->restcall->call($url, $method, $credentials, $data);
-
-			// Decode json response into php object
 			$object = json_decode($response);
 
-			// Get label data
+			// Get transaction id
+			$transaction_id = $object->object_id;
+
+			// Store transaction id in package array
+			$package['transaction_id'] = $transaction_id;
+
+			var_dump($transaction_id);
+
+			// Updates packages array
+			$packages[$i] = $package;
+
+		}
+
+		// Wait 2 second for label purchases to process
+		sleep(3);
+
+		// For each package, get tracking number and label url
+		for($i=0; $i<$count; $i++){
+
+			// Set current package
+			$package = $packages[$i];
+
+			// Get package transaction id
+			$transaction_id = $package['transaction_id'];		
+
+			// If purchase not complete, wait and try data request again
+			$wait = true;
+			while($wait == true) {
+
+				// No Data
+				$data = false;
+
+				// Call Data
+				$url = 'https://api.goshippo.com/v1/transactions/' . $transaction_id;
+				$method = 'GET';
+				$credentials = SHIPPO_AUTHORIZATION;
+
+				// Run call and decode json response into php object
+				$response = $this->restcall->call($url, $method, $credentials, $data);
+				$object = json_decode($response);
+
+				// Get status
+				$status = $object->object_status;
+
+				// If purchase not complete yet, wait and try again
+				if ($status == "WAITING" || $status == "QUEUED") {
+					sleep(1);
+					$wait = true;
+				}
+				// If error, stop process
+				else if ($status == "ERROR") {
+					$wait = false;
+				}
+				// If success, continue
+				else if ($status == "SUCCESS") {
+					break;
+					$wait = false;
+				}			
+
+			}
+
+			// Get label data and tracking number
 			$label_url = $object->label_url;
 			$tracking_number = $object->tracking_number;
-		}
+
+			// Store label url and tracking number
+			$package['label_url'] = $label_url;
+			$package['tracking_number'] = $tracking_number;
+
+			// Update local packages array
+			$packages[$i] = $package;
+
+		}	
+
+		
+
+		// Update session packages array
+		$_SESSION['packages'] = $packages;
 		
 	}	
 
 	public function create_order(){
 		
-		// Get Shipping Address
+		// Get order info
+		$order = $_SESSION['order'];
 		$shipping_address = $_SESSION['shipping_address'];
+		$packages = $_SESSION['packages'];
 
 		// Get Last Order ID Number and Set Order Status ID
 		$order_id = $this->db->getLastId();
 		$order_status_id = 1;
 
 		// Store Order in Database
-		$sql = "INSERT INTO `" . DB_PREFIX . "order` SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "' ";
+		$sql = "INSERT INTO `" . DB_PREFIX . "order` SET order_id = '" . (int)$order_id; 
+		$sql .= "', order_status_id = '" . (int)$order_status_id;
+		$sql .= "', email = '" . $shipping_address['email'];
+		$sql .= "', shipping_code = '" . $shipping_address['email'];
+		$sql .= "' ";
 
 		$this->db->query($sql);
 

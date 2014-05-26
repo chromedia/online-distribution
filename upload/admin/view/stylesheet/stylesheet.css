@@ -75,19 +75,18 @@ label {
 }
 
 .top {
-	display: inline;
-	left: 10%;
+	display: inline-block;
+	text-decoration: none;	
 	line-height: 90px;
-	padding: 0 0 0 15px;
+	padding-left: 15px;
+	padding-right: 15px;
 	font-size: 18px;
-	color: #FFFFFF;
-	text-decoration: none;
+	color: #222222;
+	background-color: #FFFFFF;
 }
 .top:hover {
-	color: #FFFFCC;
-}
-#dashboard {
-	left: 3%;
+	color: #FFFFFF;
+	background-color: #222222;
 }
 
 #menu > ul.left {
