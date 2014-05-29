@@ -400,28 +400,38 @@ class Cart {
 			// Retrieve product data from database
 			$product = $this->getProduct($product_id);
 
-			// Set product values
+			// Get product data
+			$product_id = intval($product['product_id']);
+			$product_name = intval($product['name']);
+
 			$length = intval($product['length']);
 			$width = intval($product['width']);
 			$height = intval($product['height']);
 			$weight = intval($product['weight']);
 
-			// Set loop limit at quantity
-			$max = $product_array['quantity'];
+			// Get product quantity
+			$quantity = $product_array['quantity'];
 
 			// For each unit of quantity
-			for($i=0; $i<$max; $i++) {
+			for($i=0; $i<$quantity; $i++) {
 				
 				// Count number of shipments set
 				$count = count($packages);
 
-				// Set next shipment id
-				$next = $count;
+				// Create contents array
+				$contents = array();
+				$contents[$product_id] = array(
 
-				// Create new shipment and add dimensions + weight
-				$packages[$next] = array(
+					'product_id' => $product_id,
+					'product_name' => $product_name,
+					'quantity' => 1
 
-					//'contents' 	=> array(),
+				);
+
+				// Create new shipment and add dimensions + weight + contents array
+				$packages[$count] = array(
+
+					'contents' 	=> $contents,
 					'length'	=> $length,
 					'width'		=> $width,
 					'height'	=> $height,
@@ -435,6 +445,7 @@ class Cart {
 			}
 		}	
 
+		// Update session packages array
 		$_SESSION['packages'] = $packages;
 
 		$success = 1;
@@ -852,8 +863,6 @@ class Cart {
 			// Store transaction id in package array
 			$package['transaction_id'] = $transaction_id;
 
-			var_dump($transaction_id);
-
 			// Updates packages array
 			$packages[$i] = $package;
 
@@ -920,8 +929,6 @@ class Cart {
 
 		}	
 
-		
-
 		// Update session packages array
 		$_SESSION['packages'] = $packages;
 		
@@ -934,15 +941,49 @@ class Cart {
 		$shipping_address = $_SESSION['shipping_address'];
 		$packages = $_SESSION['packages'];
 
+		// Get data from each package
+		$storage_array = array();
+		$count = count($packages);
+		for($i=0; $i<$count; $i++){
+
+			// Set current package
+			$package = $packages[$i];
+
+			// Get package data
+			$label_url = $package['label_url'];
+			$tracking_number =$package['tracking_number'];
+			$contents = $package['contents'];
+
+			// Set package array to store in database
+			$package_array = array(
+
+				'label_url' => $label_url,
+				'tracking_number' => $tracking_number,
+				'contents' => $contents
+
+			);
+
+			// Add to package strings array
+			$storage_array[] = $package_array;
+
+		}
+
+		// Serialize array of packages into single string for database
+		$shipping_code = serialize($storage_array);
+
+		// ----
+
 		// Get Last Order ID Number and Set Order Status ID
 		$order_id = $this->db->getLastId();
 		$order_status_id = 1;
+
+		// ----
 
 		// Store Order in Database
 		$sql = "INSERT INTO `" . DB_PREFIX . "order` SET order_id = '" . (int)$order_id; 
 		$sql .= "', order_status_id = '" . (int)$order_status_id;
 		$sql .= "', email = '" . $shipping_address['email'];
-		$sql .= "', shipping_code = '" . $shipping_address['email'];
+		$sql .= "', shipping_code = '" . $shipping_code;
 		$sql .= "' ";
 
 		$this->db->query($sql);
