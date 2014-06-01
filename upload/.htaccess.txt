@@ -1,11 +1,25 @@
-#Redirect 404 Error Page
+# README: You need to customize this file for your needs. Instructions below.
+
+# Instructions:
+# 1. Rename this file as <.htaccess> (excluding the brackets) in order to make it work on your server.
+# 2. After you've installed a SSL certificate, force SSL for your website by using the Force SSL section below.
+# 3. 
+
+# Enable Mod Rewrite
+RewriteEngine on
+
+# Force SSL for the website or a particular folder
+# RewriteCond %{SERVER_PORT} 80 
+# RewriteCond %{REQUEST_URI} some_folder
+# RewriteRule ^(.*)$ https://www.yourwebsite.cc/$1 [R,L]
+
+# Redirect 404 Error Page
 # ErrorDocument 404 /directory/file.ext
 
 # This allows you to redirect your entire website to any other domain
-# Redirect 302 /PATH_TO_REDIRECT http://new_url
+# Redirect 302 /REDIRECT_PATH http://new_url
 
 # Remove .php extension from web address bar
-RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php

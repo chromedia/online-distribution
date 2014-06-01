@@ -951,7 +951,7 @@ class Cart {
 
 			// Get package data
 			$label_url = $package['label_url'];
-			$tracking_number =$package['tracking_number'];
+			$tracking_number = $package['tracking_number'];
 			$contents = $package['contents'];
 
 			// Set package array to store in database
@@ -969,7 +969,10 @@ class Cart {
 		}
 
 		// Serialize array of packages into single string for database
-		$shipping_code = serialize($storage_array);
+		$storage_array = serialize($storage_array);
+		$storage_array = base64_encode($storage_array);
+
+		$shipping_code = $storage_array;
 
 		// ----
 
@@ -977,12 +980,14 @@ class Cart {
 		$order_id = $this->db->getLastId();
 		$order_status_id = 1;
 
+		$email = $shipping_address['email'];
+
 		// ----
 
 		// Store Order in Database
 		$sql = "INSERT INTO `" . DB_PREFIX . "order` SET order_id = '" . (int)$order_id; 
 		$sql .= "', order_status_id = '" . (int)$order_status_id;
-		$sql .= "', email = '" . $shipping_address['email'];
+		$sql .= "', email = '" . $email;
 		$sql .= "', shipping_code = '" . $shipping_code;
 		$sql .= "' ";
 

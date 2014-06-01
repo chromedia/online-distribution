@@ -4,9 +4,11 @@ class ControllerStep2 extends Controller {
 
 	public function index() {		
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			
 			$this->load->model('install');
-
 			$this->model_install->database($this->request->post);
+
+			// Create config file in base folder
 
 			$output  = '<?php' . "\n";
 			$output .= '// HTTP' . "\n";
@@ -35,6 +37,11 @@ class ControllerStep2 extends Controller {
 			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
 			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
 			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n";
+
+			$output .= '// Third Party API Credentials' . "\n";
+			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'PRIVATE_KEY_HERE\');' . "\n";
+			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'PUBLIC_KEY_HERE\');' . "\n";
+			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'AUTH_KEY_HERE\');' . "\n";
 			$output .= '?>';				
 
 			$file = fopen(DIR_ECOM . 'config.php', 'w');
@@ -42,6 +49,8 @@ class ControllerStep2 extends Controller {
 			fwrite($file, $output);
 
 			fclose($file);
+
+			// Create config file in admin folder
 
 			$output  = '<?php' . "\n";
 			$output .= '// HTTP' . "\n";
@@ -80,6 +89,8 @@ class ControllerStep2 extends Controller {
 			fwrite($file, $output);
 
 			fclose($file);
+
+			// Redirect to page for step 3
 
 			$this->redirect($this->url->link('step_3'));
 		}

@@ -134,7 +134,6 @@ class ControllerSaleOrder extends Controller {
 		if (isset($this->request->post['selected']) && ($this->validateDelete())) {
 			foreach ($this->request->post['selected'] as $order_id) {
 				$this->model_sale_order->deleteOrder($order_id);
-				$this->openbay->deleteOrder($order_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -184,6 +183,8 @@ class ControllerSaleOrder extends Controller {
 	}
 
 	protected function getList() {
+
+		// Order Filters
 		if (isset($this->request->get['filter_order_id'])) {
 			$filter_order_id = $this->request->get['filter_order_id'];
 		} else {
@@ -220,6 +221,7 @@ class ControllerSaleOrder extends Controller {
 			$filter_date_modified = null;
 		}
 
+		// Sort Order
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
@@ -276,20 +278,6 @@ class ControllerSaleOrder extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$this->data['breadcrumbs'] = array();
-
-		$this->data['breadcrumbs'][] = array(
-			'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
-			'separator' => false
-		);
-
-		$this->data['breadcrumbs'][] = array(
-			'text'      => $this->language->get('heading_title'),
-			'href'      => $this->url->link('sale/order', 'token=' . $this->session->data['token'] . $url, 'SSL'),
-			'separator' => ' :: '
-		);
-
 		$this->data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['insert'] = $this->url->link('sale/order/insert', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['delete'] = $this->url->link('sale/order/delete', 'token=' . $this->session->data['token'] . $url, 'SSL');
@@ -311,6 +299,7 @@ class ControllerSaleOrder extends Controller {
 
 		$order_total = $this->model_sale_order->getTotalOrders($data);
 
+		// Get order data
 		$results = $this->model_sale_order->getOrders($data);
 
 		foreach ($results as $result) {
@@ -328,7 +317,20 @@ class ControllerSaleOrder extends Controller {
 				);
 			}
 
+			// Get packages string
+			$shipping_code = $result['shipping_code'];
+
+			// Unserialize packages string
+			$shipping_code = base64_decode($shipping_code);
+
+			$shipping_code = unserialize($shipping_code);
+
+			// Set packages array
+			$packages = $shipping_code;
+
+			// Store order data into array
 			$this->data['orders'][] = array(
+				'packages'		=> $packages,
 				'order_id'      => $result['order_id'],
 				'customer'      => $result['customer'],
 				'status'        => $result['status'],
@@ -1134,18 +1136,6 @@ class ControllerSaleOrder extends Controller {
 				'reward'           => $order_product['reward']
 			);
 		}
-
-		if (isset($this->request->post['order_voucher'])) {
-			$this->data['order_vouchers'] = $this->request->post['order_voucher'];
-		} elseif (isset($this->request->get['order_id'])) {
-			$this->data['order_vouchers'] = $this->model_sale_order->getOrderVouchers($this->request->get['order_id']);			
-		} else {
-			$this->data['order_vouchers'] = array();
-		}
-
-		$this->load->model('sale/voucher_theme');
-
-		$this->data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
 
 		if (isset($this->request->post['order_total'])) {
 			$this->data['order_totals'] = $this->request->post['order_total'];
