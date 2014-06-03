@@ -9,10 +9,12 @@
   <?php } ?>
   
   <div class="box">
+
     <div class="heading">
       <h1><img src="view/image/order.png" alt="" /> <?php echo $heading_title; ?></h1>
       <div class="buttons"><a onclick="$('#form').attr('action', '<?php echo $invoice; ?>'); $('#form').attr('target', '_blank'); $('#form').submit();" class="button"><?php echo $button_invoice; ?></a><a href="<?php echo $insert; ?>" class="button"><?php echo $button_insert; ?></a><a onclick="$('#form').attr('action', '<?php echo $delete; ?>'); $('#form').attr('target', '_self'); $('#form').submit();" class="button"><?php echo $button_delete; ?></a></div>
     </div>
+
     <div class="content">
       <form action="" method="post" enctype="multipart/form-data" id="form">
         <table class="list">
@@ -29,6 +31,12 @@
                 <?php } else { ?>
                 <a href="<?php echo $sort_customer; ?>"><?php echo $column_customer; ?></a>
                 <?php } ?></td>
+
+              <!-- Order Contents -->  
+              <td class="left">
+                <a href="<?php echo $sort_customer; ?>" class="<?php echo strtolower($order); ?>"><?php echo 'Contents'; ?></a>
+              </td>    
+
               <td class="left"><?php if ($sort == 'status') { ?>
                 <a href="<?php echo $sort_status; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_status; ?></a>
                 <?php } else { ?>
@@ -57,6 +65,10 @@
               <td></td>
               <td align="right"><input type="text" name="filter_order_id" value="<?php echo $filter_order_id; ?>" size="4" style="text-align: right;" /></td>
               <td><input type="text" name="filter_customer" value="<?php echo $filter_customer; ?>" /></td>
+
+              <!-- Filter by Contents -->
+              <td><input type="text" name="filter_contents" value="" /></td>
+
               <td><select name="filter_order_status_id">
                   <option value="*"></option>
                   <?php if ($filter_order_status_id == '0') { ?>
@@ -77,6 +89,8 @@
               <td><input type="text" name="filter_date_modified" value="<?php echo $filter_date_modified; ?>" size="12" class="date" /></td>
               <td align="right"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
             </tr>
+
+            <!-- List of Orders -->
             <?php if ($orders) { ?>
             <?php foreach ($orders as $order) { ?>
             <tr>
@@ -87,6 +101,35 @@
                 <?php } ?></td>
               <td class="right"><?php echo $order['order_id']; ?></td>
               <td class="left"><?php echo $order['customer']; ?></td>
+
+              <!-- Display Order Contents -->
+              <td class="left">
+
+                <?php 
+                foreach($order['packages'] as $package) {
+
+                	// Display Label URL
+                	$label_url = $package['label_url'];
+
+                	?><div><a href="<?php echo $label_url; ?>">Shipping Label</a></div><?php
+
+                	// Display Contents
+                	$contents = $package['contents'];
+
+                	foreach($contents as $item) {
+                		
+                		$id = $item['product_id'];
+                		$name = $item['product_name'];
+                		$quantity = $item['quantity'];
+
+                		?><div><?php echo $id . '---' . $name . '---' . $quantity; ?></div><?php
+                	}
+
+            	} 
+                ?>
+
+              </td>
+
               <td class="left"><?php echo $order['status']; ?></td>
               <td class="right"><?php echo $order['total']; ?></td>
               <td class="left"><?php echo $order['date_added']; ?></td>
@@ -96,11 +139,14 @@
                 <?php } ?></td>
             </tr>
             <?php } ?>
+
+            <!-- If No Orders -->
             <?php } else { ?>
             <tr>
               <td class="center" colspan="8"><?php echo $text_no_results; ?></td>
             </tr>
             <?php } ?>
+
           </tbody>
         </table>
       </form>

@@ -402,7 +402,7 @@ class Cart {
 
 			// Get product data
 			$product_id = intval($product['product_id']);
-			$product_name = intval($product['name']);
+			$product_name = $product['name'];
 
 			$length = intval($product['length']);
 			$width = intval($product['width']);
