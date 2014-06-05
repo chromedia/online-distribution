@@ -15,7 +15,6 @@ final class Front {
 	public function dispatch($action, $error) {
 		$this->error = $error;
 
-		// Execute each pre_action
 		foreach ($this->pre_action as $pre_action) {
 			$result = $this->execute($pre_action);
 
@@ -32,27 +31,20 @@ final class Front {
 	}
 
 	private function execute($action) {
-
-		// Load action file
 		if (file_exists($action->getFile())) {
 			require_once($action->getFile());
 
-			// Get action class
 			$class = $action->getClass();
 
-			// Create action object with registry
-			$object = new $class($this->registry);
+			$controller = new $class($this->registry);
 
-			// Store action method with arguments
-			if (is_callable(array($object, $action->getMethod()))) {
-				$action = call_user_func_array(array($object, $action->getMethod()), $action->getArgs());
+			if (is_callable(array($controller, $action->getMethod()))) {
+				$action = call_user_func_array(array($controller, $action->getMethod()), $action->getArgs());
 			} else {
 				$action = $this->error;
 
 				$this->error = '';
 			}
-
-		// Error if file not found	
 		} else {
 			$action = $this->error;
 

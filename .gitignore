@@ -8,3 +8,4 @@ upload/config.php
 
 upload/.htaccess
 upload/system/cache*
+upload/image*

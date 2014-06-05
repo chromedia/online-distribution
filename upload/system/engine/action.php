@@ -32,14 +32,12 @@ final class Action {
 			}
 		}
 		
-		// Set Arguments
 		if ($args) {
 			$this->args = $args;
 		}
 			
 		$method = array_shift($parts);
 				
-		// Set Methods		
 		if ($method) {
 			$this->method = $method;
 		} else {

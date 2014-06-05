@@ -23,6 +23,11 @@ select {
 textarea {
 	padding: 2px;
 }
+a, a:visited {
+	color: #003366;
+	text-decoration: underline;
+	cursor: pointer;
+}
 a img {
 	border: 0;
 }
@@ -33,62 +38,37 @@ form {
 label {
 	cursor: pointer;
 }
-/* header */
-#header {
-	position: relative;	
-	background-color: #FFFFFF;	
-	height: 90px;
-	z-index: 99;
-	-moz-box-shadow:    0px 3px 5px 4px #DBDEE1;
-	-webkit-box-shadow: 0px 3px 5px 4px #DBDEE1;
-	box-shadow:         0px 3px 5px 4px #DBDEE1;
+#header .div1 {
+	height: 56px;
+	padding: 0px 30px;
+	background: url('../image/header.png') repeat-x;
+	min-width: 900px;
 }
-
-#header #admin_home {
-	position: absolute;
-	display: inline;
-	color: #222222;
-	line-height: 90px;
-	right: 3%;
-	font-size: 20px;
-	padding: 0;
-	text-decoration: none;
+#header .div2 {
+	color: #FFFFFF;
+	padding: 18px 0px 0px 0px;
+	float: left;
 }
-#header #admin_logged {
+#header .div3 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: #222222;
+	color: #FFF;
 	text-align: right;
 	padding: 15px 0px 0px 0px;
 	float: right;
-	margin-right: 3%;
 }
-#header #admin_logout {
-	position: absolute;
-	display: inline;
-	color: #222222;
-	line-height: 90px;
-	right: 3%;
-	font-size: 20px;
-	padding: 0;
-	text-decoration: none;	
+#header .div2 span {
+	font-weight: bold;
 }
-
-.top {
-	display: inline-block;
-	text-decoration: none;	
-	line-height: 90px;
-	padding-left: 15px;
-	padding-right: 15px;
-	font-size: 18px;
-	color: #222222;
-	background-color: #FFFFFF;
+#menu {
+	background: url('../image/menu.png') repeat-x;
+	position: relative;
+	z-index: 1;
+	height: 34px;
+	clear: both;
+	padding: 0px 30px;
+	min-width: 900px;
 }
-.top:hover {
-	color: #FFFFFF;
-	background-color: #222222;
-}
-
 #menu > ul.left {
 	float: left;
 }
@@ -114,17 +94,15 @@ label {
 	float: left;
 	list-style: none;
 }
-#menu > ul .top {
-	font-family: Arial, Helvetica, sans-serif;
-	color: #222222;
-	text-align: center;
-	margin: 0;
-	padding-right: 10px;
-	padding-left: 10px;
+#menu > ul > li + li {
+	background: url('../image/split.png') center left no-repeat;
 }
-#menu > ul .top:hover {
+#menu > ul .top {
+	padding: 10px 15px 9px 17px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
 	color: #FFFFFF;
-	background-color: #222222;
+	text-align: center;
 }
 #menu > ul li ul {
 	position: absolute;
@@ -132,6 +110,10 @@ label {
 #menu > ul ul li {
 	padding: 2px;
 	clear: both;
+}
+#menu > ul .selected .top {
+	background: url('../image/selected.png') repeat-x;
+	color: #FFFFFF;
 }
 #menu > ul .parent {
 	background-image: url('../image/arrow-right.png'); 
@@ -167,50 +149,9 @@ body > #container {
 	min-width: 900px;
 	padding-bottom: 128px;
 }
-/* login */
-.portal_input {
-	width: 300px;
-	height: 50px;
-	font-size: 15px;
-	text-align: center;
-	padding: 0;
-	border-radius: 3px;
-	border: 1px solid #CCC;	
-	background-color: #FAFAFA;
-	color: #5B5C5C;		
-}
-.portal_button {
-	width: 300px;
-	height: 50px;
-	font-size: 15px;
-	text-align: center;	
-	border-radius: 3px;	
-	border: 1px solid #CCC;
-	background-color: #FFFCCC;
-	color: #5B5C5C;
-}
-#forgot_password {
-	text-decoration: none;
-}
-/* sticky footer */
-/*http://mystrd.at/modern-clean-css-sticky-footer/*/
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-body {
-    margin: 0 0 80px; /* bottom = footer height */
-}
-footer {
-    position: absolute;
-    bottom: 0;
-    background-color: #FAFAFA;
-}
-/* footer */
 #footer {
 	background: #FFFFFF url('../image/footer.png') repeat-x;
-	height: 80px;
+	height: 90px;
 	padding-top: 38px;
 	text-align: center;
 	font-size: 12px;
@@ -597,6 +538,20 @@ table.form > tbody > tr > td {
 }
 .latest tbody td {
 	background: #FFF;
+}
+.dashboard-heading {
+	background: #547C96;
+	color: #FFF;
+	border-bottom: 1px solid #8EAEC3;
+	padding: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.dashboard-content {
+	background: #FCFCFC;
+	border: 1px solid #8EAEC3;
+	padding: 10px;
+	min-height: 180px;
 }
 .refresh {
 	cursor: pointer;

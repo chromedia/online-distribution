@@ -27,12 +27,12 @@ $(document).ready(function() {
 	});
 	
 	/* Ajax Cart */
-	$('#cart > .heading a').on('click', function() {
+	$('#cart > .heading a').live('click', function() {
 		$('#cart').addClass('active');
 		
 		$('#cart').load('index.php?route=module/cart #cart > *');
 		
-		$('#cart').on('mouseleave', function() {
+		$('#cart').live('mouseleave', function() {
 			$(this).removeClass('active');
 		});
 	});
@@ -56,6 +56,33 @@ $(document).ready(function() {
 		if (i > 0) {
 			$(this).css('margin-left', '-' + (i + 5) + 'px');
 		}
+	});
+
+	// IE6 & IE7 Fixes
+	if ($.browser.msie) {
+		if ($.browser.version <= 6) {
+			$('#column-left + #column-right + #content, #column-left + #content').css('margin-left', '195px');
+			
+			$('#column-right + #content').css('margin-right', '195px');
+		
+			$('.box-category ul li a.active + ul').css('display', 'block');	
+		}
+		
+		if ($.browser.version <= 7) {
+			$('#menu > ul > li').bind('mouseover', function() {
+				$(this).addClass('active');
+			});
+				
+			$('#menu > ul > li').bind('mouseout', function() {
+				$(this).removeClass('active');
+			});	
+		}
+	}
+	
+	$('.success img, .warning img, .attention img, .information img').live('click', function() {
+		$(this).parent().fadeOut('slow', function() {
+			$(this).remove();
+		});
 	});	
 });
 

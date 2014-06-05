@@ -102,7 +102,7 @@ class Currency {
 		if (isset($this->currencies[$from])) {
 			$from = $this->currencies[$from]['value'];
 		} else {
-			$from = 1;
+			$from = 0;
 		}
 
 		if (isset($this->currencies[$to])) {

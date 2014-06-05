@@ -1,32 +1,8 @@
-# README: You need to customize this file for your needs. Instructions below.
-
-# Instructions:
-# 1. Rename this file as <.htaccess> (excluding the brackets) in order to make it work on your server.
-# 2. After you've installed a SSL certificate, force SSL for your website by using the Force SSL section below.
-# 3. 
-
-# Enable Mod Rewrite
-RewriteEngine on
-
-# Force SSL for the website or a particular folder
-# RewriteCond %{SERVER_PORT} 80 
-# RewriteCond %{REQUEST_URI} some_folder
-# RewriteRule ^(.*)$ https://www.yourwebsite.cc/$1 [R,L]
-
-# Redirect 404 Error Page
-# ErrorDocument 404 /directory/file.ext
-
-# This allows you to redirect your entire website to any other domain
-# Redirect 302 /REDIRECT_PATH http://new_url
-
-# Remove .php extension from web address bar
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php
-
 # 1.To use URL Alias you need to be running apache with mod_rewrite enabled. 
 
-# 2. In the store directory rename htaccess.txt to .htaccess.
+# 2. In your opencart directory rename htaccess.txt to .htaccess.
+
+# For any support issues please visit: http://www.opencart.com
 
 Options +FollowSymlinks
 
@@ -41,6 +17,7 @@ Options -Indexes
 
 # SEO URL Settings
 RewriteEngine On
+# If your opencart installation does not run on the main web folder make sure you folder it does run in ie. / becomes /shop/ 
 
 RewriteBase /
 RewriteRule ^sitemap.xml$ index.php?route=feed/google_sitemap [L]
