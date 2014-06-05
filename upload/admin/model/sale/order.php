@@ -140,7 +140,10 @@ class ModelSaleOrder extends Model {
 		}
 
 		// Update order total			 
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET total = '" . (float)$total . "', affiliate_id = '" . (int)$affiliate_id . "', commission = '" . (float)$commission . "' WHERE order_id = '" . (int)$order_id . "'"); 	
+		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET total = '" . (float)$total . "', affiliate_id = '" . (int)$affiliate_id . "', commission = '" . (float)$commission . "' WHERE order_id = '" . (int)$order_id . "'");
+
+		// Notify OpenBay Pro
+		$this->openbay->orderNew((int)$order_id);
 	}
 
 	public function editOrder($order_id, $data) {
@@ -270,7 +273,7 @@ class ModelSaleOrder extends Model {
 			}
 		}
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET total = '" . (float)$total . "', affiliate_id = '" . (int)$affiliate_id . "', commission = '" . (float)$commission . "' WHERE order_id = '" . (int)$order_id . "'"); 
+		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET total = '" . (float)$total . "', affiliate_id = '" . (int)$affiliate_id . "', commission = '" . (float)$commission . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 
 	public function deleteOrder($order_id) {
@@ -305,11 +308,110 @@ class ModelSaleOrder extends Model {
 	}
 
 	public function getOrder($order_id) {
-		//$order_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order` o WHERE o.order_id = '" . (int)$order_id . "'");
-
-		$order_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id = '" . (int)$order_id . "'");
+		$order_query = $this->db->query("SELECT *, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM " . DB_PREFIX . "customer c WHERE c.customer_id = o.customer_id) AS customer FROM `" . DB_PREFIX . "order` o WHERE o.order_id = '" . (int)$order_id . "'");
 
 		if ($order_query->num_rows) {
+			$reward = 0;
+
+			$order_product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
+
+			foreach ($order_product_query->rows as $product) {
+				$reward += $product['reward'];
+			}			
+
+			$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['payment_country_id'] . "'");
+
+			if ($country_query->num_rows) {
+				$payment_iso_code_2 = $country_query->row['iso_code_2'];
+				$payment_iso_code_3 = $country_query->row['iso_code_3'];
+			} else {
+				$payment_iso_code_2 = '';
+				$payment_iso_code_3 = '';
+			}
+
+			$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$order_query->row['payment_zone_id'] . "'");
+
+			if ($zone_query->num_rows) {
+				$payment_zone_code = $zone_query->row['code'];
+			} else {
+				$payment_zone_code = '';
+			}
+
+			$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['shipping_country_id'] . "'");
+
+			if ($country_query->num_rows) {
+				$shipping_iso_code_2 = $country_query->row['iso_code_2'];
+				$shipping_iso_code_3 = $country_query->row['iso_code_3'];
+			} else {
+				$shipping_iso_code_2 = '';
+				$shipping_iso_code_3 = '';
+			}
+
+			$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$order_query->row['shipping_zone_id'] . "'");
+
+			if ($zone_query->num_rows) {
+				$shipping_zone_code = $zone_query->row['code'];
+			} else {
+				$shipping_zone_code = '';
+			}
+
+			if ($order_query->row['affiliate_id']) {
+				$affiliate_id = $order_query->row['affiliate_id'];
+			} else {
+				$affiliate_id = 0;
+			}				
+
+			$this->load->model('sale/affiliate');
+
+			$affiliate_info = $this->model_sale_affiliate->getAffiliate($affiliate_id);
+
+			if ($affiliate_info) {
+				$affiliate_firstname = $affiliate_info['firstname'];
+				$affiliate_lastname = $affiliate_info['lastname'];
+			} else {
+				$affiliate_firstname = '';
+				$affiliate_lastname = '';				
+			}
+
+			$this->load->model('localisation/language');
+
+			$language_info = $this->model_localisation_language->getLanguage($order_query->row['language_id']);
+
+			if ($language_info) {
+				$language_code = $language_info['code'];
+				$language_filename = $language_info['filename'];
+				$language_directory = $language_info['directory'];
+			} else {
+				$language_code = '';
+				$language_filename = '';
+				$language_directory = '';
+			}
+
+			$amazonOrderId = '';
+
+			if ($this->config->get('amazon_status') == 1) {
+				$amazon_query = $this->db->query("
+					SELECT `amazon_order_id`
+					FROM `" . DB_PREFIX . "amazon_order`
+					WHERE `order_id` = " . (int)$order_query->row['order_id'] . "
+					LIMIT 1")->row;
+
+				if (isset($amazon_query['amazon_order_id']) && !empty($amazon_query['amazon_order_id'])) {
+					$amazonOrderId = $amazon_query['amazon_order_id'];
+				}
+			}
+
+			if ($this->config->get('amazonus_status') == 1) {
+				$amazon_query = $this->db->query("
+						SELECT `amazonus_order_id`
+						FROM `" . DB_PREFIX . "amazonus_order`
+						WHERE `order_id` = " . (int)$order_query->row['order_id'] . "
+						LIMIT 1")->row;
+
+				if (isset($amazon_query['amazonus_order_id']) && !empty($amazon_query['amazonus_order_id'])) {
+					$amazonOrderId = $amazon_query['amazonus_order_id'];
+				}
+			}
 
 			return array(
 				'amazon_order_id'         => $amazonOrderId,
@@ -391,9 +493,8 @@ class ModelSaleOrder extends Model {
 	}
 
 	public function getOrders($data = array()) {
-		$sql = "SELECT o.order_id, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified, o.email, o.shipping_code FROM `" . DB_PREFIX . "order` o";
+		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o";
 
-		// Add Query Filters
 		if (isset($data['filter_order_status_id']) && !is_null($data['filter_order_status_id'])) {
 			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
 		} else {
@@ -453,10 +554,8 @@ class ModelSaleOrder extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		// Query Database
 		$query = $this->db->query($sql);
 
-		// Return Results from Database
 		return $query->rows;
 	}
 
@@ -681,16 +780,16 @@ class ModelSaleOrder extends Model {
 		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "order_history WHERE order_status_id = '" . (int)$order_status_id . "'");
 
 		return $query->row['total'];
-	}	
+	}
 
 	public function getEmailsByProductsOrdered($products, $start, $end) {
 		$implode = array();
 
 		foreach ($products as $product_id) {
-			$implode[] = "op.product_id = '" . $product_id . "'";
+			$implode[] = "op.product_id = '" . (int)$product_id . "'";
 		}
 
-		$query = $this->db->query("SELECT DISTINCT email FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "order_product op ON (o.order_id = op.order_id) WHERE (" . implode(" OR ", $implode) . ") AND o.order_status_id <> '0'");
+		$query = $this->db->query("SELECT DISTINCT email FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "order_product op ON (o.order_id = op.order_id) WHERE (" . implode(" OR ", $implode) . ") AND o.order_status_id <> '0' LIMIT " . (int)$start . "," . (int)$end);
 
 		return $query->rows;
 	}
@@ -699,12 +798,12 @@ class ModelSaleOrder extends Model {
 		$implode = array();
 
 		foreach ($products as $product_id) {
-			$implode[] = "op.product_id = '" . $product_id . "'";
+			$implode[] = "op.product_id = '" . (int)$product_id . "'";
 		}
 
-		$query = $this->db->query("SELECT DISTINCT email FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "order_product op ON (o.order_id = op.order_id) WHERE (" . implode(" OR ", $implode) . ") AND o.order_status_id <> '0' LIMIT " . $start . "," . $end);	
+		$query = $this->db->query("SELECT DISTINCT email FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "order_product op ON (o.order_id = op.order_id) WHERE (" . implode(" OR ", $implode) . ") AND o.order_status_id <> '0'");
 
 		return $query->row['total'];
-	}	
+	}
 }
 ?>

@@ -3,14 +3,14 @@
 $_['heading_title']                  = 'Checkout';
 
 // Text
-$_['text_cart']                      = 'Cart';
+$_['text_cart']                      = 'Shopping Cart';
 $_['text_checkout_option']           = 'Step 1: Checkout Options';
 $_['text_checkout_account']          = 'Step 2: Account &amp; Billing Details';
 $_['text_checkout_payment_address']  = 'Step 2: Billing Details';
 $_['text_checkout_shipping_address'] = 'Step 3: Delivery Details';
 $_['text_checkout_shipping_method']  = 'Step 4: Delivery Method';
 $_['text_checkout_payment_method']   = 'Step 5: Payment Method';
-$_['text_checkout_confirm']          = 'Step 6: Place Order';
+$_['text_checkout_confirm']          = 'Step 6: Confirm Order';
 $_['text_modify']                    = 'Modify &raquo;';
 $_['text_new_customer']              = 'New Customer';
 $_['text_returning_customer']        = 'Returning Customer';
@@ -99,5 +99,4 @@ $_['error_no_payment']               = 'Warning: No Payment options are availabl
 $_['text_trial']                    = '%s every %s %s for %s payments then ';
 $_['text_recurring']                = '%s every %s %s';
 $_['text_length']                   = ' for %s payments';
-$_['button_confirm'] 				= 'Place Order';
 ?>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Ecommerce Installation</title>
+<title>OpenCart - Installation</title>
 <base href="<?php echo $base; ?>" />
 <link rel="stylesheet" type="text/css" href="view/stylesheet/stylesheet.css" />
 <script type="text/javascript" src="view/javascript/cufon/cufon-yui.js"></script>
@@ -17,4 +17,6 @@ Cufon.replace('h2, #header a, .blog-list .date, .blog-list .comment, .blog-info 
 </head>
 <body>
 <div id="container">
-
+<div id="header">
+  <div id="logo"><img src="view/image/logo.png" alt="OpenCart" title="OpenCart" /></div>
+</div>

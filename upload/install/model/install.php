@@ -3,7 +3,7 @@ class ModelInstall extends Model {
 	public function database($data) {
 		$db = new DB($data['db_driver'], $data['db_host'], $data['db_user'], $data['db_password'], $data['db_name']);
 				
-		$file = DIR_APPLICATION . 'dbstart.sql';
+		$file = DIR_APPLICATION . 'opencart.sql';
 		
 		if (!file_exists($file)) { 
 			exit('Could not load sql file: ' . $file); 
@@ -42,7 +42,7 @@ class ModelInstall extends Model {
 			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_email', value = '" . $db->escape($data['email']) . "'");
 			
 			$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_url'");
-			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_url', value = '" . $db->escape(HTTP_ECOM) . "'");
+			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_url', value = '" . $db->escape(HTTP_OPENCART) . "'");
 			
 			$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_encryption'");
 			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_encryption', value = '" . $db->escape(md5(mt_rand())) . "'");

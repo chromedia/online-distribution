@@ -39,7 +39,11 @@ class ControllerAccountSuccess extends Controller {
 
 		$this->data['button_continue'] = $this->language->get('button_continue');
 
-
+		if ($this->cart->hasProducts()) {
+			$this->data['continue'] = $this->url->link('checkout/cart', '', 'SSL');
+		} else {
+			$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
+		}
 
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/success.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/common/success.tpl';

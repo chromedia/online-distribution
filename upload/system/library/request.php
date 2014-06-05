@@ -1,5 +1,4 @@
 <?php
-// Cleans global data upon construction
 class Request {
 	public $get = array();
 	public $post = array();

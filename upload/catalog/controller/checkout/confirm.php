@@ -40,9 +40,9 @@ class ControllerCheckoutConfirm extends Controller {
 		}			
 
 		// Validate if payment method has been set.	
-		/*if (!isset($this->session->data['payment_method'])) {
+		if (!isset($this->session->data['payment_method'])) {
 			$redirect = $this->url->link('checkout/checkout', '', 'SSL');
-		} */
+		}
 
 		// Validate cart has products and has stock.	
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
@@ -108,7 +108,6 @@ class ControllerCheckoutConfirm extends Controller {
 			$data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
 			$data['store_id'] = $this->config->get('config_store_id');
 			$data['store_name'] = $this->config->get('config_name');
-			$data['button_confirm'] = $this->config->get('button_confirm');
 
 			if ($data['store_id']) {
 				$data['store_url'] = $this->config->get('config_url');		
@@ -161,7 +160,6 @@ class ControllerCheckoutConfirm extends Controller {
 				$data['payment_method'] = '';
 			}
 
-			// catalog/model/checkout/order.php
 			if (isset($this->session->data['payment_method']['code'])) {
 				$data['payment_code'] = $this->session->data['payment_method']['code'];
 			} else {
@@ -415,9 +413,7 @@ class ControllerCheckoutConfirm extends Controller {
 
 			$this->data['totals'] = $total_data;
 
-			// Prepare payment extension controller code
-			//$this->data['payment'] = $this->getChild('payment/' . $this->session->data['payment_method']['code']);
-
+			$this->data['payment'] = $this->getChild('payment/' . $this->session->data['payment_method']['code']);
 		} else {
 			$this->data['redirect'] = $redirect;
 		}			

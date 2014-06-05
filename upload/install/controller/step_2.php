@@ -2,96 +2,8 @@
 class ControllerStep2 extends Controller {
 	private $error = array();
 
-	public function index() {		
+	public function index() {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			
-			$this->load->model('install');
-			$this->model_install->database($this->request->post);
-
-			// Create config file in base folder
-
-			$output  = '<?php' . "\n";
-			$output .= '// HTTP' . "\n";
-			$output .= 'define(\'HTTP_SERVER\', \'' . HTTP_ECOM . '\');' . "\n\n";
-
-			$output .= '// HTTPS' . "\n";
-			$output .= 'define(\'HTTPS_SERVER\', \'' . HTTP_ECOM . '\');' . "\n\n";
-
-			$output .= '// DIR' . "\n";
-			$output .= 'define(\'DIR_HOME\', \'' . DIR_ECOM . '\');' . "\n";			
-			$output .= 'define(\'DIR_APPLICATION\', \'' . DIR_ECOM . 'catalog/\');' . "\n";
-			$output .= 'define(\'DIR_SYSTEM\', \'' . DIR_ECOM. 'system/\');' . "\n";
-			$output .= 'define(\'DIR_DATABASE\', \'' . DIR_ECOM . 'system/database/\');' . "\n";
-			$output .= 'define(\'DIR_LANGUAGE\', \'' . DIR_ECOM . 'catalog/language/\');' . "\n";
-			$output .= 'define(\'DIR_TEMPLATE\', \'' . DIR_ECOM . 'catalog/view/\');' . "\n";
-			$output .= 'define(\'DIR_CONFIG\', \'' . DIR_ECOM . 'system/config/\');' . "\n";
-			$output .= 'define(\'DIR_IMAGE\', \'' . DIR_ECOM . 'image/\');' . "\n";
-			$output .= 'define(\'DIR_CACHE\', \'' . DIR_ECOM . 'system/cache/\');' . "\n";
-			$output .= 'define(\'DIR_DOWNLOAD\', \'' . DIR_ECOM . 'download/\');' . "\n";
-			$output .= 'define(\'DIR_LOGS\', \'' . DIR_ECOM . 'system/logs/\');' . "\n\n";
-
-			$output .= '// DB' . "\n";
-			$output .= 'define(\'DB_DRIVER\', \'' . addslashes($this->request->post['db_driver']) . '\');' . "\n";
-			$output .= 'define(\'DB_HOSTNAME\', \'' . addslashes($this->request->post['db_host']) . '\');' . "\n";
-			$output .= 'define(\'DB_USERNAME\', \'' . addslashes($this->request->post['db_user']) . '\');' . "\n";
-			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
-			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
-			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n";
-
-			$output .= '// Third Party API Credentials' . "\n";
-			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'PRIVATE_KEY_HERE\');' . "\n";
-			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'PUBLIC_KEY_HERE\');' . "\n";
-			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'AUTH_KEY_HERE\');' . "\n";
-			$output .= '?>';				
-
-			$file = fopen(DIR_ECOM . 'config.php', 'w');
-
-			fwrite($file, $output);
-
-			fclose($file);
-
-			// Create config file in admin folder
-
-			$output  = '<?php' . "\n";
-			$output .= '// HTTP' . "\n";
-			$output .= 'define(\'HTTP_SERVER\', \'' . HTTP_ECOM . 'admin/\');' . "\n";
-			$output .= 'define(\'HTTP_CATALOG\', \'' . HTTP_ECOM . '\');' . "\n\n";
-
-			$output .= '// HTTPS' . "\n";
-			$output .= 'define(\'HTTPS_SERVER\', \'' . HTTP_ECOM . 'admin/\');' . "\n";
-			$output .= 'define(\'HTTPS_CATALOG\', \'' . HTTP_ECOM . '\');' . "\n\n";
-
-			$output .= '// DIR' . "\n";
-			$output .= 'define(\'DIR_HOME\', \'' . DIR_ECOM . '\');' . "\n";			
-			$output .= 'define(\'DIR_APPLICATION\', \'' . DIR_ECOM . 'admin/\');' . "\n";
-			$output .= 'define(\'DIR_SYSTEM\', \'' . DIR_ECOM . 'system/\');' . "\n";
-			$output .= 'define(\'DIR_DATABASE\', \'' . DIR_ECOM . 'system/database/\');' . "\n";
-			$output .= 'define(\'DIR_LANGUAGE\', \'' . DIR_ECOM . 'admin/language/\');' . "\n";
-			$output .= 'define(\'DIR_TEMPLATE\', \'' . DIR_ECOM . 'admin/view/template/\');' . "\n";
-			$output .= 'define(\'DIR_CONFIG\', \'' . DIR_ECOM . 'system/config/\');' . "\n";
-			$output .= 'define(\'DIR_IMAGE\', \'' . DIR_ECOM . 'image/\');' . "\n";
-			$output .= 'define(\'DIR_CACHE\', \'' . DIR_ECOM . 'system/cache/\');' . "\n";
-			$output .= 'define(\'DIR_DOWNLOAD\', \'' . DIR_ECOM . 'download/\');' . "\n";
-			$output .= 'define(\'DIR_LOGS\', \'' . DIR_ECOM . 'system/logs/\');' . "\n";
-			$output .= 'define(\'DIR_CATALOG\', \'' . DIR_ECOM . 'catalog/\');' . "\n\n";
-
-			$output .= '// DB' . "\n";
-			$output .= 'define(\'DB_DRIVER\', \'' . addslashes($this->request->post['db_driver']) . '\');' . "\n";
-			$output .= 'define(\'DB_HOSTNAME\', \'' . addslashes($this->request->post['db_host']) . '\');' . "\n";
-			$output .= 'define(\'DB_USERNAME\', \'' . addslashes($this->request->post['db_user']) . '\');' . "\n";
-			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
-			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
-			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n";
-			$output .= '?>';	
-
-			$file = fopen(DIR_ECOM . 'admin/config.php', 'w');
-
-			fwrite($file, $output);
-
-			fclose($file);
-
-			// Redirect to page for step 3
-
 			$this->redirect($this->url->link('step_3'));
 		}
 
@@ -101,109 +13,17 @@ class ControllerStep2 extends Controller {
 			$this->data['error_warning'] = '';
 		}
 
-		if (isset($this->error['db_driver'])) {
-			$this->data['error_db_driver'] = $this->error['db_driver'];
-		} else {
-			$this->data['error_db_driver'] = '';
-		}
-
-		if (isset($this->error['db_host'])) {
-			$this->data['error_db_host'] = $this->error['db_host'];
-		} else {
-			$this->data['error_db_host'] = '';
-		}
-
-		if (isset($this->error['db_user'])) {
-			$this->data['error_db_user'] = $this->error['db_user'];
-		} else {
-			$this->data['error_db_user'] = '';
-		}
-
-		if (isset($this->error['db_name'])) {
-			$this->data['error_db_name'] = $this->error['db_name'];
-		} else {
-			$this->data['error_db_name'] = '';
-		}
-
-		if (isset($this->error['db_prefix'])) {
-			$this->data['error_db_prefix'] = $this->error['db_prefix'];
-		} else {
-			$this->data['error_db_prefix'] = '';
-		}
-
-		if (isset($this->error['username'])) {
-			$this->data['error_username'] = $this->error['username'];
-		} else {
-			$this->data['error_username'] = '';
-		}
-
-		if (isset($this->error['password'])) {
-			$this->data['error_password'] = $this->error['password'];
-		} else {
-			$this->data['error_password'] = '';
-		}
-
-		if (isset($this->error['email'])) {
-			$this->data['error_email'] = $this->error['email'];
-		} else {
-			$this->data['error_email'] = '';
-		}
-
 		$this->data['action'] = $this->url->link('step_2');
 
-		if (isset($this->request->post['db_driver'])) {
-			$this->data['db_driver'] = $this->request->post['db_driver'];
-		} else {
-			$this->data['db_driver'] = 'mysqli';
-		}
+		$this->data['config_catalog'] = DIR_OPENCART . 'config.php';
+		$this->data['config_admin'] = DIR_OPENCART . 'admin/config.php';
 
-		if (isset($this->request->post['db_host'])) {
-			$this->data['db_host'] = $this->request->post['db_host'];
-		} else {
-			$this->data['db_host'] = 'localhost';
-		}
-
-		if (isset($this->request->post['db_user'])) {
-			$this->data['db_user'] = html_entity_decode($this->request->post['db_user']);
-		} else {
-			$this->data['db_user'] = '';
-		}
-
-		if (isset($this->request->post['db_password'])) {
-			$this->data['db_password'] = html_entity_decode($this->request->post['db_password']);
-		} else {
-			$this->data['db_password'] = '';
-		}
-
-		if (isset($this->request->post['db_name'])) {
-			$this->data['db_name'] = html_entity_decode($this->request->post['db_name']);
-		} else {
-			$this->data['db_name'] = '';
-		}
-
-		if (isset($this->request->post['db_prefix'])) {
-			$this->data['db_prefix'] = html_entity_decode($this->request->post['db_prefix']);
-		} else {
-			$this->data['db_prefix'] = 'oc_';
-		}
-
-		if (isset($this->request->post['username'])) {
-			$this->data['username'] = $this->request->post['username'];
-		} else {
-			$this->data['username'] = 'admin';
-		}
-
-		if (isset($this->request->post['password'])) {
-			$this->data['password'] = $this->request->post['password'];
-		} else {
-			$this->data['password'] = '';
-		}
-
-		if (isset($this->request->post['email'])) {
-			$this->data['email'] = $this->request->post['email'];
-		} else {
-			$this->data['email'] = '';
-		}
+		$this->data['cache'] = DIR_SYSTEM . 'cache';
+		$this->data['logs'] = DIR_SYSTEM . 'logs';
+		$this->data['image'] = DIR_OPENCART . 'image';
+		$this->data['image_cache'] = DIR_OPENCART . 'image/cache';
+		$this->data['image_data'] = DIR_OPENCART . 'image/data';
+		$this->data['download'] = DIR_OPENCART . 'download';
 
 		$this->data['back'] = $this->url->link('step_1');
 
@@ -213,75 +33,84 @@ class ControllerStep2 extends Controller {
 			'footer'
 		);
 
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
 	}
 
 	private function validate() {
-		if (!$this->request->post['db_host']) {
-			$this->error['db_host'] = 'Host required!';
+		if (phpversion() < '5.0') {
+			$this->error['warning'] = 'Warning: You need to use PHP5 or above for OpenCart to work!';
 		}
 
-		if (!$this->request->post['db_user']) {
-			$this->error['db_user'] = 'User required!';
+		if (!ini_get('file_uploads')) {
+			$this->error['warning'] = 'Warning: file_uploads needs to be enabled!';
 		}
 
-		if (!$this->request->post['db_name']) {
-			$this->error['db_name'] = 'Database Name required!';
+		if (ini_get('session.auto_start')) {
+			$this->error['warning'] = 'Warning: OpenCart will not work with session.auto_start enabled!';
 		}
 
-		if ($this->request->post['db_prefix'] && preg_match('/[^a-z0-9_]/', $this->request->post['db_prefix'])) {
-			$this->error['db_prefix'] = 'DB Prefix can only contain lowercase characters in the a-z range, 0-9 and "_"!';
+		if (!extension_loaded('mysql')) {
+			$this->error['warning'] = 'Warning: MySQL extension needs to be loaded for OpenCart to work!';
 		}
 
-		if ($this->request->post['db_driver'] == 'mysql') {
-			if(function_exists('mysql_connect')) {
-				if (!$connection = @mysql_connect($this->request->post['db_host'], $this->request->post['db_user'], $this->request->post['db_password'])) {
-					$this->error['warning'] = 'Error: Could not connect to the database please make sure the database server, username and password is correct!';
-				} else {
-					if (!@mysql_select_db($this->request->post['db_name'], $connection)) {
-						$this->error['warning'] = 'Error: Database does not exist!';
-					}
+		if (!extension_loaded('gd')) {
+			$this->error['warning'] = 'Warning: GD extension needs to be loaded for OpenCart to work!';
+		}
 
-					mysql_close($connection);
-				}
-			} else {
-				$this->error['db_driver'] = 'MySQL is not supported on your server! Try using MySQLi';
+		if (!extension_loaded('curl')) {
+			$this->error['warning'] = 'Warning: CURL extension needs to be loaded for OpenCart to work!';
+		}
+
+		if (!function_exists('mcrypt_encrypt')) {
+			$this->error['warning'] = 'Warning: mCrypt extension needs to be loaded for OpenCart to work!';
+		}
+
+		if (!extension_loaded('zlib')) {
+			$this->error['warning'] = 'Warning: ZLIB extension needs to be loaded for OpenCart to work!';
+		}
+
+		if (!function_exists('iconv')) {
+			// iconv or mbstrings are used in the utf8 helper. Only 1 is needed but suggested to enable mbstring if iconv is not set
+			if (!extension_loaded('mbstring')) {
+				$this->error['warning'] = 'Warning: mbstring extension needs to be loaded for OpenCart to work!';
 			}
 		}
 
-		if ($this->request->post['db_driver'] == 'mysqli') {
-			if(function_exists('mysqli_connect')) {
-				$connection = new mysqli($this->request->post['db_host'], $this->request->post['db_user'], $this->request->post['db_password'], $this->request->post['db_name']);
-
-				if (mysqli_connect_error()) {
-					$this->error['warning'] = 'Error: Could not connect to the database please make sure the database server, username and password is correct!';
-				} else {
-					$connection->close();
-				}
-			} else {
-				$this->error['db_driver'] = 'MySQLi is not supported on your server! Try using MySQL';
-			}
+		if (!file_exists(DIR_OPENCART . 'config.php')) {
+			$this->error['warning'] = 'Warning: config.php does not exist. You need to rename config-dist.php to config.php!';
+		} elseif (!is_writable(DIR_OPENCART . 'config.php')) {
+			$this->error['warning'] = 'Warning: config.php needs to be writable for OpenCart to be installed!';
 		}
 
-		if (!$this->request->post['username']) {
-			$this->error['username'] = 'Username required!';
+		if (!file_exists(DIR_OPENCART . 'admin/config.php')) {
+			$this->error['warning'] = 'Warning: admin/config.php does not exist. You need to rename admin/config-dist.php to admin/config.php!';
+		} elseif (!is_writable(DIR_OPENCART . 'admin/config.php')) {
+			$this->error['warning'] = 'Warning: admin/config.php needs to be writable for OpenCart to be installed!';
 		}
 
-		if (!$this->request->post['password']) {
-			$this->error['password'] = 'Password required!';
+		if (!is_writable(DIR_SYSTEM . 'cache')) {
+			$this->error['warning'] = 'Warning: Cache directory needs to be writable for OpenCart to work!';
 		}
 
-		if ((utf8_strlen($this->request->post['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $this->request->post['email'])) {
-			$this->error['email'] = 'Invalid E-Mail!';
+		if (!is_writable(DIR_SYSTEM . 'logs')) {
+			$this->error['warning'] = 'Warning: Logs directory needs to be writable for OpenCart to work!';
 		}
 
-		if (!is_writable(DIR_ECOM . 'config.php')) {
-			$this->error['warning'] = 'Error: Could not write to config.php please check you have set the correct permissions on: ' . DIR_ECOM . 'config.php!';
+		if (!is_writable(DIR_OPENCART . 'image')) {
+			$this->error['warning'] = 'Warning: Image directory needs to be writable for OpenCart to work!';
 		}
 
-		if (!is_writable(DIR_ECOM . 'admin/config.php')) {
-			$this->error['warning'] = 'Error: Could not write to config.php please check you have set the correct permissions on: ' . DIR_ECOM . 'admin/config.php!';
-		}	
+		if (!is_writable(DIR_OPENCART . 'image/cache')) {
+			$this->error['warning'] = 'Warning: Image cache directory needs to be writable for OpenCart to work!';
+		}
+
+		if (!is_writable(DIR_OPENCART . 'image/data')) {
+			$this->error['warning'] = 'Warning: Image data directory needs to be writable for OpenCart to work!';
+		}
+
+		if (!is_writable(DIR_OPENCART . 'download')) {
+			$this->error['warning'] = 'Warning: Download directory needs to be writable for OpenCart to work!';
+		}
 
 		if (!$this->error) {
 			return true;
