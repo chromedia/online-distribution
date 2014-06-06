@@ -1,15 +1,8 @@
-
-
-
-
 .DS_Store
 upload/admin/config.php
 upload/config.php
 
 upload/.htaccess
 upload/system/cache*
-<<<<<<< HEAD
 upload/image*
-=======
-upload/image*
->>>>>>> Created new open cart application.
+latest-news/wp-config.php
