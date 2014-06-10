@@ -58,7 +58,7 @@ class ShippoService
     public function getShipmentInfo($packages, $addressFrom, $addressTo)
     {
         $ratesInfo = array('carriers' => array(), 'ratesOptionPerPackage' => array());
-        $rates = array();
+        $newPackages = array();
 
         foreach ($packages as $key => $package) {
             $parcelInfoArray = $this->makeParcelCall($package);
@@ -68,11 +68,12 @@ class ShippoService
             }
 
             $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
-            $rates[$key]['rates'] = $ratesInfo['ratesOptionPerPackage'];
+            $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
 
+            $newPackages[$key] = $package;
         }
 
-        $_SESSION['packages'] = array_merge($packages, $rates);
+        $_SESSION['packages'] = $newPackages;
         
         return $ratesInfo['carriers'];
     }
@@ -193,7 +194,7 @@ class ShippoService
     {
         if(isset($_SESSION['packages'])) {
             $packages = $_SESSION['packages'];
-            $transactions = array();
+            $newPackages = array();
 
             foreach ($packages as $key => $package) {
                 $possibleRates = $package['rates'];
@@ -216,14 +217,17 @@ class ShippoService
                     $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
                     $object = json_decode($response, true);
 
-                    $transactions[$key]['transaction'] = $response;
+                    $package['transaction'] = $response;
+                    $newPackages[$key] = $package;
                 }
             }
 
-            $_SESSION['packages'] = array_merge($packages, $transactions);
+            $_SESSION['packages'] = $newPackages;
+
+            return true;
         }
 
-        throw new Exception('Session timeout due to inactivity. Please repeat process.');
+        throw new Exception('Session timeout while processing shipping due to inactivity. Please repeat process.');
     }
 
     /**

@@ -87,9 +87,10 @@ class CartService
         $orderInfo = '';
 
         if (isset($_SESSION['packages'])) {
+            $packages = $_SESSION['packages'];
+            
             foreach ($packages as $package) {
                 $transaction = json_decode($package['transaction'], true);
-
 
                 if (isset($transaction['tracking_number'])) {
                     $trackingNumber = $transaction['tracking_number'];
