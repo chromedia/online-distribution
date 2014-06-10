@@ -5,6 +5,7 @@ class ControllerProductProduct extends Controller {
 	public function index() {
 		$this->language->load('product/product');
 
+
 		$this->data['breadcrumbs'] = array();
 
 		$this->data['breadcrumbs'][] = array(
@@ -15,144 +16,144 @@ class ControllerProductProduct extends Controller {
 
 		$this->load->model('catalog/category');
 
-		if (isset($this->request->get['path'])) {
-			$path = '';
+		// if (isset($this->request->get['path'])) {
+		// 	$path = '';
 
-			$parts = explode('_', (string)$this->request->get['path']);
+		// 	$parts = explode('_', (string)$this->request->get['path']);
 
-			$category_id = (int)array_pop($parts);
+		// 	$category_id = (int)array_pop($parts);
 
-			foreach ($parts as $path_id) {
-				if (!$path) {
-					$path = $path_id;
-				} else {
-					$path .= '_' . $path_id;
-				}
+		// 	foreach ($parts as $path_id) {
+		// 		if (!$path) {
+		// 			$path = $path_id;
+		// 		} else {
+		// 			$path .= '_' . $path_id;
+		// 		}
 
-				$category_info = $this->model_catalog_category->getCategory($path_id);
+		// 		$category_info = $this->model_catalog_category->getCategory($path_id);
 
-				if ($category_info) {
-					$this->data['breadcrumbs'][] = array(
-						'text'      => $category_info['name'],
-						'href'      => $this->url->link('product/category', 'path=' . $path),
-						'separator' => $this->language->get('text_separator')
-					);
-				}
-			}
+		// 		if ($category_info) {
+		// 			$this->data['breadcrumbs'][] = array(
+		// 				'text'      => $category_info['name'],
+		// 				'href'      => $this->url->link('product/category', 'path=' . $path),
+		// 				'separator' => $this->language->get('text_separator')
+		// 			);
+		// 		}
+		// 	}
 
-			// Set the last category breadcrumb
-			$category_info = $this->model_catalog_category->getCategory($category_id);
+		// 	// Set the last category breadcrumb
+		// 	$category_info = $this->model_catalog_category->getCategory($category_id);
 
-			if ($category_info) {
-				$url = '';
+		// 	if ($category_info) {
+		// 		$url = '';
 
-				if (isset($this->request->get['sort'])) {
-					$url .= '&sort=' . $this->request->get['sort'];
-				}
+		// 		if (isset($this->request->get['sort'])) {
+		// 			$url .= '&sort=' . $this->request->get['sort'];
+		// 		}
 
-				if (isset($this->request->get['order'])) {
-					$url .= '&order=' . $this->request->get['order'];
-				}
+		// 		if (isset($this->request->get['order'])) {
+		// 			$url .= '&order=' . $this->request->get['order'];
+		// 		}
 
-				if (isset($this->request->get['page'])) {
-					$url .= '&page=' . $this->request->get['page'];
-				}
+		// 		if (isset($this->request->get['page'])) {
+		// 			$url .= '&page=' . $this->request->get['page'];
+		// 		}
 
-				if (isset($this->request->get['limit'])) {
-					$url .= '&limit=' . $this->request->get['limit'];
-				}
+		// 		if (isset($this->request->get['limit'])) {
+		// 			$url .= '&limit=' . $this->request->get['limit'];
+		// 		}
 
-				$this->data['breadcrumbs'][] = array(
-					'text'      => $category_info['name'],
-					'href'      => $this->url->link('product/category', 'path=' . $this->request->get['path'].$url),
-					'separator' => $this->language->get('text_separator')
-				);
-			}
-		}
+		// 		$this->data['breadcrumbs'][] = array(
+		// 			'text'      => $category_info['name'],
+		// 			'href'      => $this->url->link('product/category', 'path=' . $this->request->get['path'].$url),
+		// 			'separator' => $this->language->get('text_separator')
+		// 		);
+		// 	}
+		// }
 
-		$this->load->model('catalog/manufacturer');
+		// $this->load->model('catalog/manufacturer');
 
-		if (isset($this->request->get['manufacturer_id'])) {
-			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_brand'),
-				'href'      => $this->url->link('product/manufacturer'),
-				'separator' => $this->language->get('text_separator')
-			);
+		// if (isset($this->request->get['manufacturer_id'])) {
+		// 	$this->data['breadcrumbs'][] = array(
+		// 		'text'      => $this->language->get('text_brand'),
+		// 		'href'      => $this->url->link('product/manufacturer'),
+		// 		'separator' => $this->language->get('text_separator')
+		// 	);
 
-			$url = '';
+		// 	$url = '';
 
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
+		// 	if (isset($this->request->get['sort'])) {
+		// 		$url .= '&sort=' . $this->request->get['sort'];
+		// 	}
 
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
+		// 	if (isset($this->request->get['order'])) {
+		// 		$url .= '&order=' . $this->request->get['order'];
+		// 	}
 
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
+		// 	if (isset($this->request->get['page'])) {
+		// 		$url .= '&page=' . $this->request->get['page'];
+		// 	}
 
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
+		// 	if (isset($this->request->get['limit'])) {
+		// 		$url .= '&limit=' . $this->request->get['limit'];
+		// 	}
 
-			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($this->request->get['manufacturer_id']);
+		// 	$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($this->request->get['manufacturer_id']);
 
-			if ($manufacturer_info) {
-				$this->data['breadcrumbs'][] = array(
-					'text'	    => $manufacturer_info['name'],
-					'href'	    => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url),
-					'separator' => $this->language->get('text_separator')
-				);
-			}
-		}
+		// 	if ($manufacturer_info) {
+		// 		$this->data['breadcrumbs'][] = array(
+		// 			'text'	    => $manufacturer_info['name'],
+		// 			'href'	    => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url),
+		// 			'separator' => $this->language->get('text_separator')
+		// 		);
+		// 	}
+		// }
 
-		if (isset($this->request->get['search']) || isset($this->request->get['tag'])) {
-			$url = '';
+		// if (isset($this->request->get['search']) || isset($this->request->get['tag'])) {
+		// 	$url = '';
 
-			if (isset($this->request->get['search'])) {
-				$url .= '&search=' . $this->request->get['search'];
-			}
+		// 	if (isset($this->request->get['search'])) {
+		// 		$url .= '&search=' . $this->request->get['search'];
+		// 	}
 
-			if (isset($this->request->get['tag'])) {
-				$url .= '&tag=' . $this->request->get['tag'];
-			}
+		// 	if (isset($this->request->get['tag'])) {
+		// 		$url .= '&tag=' . $this->request->get['tag'];
+		// 	}
 
-			if (isset($this->request->get['description'])) {
-				$url .= '&description=' . $this->request->get['description'];
-			}
+		// 	if (isset($this->request->get['description'])) {
+		// 		$url .= '&description=' . $this->request->get['description'];
+		// 	}
 
-			if (isset($this->request->get['category_id'])) {
-				$url .= '&category_id=' . $this->request->get['category_id'];
-			}
+		// 	if (isset($this->request->get['category_id'])) {
+		// 		$url .= '&category_id=' . $this->request->get['category_id'];
+		// 	}
 
-			if (isset($this->request->get['sub_category'])) {
-				$url .= '&sub_category=' . $this->request->get['sub_category'];
-			}
+		// 	if (isset($this->request->get['sub_category'])) {
+		// 		$url .= '&sub_category=' . $this->request->get['sub_category'];
+		// 	}
 
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
+		// 	if (isset($this->request->get['sort'])) {
+		// 		$url .= '&sort=' . $this->request->get['sort'];
+		// 	}
 
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
+		// 	if (isset($this->request->get['order'])) {
+		// 		$url .= '&order=' . $this->request->get['order'];
+		// 	}
 
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
+		// 	if (isset($this->request->get['page'])) {
+		// 		$url .= '&page=' . $this->request->get['page'];
+		// 	}
 
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
+		// 	if (isset($this->request->get['limit'])) {
+		// 		$url .= '&limit=' . $this->request->get['limit'];
+		// 	}
 
-			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_search'),
-				'href'      => $this->url->link('product/search', $url),
-				'separator' => $this->language->get('text_separator')
-			);
-		}
+		// 	$this->data['breadcrumbs'][] = array(
+		// 		'text'      => $this->language->get('text_search'),
+		// 		'href'      => $this->url->link('product/search', $url),
+		// 		'separator' => $this->language->get('text_separator')
+		// 	);
+		// }
 
 		if (isset($this->request->get['product_id'])) {
 			$product_id = (int)$this->request->get['product_id'];
@@ -167,53 +168,53 @@ class ControllerProductProduct extends Controller {
 		if ($product_info) {
 			$url = '';
 
-			if (isset($this->request->get['path'])) {
-				$url .= '&path=' . $this->request->get['path'];
-			}
+			// if (isset($this->request->get['path'])) {
+			// 	$url .= '&path=' . $this->request->get['path'];
+			// }
 
-			if (isset($this->request->get['filter'])) {
-				$url .= '&filter=' . $this->request->get['filter'];
-			}
+			// if (isset($this->request->get['filter'])) {
+			// 	$url .= '&filter=' . $this->request->get['filter'];
+			// }
 
-			if (isset($this->request->get['manufacturer_id'])) {
-				$url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
-			}
+			// if (isset($this->request->get['manufacturer_id'])) {
+			// 	$url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
+			// }
 
-			if (isset($this->request->get['search'])) {
-				$url .= '&search=' . $this->request->get['search'];
-			}
+			// if (isset($this->request->get['search'])) {
+			// 	$url .= '&search=' . $this->request->get['search'];
+			// }
 
-			if (isset($this->request->get['tag'])) {
-				$url .= '&tag=' . $this->request->get['tag'];
-			}
+			// if (isset($this->request->get['tag'])) {
+			// 	$url .= '&tag=' . $this->request->get['tag'];
+			// }
 
-			if (isset($this->request->get['description'])) {
-				$url .= '&description=' . $this->request->get['description'];
-			}
+			// if (isset($this->request->get['description'])) {
+			// 	$url .= '&description=' . $this->request->get['description'];
+			// }
 
-			if (isset($this->request->get['category_id'])) {
-				$url .= '&category_id=' . $this->request->get['category_id'];
-			}
+			// if (isset($this->request->get['category_id'])) {
+			// 	$url .= '&category_id=' . $this->request->get['category_id'];
+			// }
 
-			if (isset($this->request->get['sub_category'])) {
-				$url .= '&sub_category=' . $this->request->get['sub_category'];
-			}
+			// if (isset($this->request->get['sub_category'])) {
+			// 	$url .= '&sub_category=' . $this->request->get['sub_category'];
+			// }
 
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
+			// if (isset($this->request->get['sort'])) {
+			// 	$url .= '&sort=' . $this->request->get['sort'];
+			// }
 
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
+			// if (isset($this->request->get['order'])) {
+			// 	$url .= '&order=' . $this->request->get['order'];
+			// }
 
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
+			// if (isset($this->request->get['page'])) {
+			// 	$url .= '&page=' . $this->request->get['page'];
+			// }
 
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
+			// if (isset($this->request->get['limit'])) {
+			// 	$url .= '&limit=' . $this->request->get['limit'];
+			// }
 
 			$this->data['breadcrumbs'][] = array(
 				'text'      => $product_info['name'],
@@ -463,81 +464,77 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
 				'common/footer',
 				'common/header'
 			);
 
 			$this->response->setOutput($this->render());
 		} else {
-			$url = '';
+			// $url = '';
 
-			if (isset($this->request->get['path'])) {
-				$url .= '&path=' . $this->request->get['path'];
-			}
+			// if (isset($this->request->get['path'])) {
+			// 	$url .= '&path=' . $this->request->get['path'];
+			// }
 
-			if (isset($this->request->get['filter'])) {
-				$url .= '&filter=' . $this->request->get['filter'];
-			}
+			// if (isset($this->request->get['filter'])) {
+			// 	$url .= '&filter=' . $this->request->get['filter'];
+			// }
 
-			if (isset($this->request->get['manufacturer_id'])) {
-				$url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
-			}
+			// if (isset($this->request->get['manufacturer_id'])) {
+			// 	$url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
+			// }
 
-			if (isset($this->request->get['search'])) {
-				$url .= '&search=' . $this->request->get['search'];
-			}
+			// if (isset($this->request->get['search'])) {
+			// 	$url .= '&search=' . $this->request->get['search'];
+			// }
 
-			if (isset($this->request->get['tag'])) {
-				$url .= '&tag=' . $this->request->get['tag'];
-			}
+			// if (isset($this->request->get['tag'])) {
+			// 	$url .= '&tag=' . $this->request->get['tag'];
+			// }
 
-			if (isset($this->request->get['description'])) {
-				$url .= '&description=' . $this->request->get['description'];
-			}
+			// if (isset($this->request->get['description'])) {
+			// 	$url .= '&description=' . $this->request->get['description'];
+			// }
 
-			if (isset($this->request->get['category_id'])) {
-				$url .= '&category_id=' . $this->request->get['category_id'];
-			}
+			// if (isset($this->request->get['category_id'])) {
+			// 	$url .= '&category_id=' . $this->request->get['category_id'];
+			// }
 
-			if (isset($this->request->get['sub_category'])) {
-				$url .= '&sub_category=' . $this->request->get['sub_category'];
-			}
+			// if (isset($this->request->get['sub_category'])) {
+			// 	$url .= '&sub_category=' . $this->request->get['sub_category'];
+			// }
 
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
+			// if (isset($this->request->get['sort'])) {
+			// 	$url .= '&sort=' . $this->request->get['sort'];
+			// }
 
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
+			// if (isset($this->request->get['order'])) {
+			// 	$url .= '&order=' . $this->request->get['order'];
+			// }
 
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
+			// if (isset($this->request->get['page'])) {
+			// 	$url .= '&page=' . $this->request->get['page'];
+			// }
 
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
+			// if (isset($this->request->get['limit'])) {
+			// 	$url .= '&limit=' . $this->request->get['limit'];
+			// }
 
-			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_error'),
-				'href'      => $this->url->link('product/product', $url . '&product_id=' . $product_id),
-				'separator' => $this->language->get('text_separator')
-			);
+			// $this->data['breadcrumbs'][] = array(
+			// 	'text'      => $this->language->get('text_error'),
+			// 	'href'      => $this->url->link('product/product', $url . '&product_id=' . $product_id),
+			// 	'separator' => $this->language->get('text_separator')
+			// );
 
-			$this->document->setTitle($this->language->get('text_error'));
+			// $this->document->setTitle($this->language->get('text_error'));
 
-			$this->data['heading_title'] = $this->language->get('text_error');
+			// $this->data['heading_title'] = $this->language->get('text_error');
 
-			$this->data['text_error'] = $this->language->get('text_error');
+			// $this->data['text_error'] = $this->language->get('text_error');
 
-			$this->data['button_continue'] = $this->language->get('button_continue');
+			// $this->data['button_continue'] = $this->language->get('button_continue');
 
-			$this->data['continue'] = $this->url->link('common/home');
+			// $this->data['continue'] = $this->url->link('common/home');
 
 			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
 
@@ -548,10 +545,6 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
 				'common/footer',
 				'common/header'
 			);
@@ -778,4 +771,3 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 }
-?>

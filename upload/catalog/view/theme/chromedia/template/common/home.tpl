@@ -24,6 +24,10 @@
 </div>
 <!-- END LANDING SECTION -->
 
+<!-- DISPLAY PRODUCTS -->
+
+<!-- DISPLAY PRODUCTS -->
+
 <!-- BEG EMAIL SECTION -->
 
 <div id="newsletter">
@@ -62,7 +66,37 @@
 </div>
 
 <!-- END EMAIL SECTION -->
+  <?php if(!empty($products)): ?>
+    <section class="row block-product-nav">
+        <div class="small-12 columns">
+          <h1 style="margin: 1em auto 1em auto;" name="latest_news">Latest Products</h1>
+        </div>
 
+        <ul>
+            <?php foreach ($products as $product): ?>
+                <li style="display:inline; ">
+                    <?php if ($product['thumb']): ?>
+                          <div class="image"><a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" /></a>
+                          </div>
+                    <?php else: ?>
+                        <div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>
+                    <?php endif ?>
+
+                    <?php if ($product['price']): ?>
+                          <div class="price">
+                            <?php if (!$product['special']): ?>
+                                <?php echo $product['price']; ?>
+                            <?php else: ?>
+                                <span class="price-old">Old: <?php echo $product['price']; ?></span>
+                                <span class="price-new">Price: <?php echo $product['special']; ?></span>
+                            <?php endif; ?>
+                          </div>
+                    <?php endif ?> 
+                </li> 
+            <?php endforeach;?>
+        </ul>
+    </section>
+  <?php endif;?>
 <!-- BEG LATEST NEWS SECTION -->
 
 <section class="row">

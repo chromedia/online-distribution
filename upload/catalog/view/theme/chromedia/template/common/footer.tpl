@@ -35,12 +35,10 @@
 </footer>
 
 <!-- END FOOTER SECTION -->
-
+    <script type="text/javascript"  src="catalog/view/javascript/bower_components/foundation/js/foundation.min.js"></script>
     <script type="text/javascript" src="catalog/view/javascript/custom/app.js"></script>
-    
-    
-    <script type="text/javascript"  src="bower_components/foundation/js/foundation.min.js"></script>
-    <script type="text/javascript"  src='catalog/view/javascript/smooth-scroll.js'></script>
+  
+    <script type="text/javascript"  src='catalog/view/javascript/custom/smooth-scroll.js'></script>
 
   </body>
 </html>
