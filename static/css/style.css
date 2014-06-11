@@ -16,6 +16,7 @@ strong{
 .card-bordered{
   border: 1px solid #CFDDE5;
   border-radius: 5px;
+  margin-bottom: 20px;
 }
 .card-title,
 .card-body,
@@ -352,4 +353,15 @@ label.use-cc-info{
   margin-right: 5px;
   position: relative;
   top: -3px;
+}
+
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { 
+  .product-sidebar{
+    top: 0;
+  }
+}
+@media only screen and (max-width: 40em) { 
+  .product-sidebar{
+    top: 0;
+  }
 }
