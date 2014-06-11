@@ -217,6 +217,17 @@ dd.dd-price,.dd-price{
   background-image: url('../img/icon-lock-sm.png');
   display: inline-block;
 }
+.icon-paypal{
+  width: 29px;
+  height: 18px;
+  background-image: url('../img/icon-paypal.png');
+  display: inline-block;
+  vertical-align: middle
+}
+.paypal{
+  margin: 30px 0;
+  font-size: 14px;
+}
 .credit-cards{
   height: 32px;
   width: 225px;
