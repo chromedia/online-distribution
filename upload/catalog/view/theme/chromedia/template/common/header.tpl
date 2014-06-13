@@ -6,12 +6,13 @@
     <title>Open Tech Collaborative</title>
     <link rel="shortcut icon" href="img/favicon.ico">
 
+    <!-- <link rel="stylesheet" href="catalog/view/theme/chromedia/css/foundation/foundation.min.css" /> -->
     <link rel="stylesheet" href="catalog/view/theme/chromedia/css/app.css" />
-     <link rel="stylesheet" href="catalog/view/theme/chromedia/css/style.css" />
+    <link rel="stylesheet" href="catalog/view/theme/chromedia/css/style.css" />
+    
 
-    <script src="catalog/view/javascript/bower_components/modernizr/modernizr.js"></script>
-    <script src="catalog/view/javascript/bower_components/jquery/jquery.min.js"></script>
-
+    <script src="catalog/view/theme/chromedia/javascripts/foundation/modernizr.foundation.js"></script>
+    <script src="catalog/view/theme/chromedia/javascripts/jquery/jquery.min.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

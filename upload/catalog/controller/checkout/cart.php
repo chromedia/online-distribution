@@ -318,17 +318,17 @@ class ControllerCheckoutCart extends Controller {
 				$quantity = 1;
 			}
 
-			if (isset($this->request->post['option'])) {
-				$option = array_filter($this->request->post['option']);
-			} else {
-				$option = array();	
-			}
+			// if (isset($this->request->post['option'])) {
+			// 	$option = array_filter($this->request->post['option']);
+			// } else {
+			// 	$option = array();	
+			// }
 
-			if (isset($this->request->post['profile_id'])) {
-				$profile_id = $this->request->post['profile_id'];
-			} else {
-				$profile_id = 0;
-			}
+			// if (isset($this->request->post['profile_id'])) {
+			// 	$profile_id = $this->request->post['profile_id'];
+			// } else {
+			// 	$profile_id = 0;
+			// }
 
 			if (!$json) {
 				$this->cart->add($this->request->post['product_id'], $quantity, $option, $profile_id);

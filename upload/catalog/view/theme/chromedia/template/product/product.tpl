@@ -16,7 +16,8 @@
   4. 
 -->
 
-<div id="breadcrumbs-product-page" class="breadcrumb">
+
+<div id="breadcrumbs-product-page" class="breadcrumb" style="padding:70px;">
     <?php foreach ($breadcrumbs as $breadcrumb): ?>
         <?php echo $breadcrumb['separator']; ?>
 
@@ -28,9 +29,7 @@
     <?php endforeach; ?>
 </div>
 
-
-
-<div class="product-cover" style="background-image: url('img/beehive-image.jpg')">
+<div class="product-cover" style="background-image: url('<?php echo $header_img;?>')">
     <div class="notification green" style="display:none;"></div>
 
     <div class="product-title">
@@ -40,7 +39,7 @@
     </div>
 </div>
 <div class="row">
-    <ul class="product-tabs tabs pill">
+    <ul class="product-tabs tabs">
         <li><a href="#product-overview" class="active">Product Overview</a></li>
         <li><a href="#details">Details</a></li>
         <li><a href="#documentation">Documentation</a></li>
@@ -49,52 +48,54 @@
 
 <div class="row">
     <?php if(false): ?>
-        <div  class="large-8 columns tabs-content">
-            <div class="product-description active" id="product-overview"> 
-                <?php echo $description; ?>
-            </div>
+      <ul class="large-8 columns tabs-content">
+          <li class="product-description active" id="product-overview"> 
+              <?php echo $description; ?>
+          </li>
 
-            <div class="product-description" id="details"> 
-                <?php echo 'details testing'; ?>
-            </div>
+          <li class="product-description" id="details"> 
+              <?php echo 'details testing'; ?>
+          </li>
 
-            <div class="product-description" id="documentation"> 
-                <?php echo 'documentation testing'; ?>
-            </div>  
-        </div>
+          <li class="product-description" id="documentation"> 
+              <?php echo 'documentation testing'; ?>
+          </li>
+      </ul>
     <?php endif;?>
 
-    <div  class="large-8 columns">
-        <ul class="tabs-content">
-            <li class="product-description active" id="product-overview"> 
-                <?php echo $description; ?>
-            </li>
-            <li class="product-description" id="details"> 
-                <?php echo 'details testing'; ?>
-            </li>
+    <div class="large-8 columns tabs-content">
+        <div class="product-description active" id="product-overview"> 
+            <?php echo $description; ?>
+        </div>
 
-            <li class="product-description" id="documentation"> 
-                <?php echo 'documentation testing'; ?>
-            </li> 
-        </ul> 
+        <div class="product-description" id="details"> 
+            <?php //echo 'details testing'; ?>
+        </div>
+
+        <div class="product-description" id="documentation"> 
+            <?php  //echo //'documentation testing'; ?>
+        </div>
     </div>
 
     <div class="large-4 columns">
         <div class="product-sidebar">
             <dl class="product-list-details">
                 <dt>Price</dt>
-                <dd class="dd-price">$120</dd>
+                <dd class="dd-price"><?php echo $price; ?></dd>
             </dl>
             <dl class="product-list-details">
                 <dt>Availability</dt>
-                <dd>In-stock</dd>
+                <dd><?php echo $stock; ?></dd>
             </dl>
             <dl class="product-list-details">
                 <dt>Quantity</dt>
-                <dd><input type="text" value="1" class="qty-input"></dd>
+                <dd>
+                  <input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" class="qty-input"></dd>
             </dl>
 
-            <input type="submit" value="Add to cart" class="btn add-to-cart-btn">
+            <!-- Hidden Product ID -->
+            <input type="hidden" name="product_id" size="2" value="<?php echo $product_id; ?>" />
+            <input type="submit" value="Add to Cart" class="btn add-to-cart-btn">
       </div>
     </div>
 </div>
@@ -188,38 +189,24 @@
 
 <!-- Add to Cart Javascript -->
 <script type="text/javascript">  
-    jQuery(function($) {    
-        $('#add-to-cart').on('click', function(e) {
+    jQuery(function($) {
+        $('.add-to-cart-btn').on('click', function(e) {
             e.preventDefault();
-            // Get form
-            var sendform = $('#sendform');
-
-            // Serialize form
-            var data = $('#sendform').serialize();
-
             // add data to cart
+            var data = { product_id: $('input[name="product_id"]').val(), quantity: $('input[name="quantity"]').val() };
 
             // Send POST data to server
             $(function() {
                 $.ajax({
                     url: 'index.php?route=checkout/cart/add',
                     type: 'post',
-                    data: $('#sendform').serialize(),
+                    data: data,
                     dataType: 'json',
                     success: function(json) {
-                        // TODO: Improve everythingggggg..
                         $('.success, .warning, .attention, information, .error').remove();
                         
                         if (json['error']) {
-                            if (json['error']['option']) {
-                                for (i in json['error']['option']) {
-                                    $('#option-' + i).after('<span class="error">' + json['error']['option'][i] + '</span>');
-                                }
-                            }
-                            
-                            if (json['error']['profile']) {
-                                $('select[name="profile_id"]').after('<span class="error">' + json['error']['profile'] + '</span>');
-                            }
+                        
                         } 
                         
                         if (json['success']) {

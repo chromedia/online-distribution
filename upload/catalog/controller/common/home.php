@@ -16,7 +16,6 @@ class ControllerCommonHome extends Controller {
 
         $this->template =  $this->config->get('config_template').'/template/home/home.tpl';
         
-        
         // setting of products data
         $this->setFeaturedProductsInfo();
         $this->data['button_cart'] = $this->language->get('button_cart');
