@@ -10,11 +10,6 @@ class ControllerCheckoutShipping extends Controller {
      */
     public function checkShippingInfo()
     {
-        // 1. Confirm Address
-        // 2. Prepare packages
-        // 3. Get shipping speeds
-        // 4. Select shipping speeds
-
         /*** Confirming address **/
         try {
             $toAddressData = array(
@@ -48,8 +43,6 @@ class ControllerCheckoutShipping extends Controller {
             $packages = $cartService->preparePackages($this->cart);
 
             $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
-
-            //var_dump($info);
 
             $rates = array('rates' => $info);
             $_SESSION['rates'] = $info;

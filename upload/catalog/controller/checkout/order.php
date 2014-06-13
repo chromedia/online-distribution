@@ -3,6 +3,8 @@
 require_once(DIR_SYSTEM . 'services/StripeService.php');
 require_once(DIR_SYSTEM . 'services/CartService.php');
 require_once(DIR_SYSTEM . 'services/ShippoService.php');
+require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
+
 
 /**
  * Handles order process
@@ -23,12 +25,13 @@ class ControllerCheckoutOrder extends Controller {
         try {
             $cartService = CartService::getInstance();
             $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
+
             $amount = $this->cart->getTotal() + $shippingAmount;
             $email = $this->request->post['customer_email'];
 
             $response = array();
 
-            /*$stripeService = StripeService::getInstance();
+            $stripeService = StripeService::getInstance();
             $charge = $stripeService->processPayment(array(
                 'amount'   => (int)($amount * 100),
                 'currency' => 'usd',
@@ -36,17 +39,19 @@ class ControllerCheckoutOrder extends Controller {
                 'description' => $email
             ));
 
-            if ($charge['paid'] === true) {*/
+            if ($charge['paid'] === true) {
 
                 $shippoService = ShippoService::getInstance();
                 $shippoService->requestShipping($this->request->post['service_name']);
-                //TODO:  Save to database if necessary
+                //TODO:  Save to database needed fields
 
-                $cartService->emailCustomerForConfirmation($email);
+                
+
+                $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);
                 $response = array('success' => true);
-            /*} else {
+            } else {
                 $response = array('success' => false, 'errorMsg' => 'Payment System Error!');
-            }*/
+            }
         } catch (Exception $e) {
             $response = array('success' => false, 'errorMsg' => $e->getMessage());
         }

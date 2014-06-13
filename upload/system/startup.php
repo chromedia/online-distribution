@@ -37,7 +37,9 @@ require_once(DIR_SYSTEM . 'library/encryption.php');
 require_once(DIR_SYSTEM . 'library/image.php');
 require_once(DIR_SYSTEM . 'library/language.php');
 require_once(DIR_SYSTEM . 'library/log.php');
-require_once(DIR_SYSTEM . 'library/mail.php');
+// require_once(DIR_SYSTEM . 'library/mail.php');
+require_once(DIR_SYSTEM . 'library/swiftmailer/swift_required.php');
+
 require_once(DIR_SYSTEM . 'library/pagination.php');
 require_once(DIR_SYSTEM . 'library/request.php');
 require_once(DIR_SYSTEM . 'library/response.php');
@@ -88,7 +90,7 @@ if(defined('DIR_HOME')){
 	$registry->set('document', new Document()); 		
 	$registry->set('customer', new Customer($registry));
 	// $registry->set('account', new Account($registry));
-	$registry->set('restcall', new Restcall());
+	// $registry->set('restcall', new Restcall());
 	$registry->set('currency', new Currency($registry));
 	$registry->set('user', new User($registry));	
 	$registry->set('tax', new Tax($registry));
@@ -106,7 +108,7 @@ if(defined('DIR_HOME')){
 	//require_once(DIR_SYSTEM . 'procedure/end.php');
 
 	// Routers
-	require_once(DIR_SYSTEM . 'router/cart.php');	
+	//require_once(DIR_SYSTEM . 'router/cart.php');	
 
 }
 

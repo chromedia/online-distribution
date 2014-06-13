@@ -97,6 +97,7 @@
         </ul>
     </section>
   <?php endif;?>
+  
 <!-- BEG LATEST NEWS SECTION -->
 
 <section class="row">

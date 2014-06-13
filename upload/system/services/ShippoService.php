@@ -209,7 +209,7 @@ class ShippoService
                         "notification_email_other" => "",
                         "metadata" => $package['content']['product_name']
                     );
-
+                    
                     // Call Data
                     $url = self::END_POINT.'transactions/';
 
@@ -221,7 +221,7 @@ class ShippoService
                     $newPackages[$key] = $package;
                 }
             }
-
+            
             $_SESSION['packages'] = $newPackages;
 
             return true;
@@ -229,6 +229,10 @@ class ShippoService
 
         throw new Exception('Session timeout while processing shipping due to inactivity. Please repeat process.');
     }
+
+    /**
+     * Request shipping 
+     */
 
     /**
      * Get rate id of selected speed

@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="img/favicon.ico">
 
     <link rel="stylesheet" href="catalog/view/theme/chromedia/css/app.css" />
-     <link rel="stylesheet" href="catalog/view/theme/chromedia/css/default.css" />
+     <link rel="stylesheet" href="catalog/view/theme/chromedia/css/style.css" />
 
     <script src="catalog/view/javascript/bower_components/modernizr/modernizr.js"></script>
     <script src="catalog/view/javascript/bower_components/jquery/jquery.min.js"></script>

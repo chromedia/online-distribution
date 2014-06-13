@@ -1,15 +1,11 @@
 <?php
 
-require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
-
 /**
  * Provides services for cart
  */
 class CartService
 {
     private static $instance;
-
-    private $mailUtil;
     
     /**
      * Returns instance
@@ -21,15 +17,6 @@ class CartService
         }
 
         return self::$instance;
-    }
-
-
-    /**
-     * Instantiates shippo service class
-     */
-    public function __construct()
-    {
-        $this->maillUtil = new MailUtil();
     }
 
     /**
@@ -82,7 +69,7 @@ class CartService
     /**
      * Do email customer for order confirmation
      */
-    public function emailCustomerForConfirmation($recipientEmail = '')
+    public function emailCustomerForConfirmation($mailUtil, $recipientEmail = '')
     {
         $orderInfo = '';
 
@@ -92,18 +79,19 @@ class CartService
             foreach ($packages as $package) {
                 $transaction = json_decode($package['transaction'], true);
 
-                if (isset($transaction['tracking_number'])) {
+                if (isset($transaction['tracking_number']) && !empty($transaction['tracking_number'])) {
                     $trackingNumber = $transaction['tracking_number'];
                 } else {
-                    $trackingNumber = 'Please verify this.';
+                    $trackingNumber = '<em>Please inquire this from our admin.</em>';
                 }
 
                 $orderInfo .= '<p>'.$package['content']['product_name'].' - '.$trackingNumber.'</p>';
             }
 
-            $this->maillUtil->sendEmail(array(
+            $mailUtil->sendEmail(array(
                 'message' => $orderInfo,
-                'mail'    => $recipientEmail
+                'email'   => $recipientEmail,
+                'subject' => 'Opentech Order History'
             ));            
         }
     }
