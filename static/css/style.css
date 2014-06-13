@@ -16,6 +16,7 @@ strong{
 .card-bordered{
   border: 1px solid #CFDDE5;
   border-radius: 5px;
+  margin-bottom: 20px;
 }
 .card-title,
 .card-body,
@@ -67,10 +68,16 @@ a.btn-view-small{
   background-image: linear-gradient(-179deg, #F07B3E 0%, #D56D37 100%);
   border: 1px solid #C96631;
   color: #fff;
-  padding: 5px 12px;
+  padding: 10px 20px;
   font-size: 14px;
   cursor: pointer;
   border-radius: 3px;
+}
+a.btn-checkout{
+  width: 280px;
+  padding: 10px;
+  text-align: center;
+  display: block;
 }
 .notification{
   padding: 10px 20px;
@@ -157,7 +164,14 @@ a.btn-view-small{
   font-weight: normal
 }
 input.qty-input{
-  width: 40px;
+  width: 45px;
+}
+input.qty-input-3{
+  width: 60px;
+}
+
+input.qty-input.inline{
+  display: inline-block;
 }
 dd.dd-price,.dd-price{
   font-size: 20px;
@@ -190,11 +204,46 @@ dd.dd-price,.dd-price{
   background-image: url('../img/icon-arrow-right.png');
   vertical-align: middle;
 }
+.icon-green-check{
+  width: 21px;
+  height: 21px;
+  display: inline-block;
+  background-image: url('../img/icon-green-check.png');
+  vertical-align: middle
+}
+.icon-lock-sm{
+  width: 16px;
+  height: 16px;
+  background-image: url('../img/icon-lock-sm.png');
+  display: inline-block;
+}
+.credit-cards{
+  height: 32px;
+  width: 225px;
+  background-image: url('../img/credit-cards.png');
+  margin-bottom: 30px;
+}
 .form label{
   font-weight: 600;
 }
 .form input[type=text]{
   margin-top: 5px;  
+}
+label.has-error{
+  color: #E04242;
+}
+input.has-error{
+  border: 1px solid #E04242; 
+}
+.notif-msg{
+  text-align: center;
+}
+.notif{
+  background-color: #DB4343;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px;
 }
 .shipping-selection{
   margin-top: 10px;
@@ -277,14 +326,42 @@ label.use-cc-info{
 }
 .shipping-cost{
   font-size: 14px;
+  
 }
 .shipping-cost,
 .sub-total-value{
-  padding: 10px;
+  padding: 13px 0;
   text-align: right;
 }
 .shipping-cost em,
 .sub-total-value em{
   color: #999;
   margin-right: 10px;
+}
+.sub-total-value{
+  padding: 10px 0;
+  border-top: 1px dashed #e1e1e1;
+}
+.secure-notice{
+  background-color: #F3EEE3;
+  margin-bottom: 20px;
+  font-size: 12px;
+  padding: 10px;
+}
+.secure-notice .icon-lock-sm{
+  float: left;
+  margin-right: 5px;
+  position: relative;
+  top: -3px;
+}
+
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { 
+  .product-sidebar{
+    top: 0;
+  }
+}
+@media only screen and (max-width: 40em) { 
+  .product-sidebar{
+    top: 0;
+  }
 }
