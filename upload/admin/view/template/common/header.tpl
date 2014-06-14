@@ -53,16 +53,30 @@ $(document).ready(function(){
 <body>
 <div id="container">
     <div id="header">
-  <div class="div1">
-    <div class="div2"><img src="view/image/logo.png" title="<?php echo $heading_title; ?>" onclick="location = '<?php echo $home; ?>'" /></div>
+
+    <!-- Top Block -->
     <?php if ($logged) { ?>
-    <div class="div3"><img src="view/image/lock.png" alt="" style="position: relative; top: 3px;" />&nbsp;<?php echo $logged; ?></div>
+ 	<div class="div1">
+
+ 		<!-- Dashboard -->
+    	<a class="div2 mark" href="<?php echo $home; ?>"><?php echo $text_dashboard; ?></a>
+    	<!-- Storefront -->
+    	<a class="div2 mark" href="<?php echo $store; ?>" target="_blank"><?php echo $text_front; ?></a>
+
+		<div class="right">
+			<!-- Logged In As -->
+			<span class="div2"><?php echo $logged; ?></span>
+			<!-- Logout -->
+      		<a class="div2 mark" href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a>
+  		</div>
+
+  	</div>
     <?php } ?>
-  </div>
+
+    <!-- Left Side -->
   <?php if ($logged) { ?>
   <div id="menu">
     <ul class="left" style="display: none;">
-      <li id="dashboard"><a href="<?php echo $home; ?>" class="top"><?php echo $text_dashboard; ?></a></li>
       <li id="catalog"><a class="top"><?php echo $text_catalog; ?></a>
         <ul>
           <li><a href="<?php echo $category; ?>"><?php echo $text_category; ?></a></li>
@@ -245,16 +259,20 @@ $(document).ready(function(){
         </ul>
       </li>
     </ul>
+
+    <!-- Right Side -->
     <ul class="right" style="display: none;">
-      <li id="store"><a href="<?php echo $store; ?>" target="_blank" class="top"><?php echo $text_front; ?></a>
         <ul>
           <?php foreach ($stores as $stores) { ?>
           <li><a href="<?php echo $stores['href']; ?>" target="_blank"><?php echo $stores['name']; ?></a></li>
           <?php } ?>
         </ul>
       </li>
-      <li><a class="top" href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a></li>
+      
     </ul>
+
+
+
   </div>
   <?php } ?>
 </div>

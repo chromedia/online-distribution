@@ -38,30 +38,35 @@ form {
 label {
 	cursor: pointer;
 }
+
 #header .div1 {
-	height: 56px;
-	padding: 0px 30px;
-	background: url('../image/header.png') repeat-x;
+	background-color: #FFFFFF;
 	min-width: 900px;
+	line-height: 60px;
 }
 #header .div2 {
-	color: #FFFFFF;
-	padding: 18px 0px 0px 0px;
 	float: left;
-}
-#header .div3 {
 	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	display: inline-block;
 	font-size: 12px;
-	color: #FFF;
-	text-align: right;
-	padding: 15px 0px 0px 0px;
+	color: #303030;
+	line-height: 30px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-top: 3px;
+}
+#header .right {
 	float: right;
 }
-#header .div2 span {
-	font-weight: bold;
+#header .mark:hover {
+	padding-top: 0px;
+	border-top: 3px solid #3399FF;
 }
+
+
 #menu {
-	background: url('../image/menu.png') repeat-x;
+	background-color: #333333;
 	position: relative;
 	z-index: 1;
 	height: 34px;
@@ -111,7 +116,7 @@ label {
 	padding: 2px;
 	clear: both;
 }
-#menu > ul .selected .top {
+.selected {
 	background: url('../image/selected.png') repeat-x;
 	color: #FFFFFF;
 }
