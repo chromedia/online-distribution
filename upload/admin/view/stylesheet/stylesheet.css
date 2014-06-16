@@ -38,6 +38,7 @@ form {
 label {
 	cursor: pointer;
 }
+<<<<<<< HEAD
 #header .div1 {
 	height: 56px;
 	padding: 0px 30px;
@@ -62,6 +63,37 @@ label {
 }
 #menu {
 	background: url('../image/menu.png') repeat-x;
+=======
+
+#header .div1 {
+	background-color: #FFFFFF;
+	min-width: 900px;
+	line-height: 60px;
+}
+#header .div2 {
+	float: left;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	color: #303030;
+	line-height: 30px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-top: 3px;
+}
+#header .right {
+	float: right;
+}
+#header .mark:hover {
+	padding-top: 0px;
+	border-top: 3px solid #3399FF;
+}
+
+
+#menu {
+	background-color: #333333;
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 	position: relative;
 	z-index: 1;
 	height: 34px;
@@ -111,7 +143,11 @@ label {
 	padding: 2px;
 	clear: both;
 }
+<<<<<<< HEAD
 #menu > ul .selected .top {
+=======
+.selected {
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 	background: url('../image/selected.png') repeat-x;
 	color: #FFFFFF;
 }

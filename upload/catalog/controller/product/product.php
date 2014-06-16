@@ -1,11 +1,13 @@
 <?php
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 class ControllerProductProduct extends Controller {
 	private $error = array();
 
 	public function index() {
 		$this->language->load('product/product');
-
-		$this->data['breadcrumbs'] = array();
 
 		$this->data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('text_home'),
@@ -13,6 +15,7 @@ class ControllerProductProduct extends Controller {
 			'separator' => false
 		);
 
+<<<<<<< HEAD
 		$this->load->model('catalog/category');
 
 		if (isset($this->request->get['path'])) {
@@ -147,13 +150,22 @@ class ControllerProductProduct extends Controller {
 				$url .= '&limit=' . $this->request->get['limit'];
 			}
 
+=======
+		if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] == $this->url->link('product/display/all')) {
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_search'),
-				'href'      => $this->url->link('product/search', $url),
+				'text'      => 'Product List',
+				'href'      => $this->url->link('product/display/all'),
 				'separator' => $this->language->get('text_separator')
 			);
 		}
 
+<<<<<<< HEAD
+=======
+
+		$this->load->model('catalog/category');
+
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 		if (isset($this->request->get['product_id'])) {
 			$product_id = (int)$this->request->get['product_id'];
 		} else {
@@ -167,6 +179,7 @@ class ControllerProductProduct extends Controller {
 		if ($product_info) {
 			$url = '';
 
+<<<<<<< HEAD
 			if (isset($this->request->get['path'])) {
 				$url .= '&path=' . $this->request->get['path'];
 			}
@@ -215,9 +228,11 @@ class ControllerProductProduct extends Controller {
 				$url .= '&limit=' . $this->request->get['limit'];
 			}
 
+=======
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 			$this->data['breadcrumbs'][] = array(
 				'text'      => $product_info['name'],
-				'href'      => $this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id']),
+				'href'      => '',//$this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id']),
 				'separator' => $this->language->get('text_separator')
 			);
 
@@ -287,17 +302,19 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$this->load->model('tool/image');
+			// echo $product_info['image'];exit;
 
 			if ($product_info['image']) {
+				$this->data['header_img'] = $this->model_tool_image->resize($product_info['image'], 700, 200);
 				$this->data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));
-			} else {
-				$this->data['popup'] = '';
-			}
-
-			if ($product_info['image']) {
 				$this->data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));
 			} else {
+				$this->data['popup'] = '';
 				$this->data['thumb'] = '';
+			}
+
+			if (!isset($this->data['header_img']) || empty($this->data['header_img'])) {
+				$this->data['header_img'] = $this->model_tool_image->resize('no_image.jpg', 300, 100);
 			}
 
 			$this->data['images'] = array();
@@ -317,6 +334,7 @@ class ControllerProductProduct extends Controller {
 				$this->data['price'] = false;
 			}
 
+<<<<<<< HEAD
 			if ((float)$product_info['special']) {
 				$this->data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')));
 			} else {
@@ -384,6 +402,75 @@ class ControllerProductProduct extends Controller {
 					);
 				}
 			}
+=======
+			// if ((float)$product_info['special']) {
+			// 	$this->data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+			// } else {
+			// 	$this->data['special'] = false;
+			// }
+
+			// if ($this->config->get('config_tax')) {
+			// 	$this->data['tax'] = $this->currency->format((float)$product_info['special'] ? $product_info['special'] : $product_info['price']);
+			// } else {
+			// 	$this->data['tax'] = false;
+			// }
+
+			// $discounts = $this->model_catalog_product->getProductDiscounts($this->request->get['product_id']);
+
+			// $this->data['discounts'] = array();
+
+			// foreach ($discounts as $discount) {
+			// 	$this->data['discounts'][] = array(
+			// 		'quantity' => $discount['quantity'],
+			// 		'price'    => $this->currency->format($this->tax->calculate($discount['price'], $product_info['tax_class_id'], $this->config->get('config_tax')))
+			// 	);
+			// }
+
+			// $this->data['options'] = array();
+
+			// foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) {
+			// 	if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'checkbox' || $option['type'] == 'image') {
+			// 		$option_value_data = array();
+
+			// 		foreach ($option['option_value'] as $option_value) {
+			// 			if (!$option_value['subtract'] || ($option_value['quantity'] > 0)) {
+			// 				if ((($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) && (float)$option_value['price']) {
+			// 					$price = $this->currency->format($this->tax->calculate($option_value['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+			// 				} else {
+			// 					$price = false;
+			// 				}
+
+			// 				$option_value_data[] = array(
+			// 					'product_option_value_id' => $option_value['product_option_value_id'],
+			// 					'option_value_id'         => $option_value['option_value_id'],
+			// 					'name'                    => $option_value['name'],
+			// 					'image'                   => $this->model_tool_image->resize($option_value['image'], 50, 50),
+			// 					'price'                   => $price,
+			// 					'price_prefix'            => $option_value['price_prefix']
+			// 				);
+			// 			}
+			// 		}
+
+			// 		$this->data['options'][] = array(
+			// 			'product_option_id' => $option['product_option_id'],
+			// 			'option_id'         => $option['option_id'],
+			// 			'name'              => $option['name'],
+			// 			'type'              => $option['type'],
+			// 			'option_value'      => $option_value_data,
+			// 			'required'          => $option['required']
+			// 		);
+			// 	} elseif ($option['type'] == 'text' || $option['type'] == 'textarea' || $option['type'] == 'file' || $option['type'] == 'date' || $option['type'] == 'datetime' || $option['type'] == 'time') {
+			// 		$this->data['options'][] = array(
+			// 			'product_option_id' => $option['product_option_id'],
+			// 			'option_id'         => $option['option_id'],
+			// 			'name'              => $option['name'],
+			// 			'type'              => $option['type'],
+			// 			'option_value'      => $option['option_value'],
+			// 			'required'          => $option['required']
+			// 		);
+			// 	}
+			// }
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 
 			if ($product_info['minimum']) {
 				$this->data['minimum'] = $product_info['minimum'];
@@ -463,16 +550,13 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
 				'common/footer',
 				'common/header'
 			);
 
 			$this->response->setOutput($this->render());
 		} else {
+<<<<<<< HEAD
 			$url = '';
 
 			if (isset($this->request->get['path'])) {
@@ -539,6 +623,8 @@ class ControllerProductProduct extends Controller {
 
 			$this->data['continue'] = $this->url->link('common/home');
 
+=======
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
 
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/error/not_found.tpl')) {
@@ -548,10 +634,6 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$this->children = array(
-				'common/column_left',
-				'common/column_right',
-				'common/content_top',
-				'common/content_bottom',
 				'common/footer',
 				'common/header'
 			);
@@ -778,4 +860,3 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 }
-?>

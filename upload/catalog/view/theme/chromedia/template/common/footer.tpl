@@ -35,12 +35,18 @@
 </footer>
 
 <!-- END FOOTER SECTION -->
+<<<<<<< HEAD
 
     <script type="text/javascript" src="catalog/view/javascript/custom/app.js"></script>
     
     
     <script type="text/javascript"  src="bower_components/foundation/js/foundation.min.js"></script>
     <script type="text/javascript"  src='catalog/view/javascript/smooth-scroll.js'></script>
+=======
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/foundation.min.js"></script>
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/app.js"></script>
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/smooth-scroll.js"></script>
+>>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 
   </body>
 </html>
