@@ -47,9 +47,9 @@ class Cart {
 					$option_points = 0;
 					$option_weight = 0;
 
-					$option_data = array();
+					// $option_data = array();
 
-					foreach ($options as $product_option_id => $option_value) {
+					/*foreach ($options as $product_option_id => $option_value) {
 						$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM " . DB_PREFIX . "product_option po LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id) LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 						if ($option_query->num_rows) {
@@ -163,18 +163,18 @@ class Cart {
 								);						
 							}
 						}
-					} 
+					}*/ 
 
-					if ($this->customer->isLogged()) {
+					/*if ($this->customer->isLogged()) {
 						$customer_group_id = $this->customer->getCustomerGroupId();
 					} else {
 						$customer_group_id = $this->config->get('config_customer_group_id');
-					}
+					}*/
 
 					$price = $product_query->row['price'];
 
 					// Product Discounts
-					$discount_quantity = 0;
+					/*$discount_quantity = 0;
 
 					foreach ($this->session->data['cart'] as $key_2 => $quantity_2) {
 						$product_2 = explode(':', $key_2);
@@ -255,44 +255,44 @@ class Cart {
 							$recurring_trial_cycle = $profile_info['trial_cycle'];
 							$recurring_trial_duration = $profile_info['trial_duration'];
 						}
-					}
+					}*/
 
 					$this->data[$key] = array(
 						'key'                       => $key,
 						'product_id'                => $product_query->row['product_id'],
 						'name'                      => $product_query->row['name'],
-						'model'                     => $product_query->row['model'],
-						'shipping'                  => $product_query->row['shipping'],
+						//'model'                     => $product_query->row['model'],
+						//'shipping'                  => $product_query->row['shipping'],
 						'image'                     => $product_query->row['image'],
-						'option'                    => $option_data,
-						'download'                  => $download_data,
+						//'option'                    => $option_data,
+						//'download'                  => $download_data,
 						'quantity'                  => $quantity,
 						'minimum'                   => $product_query->row['minimum'],
-						'subtract'                  => $product_query->row['subtract'],
+						//'subtract'                  => $product_query->row['subtract'],
 						'stock'                     => $stock,
 						'price'                     => ($price + $option_price),
 						'total'                     => ($price + $option_price) * $quantity,
-						'reward'                    => $reward * $quantity,
-						'points'                    => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
-						'tax_class_id'              => $product_query->row['tax_class_id'],
+						//'reward'                    => $reward * $quantity,
+						//'points'                    => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
+						//'tax_class_id'              => $product_query->row['tax_class_id'],
 						'weight'                    => ($product_query->row['weight'] + $option_weight) * $quantity,
 						'weight_class_id'           => $product_query->row['weight_class_id'],
 						'length'                    => $product_query->row['length'],
 						'width'                     => $product_query->row['width'],
 						'height'                    => $product_query->row['height'],
 						'length_class_id'           => $product_query->row['length_class_id'],
-						'profile_id'                => $profile_id,
-						'profile_name'              => $profile_name,
-						'recurring'                 => $recurring,
-						'recurring_frequency'       => $recurring_frequency,
-						'recurring_price'           => $recurring_price,
-						'recurring_cycle'           => $recurring_cycle,
-						'recurring_duration'        => $recurring_duration,
-						'recurring_trial'           => $recurring_trial_status,
-						'recurring_trial_frequency' => $recurring_trial_frequency,
-						'recurring_trial_price'     => $recurring_trial_price,
-						'recurring_trial_cycle'     => $recurring_trial_cycle,
-						'recurring_trial_duration'  => $recurring_trial_duration,
+						//'profile_id'                => $profile_id,
+						//'profile_name'              => $profile_name,
+						//'recurring'                 => $recurring,
+						//'recurring_frequency'       => $recurring_frequency,
+						//'recurring_price'           => $recurring_price,
+						//'recurring_cycle'           => $recurring_cycle,
+						//'recurring_duration'        => $recurring_duration,
+						//'recurring_trial'           => $recurring_trial_status,
+						//'recurring_trial_frequency' => $recurring_trial_frequency,
+						//'recurring_trial_price'     => $recurring_trial_price,
+						//'recurring_trial_cycle'     => $recurring_trial_cycle,
+						//'recurring_trial_duration'  => $recurring_trial_duration,
 					);
 				} else {
 					$this->remove($key);
@@ -315,7 +315,7 @@ class Cart {
 		return $recurring_products;
 	}
 
-	public function add($product_id, $qty = 1, $option, $profile_id = '') {
+	public function add($product_id, $qty = 1, $option = '', $profile_id = '') {
 		$key = (int)$product_id . ':';
 
 		if ($option) {
@@ -366,9 +366,9 @@ class Cart {
 		$weight = 0;
 
 		foreach ($this->getProducts() as $product) {
-			if ($product['shipping']) {
+			// if ($product['shipping']) {
 				$weight += $this->weight->convert($product['weight'], $product['weight_class_id'], $this->config->get('config_weight_class_id'));
-			}
+			// }
 		}
 
 		return $weight;
@@ -406,9 +406,10 @@ class Cart {
 
 	public function getTotal() {
 		$total = 0;
+		$products = $this->getProducts();
 
-		foreach ($this->getProducts() as $product) {
-			$total += $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'];
+		foreach ($products as $product) {
+			$total += $product['total'];// * $product['quantity'];//$this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'];
 		}
 
 		return $total;

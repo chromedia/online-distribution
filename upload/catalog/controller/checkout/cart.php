@@ -1,5 +1,7 @@
 <?php
 
+require_once(DIR_SYSTEM . 'services/CartService.php');
+
 class ControllerCheckoutCart extends Controller {
 	private $error = array();
 
@@ -135,6 +137,8 @@ class ControllerCheckoutCart extends Controller {
 
 			$products = $this->cart->getProducts();
 
+			$cartTotalPrice = 0;
+
 			foreach ($products as $product) {
 				$product_total = 0;
 
@@ -150,95 +154,91 @@ class ControllerCheckoutCart extends Controller {
 				}
 
 				if ($product['image']) {
-					$image = $this->model_tool_image->resize($product['image'], $this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height'));
-				} else {
-					$image = '';
+					$image = $this->model_tool_image->resize($product['image'], 55, 55/*$this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')*/);
+				}
+
+				if (!isset($image) || empty($image) || is_null($image)) {
+					$image = $this->model_tool_image->resize('no_image.jpg', 55, 55);
 				}
 
 				$option_data = array();
 
 				// Display prices
-				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
-				} else {
-					$price = false;
-				}
+				// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+				// 	$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
+				// } else {
+				// 	$price = false;
+				// }
 
 				// Display prices
-				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$total = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity']);
-				} else {
-					$total = false;
-				}
+				// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+				// 	$total = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity']);
+				// } else {
+				// 	$total = false;
+				// }
+				$total = $product['price'] * $product['quantity'];
+				$cartTotalPrice += $total;
 
-				$profile_description = '';
+				$total = $this->currency->format($total);
+				$price = $this->currency->format($product['price']);
 
-				if ($product['recurring']) {
-					$frequencies = array(
-						'day' => $this->language->get('text_day'),
-						'week' => $this->language->get('text_week'),
-						'semi_month' => $this->language->get('text_semi_month'),
-						'month' => $this->language->get('text_month'),
-						'year' => $this->language->get('text_year'),
-					);
-				}
+				//$this->currency->format($product['price']);
 
 				$this->data['products'][] = array(
+					'id'                  => $product['product_id'],
 					'key'                 => $product['key'],
 					'thumb'               => $image,
 					'name'                => $product['name'],
-					'model'               => $product['model'],
-					//'option'              => $option_data,
 					'quantity'            => $product['quantity'],
 					'stock'               => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
-					//'reward'              => ($product['reward'] ? sprintf($this->language->get('text_points'), $product['reward']) : ''),
 					'price'               => $price,
 					'total'               => $total,
 					'href'                => $this->url->link('product/product', 'product_id=' . $product['product_id']),
 					'remove'              => $this->url->link('checkout/cart', 'remove=' . $product['key']),
-					//'recurring'           => $product['recurring'],
-					//'profile_name'        => $product['profile_name'],
-					//'profile_description' => $profile_description,
 				);
 			}
 
+			$this->data['products_in_cart_count'] = $this->cart->countProducts();
 			// Totals
-			$this->load->model('setting/extension');
+			// $this->load->model('setting/extension');
 
-			$total_data = array();					
-			$total = 0;
-			$taxes = $this->cart->getTaxes();
+			// $total_data = array();					
+			// $total = 0;
+			// $taxes = $this->cart->getTaxes();
 
 			// Display prices
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$sort_order = array(); 
+			// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+			// 	$sort_order = array(); 
 
-				$results = $this->model_setting_extension->getExtensions('total');
+			// 	$results = $this->model_setting_extension->getExtensions('total');
 
-				foreach ($results as $key => $value) {
-					$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-				}
+			// 	var_dump($results);exit;
 
-				array_multisort($sort_order, SORT_ASC, $results);
+			// 	foreach ($results as $key => $value) {
+			// 		$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+			// 	}
 
-				foreach ($results as $result) {
-					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('total/' . $result['code']);
+			// 	array_multisort($sort_order, SORT_ASC, $results);
 
-						$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-					}
+			// 	foreach ($results as $result) {
+			// 		if ($this->config->get($result['code'] . '_status')) {
+			// 			$this->load->model('total/' . $result['code']);
 
-					$sort_order = array(); 
+			// 			$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+			// 		}
 
-					foreach ($total_data as $key => $value) {
-						$sort_order[$key] = $value['sort_order'];
-					}
+			// 		$sort_order = array(); 
 
-					array_multisort($sort_order, SORT_ASC, $total_data);			
-				}
-			}
+			// 		foreach ($total_data as $key => $value) {
+			// 			$sort_order[$key] = $value['sort_order'];
+			// 		}
 
-			$this->data['totals'] = $total_data;
+			// 		array_multisort($sort_order, SORT_ASC, $total_data);			
+			// 	}
+			// }
+
+			$this->data['subTotalWithCurrency'] = $this->currency->format($cartTotalPrice);
+			$this->data['subTotal'] = $cartTotalPrice;
 
 			$this->data['continue'] = $this->url->link('common/home');
 
@@ -331,9 +331,9 @@ class ControllerCheckoutCart extends Controller {
 			// }
 
 			if (!$json) {
-				$this->cart->add($this->request->post['product_id'], $quantity, $option, $profile_id);
+				$this->cart->add($this->request->post['product_id'], $quantity, ''/*, $option, $profile_id*/);
 
-				$json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']), $product_info['name'], $this->url->link('checkout/cart'));
+				$json['success'] = sprintf($this->language->get('text_success'), $product_info['name'], $this->url->link('checkout/cart'));
 
 				unset($this->session->data['shipping_method']);
 				unset($this->session->data['shipping_methods']);
@@ -345,44 +345,72 @@ class ControllerCheckoutCart extends Controller {
 
 				$total_data = array();					
 				$total = 0;
-				$taxes = $this->cart->getTaxes();
+				//$taxes = $this->cart->getTaxes();
 
 				// Display prices
-				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$sort_order = array(); 
+				// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+				// 	$sort_order = array(); 
 
-					$results = $this->model_setting_extension->getExtensions('total');
+				// 	$results = $this->model_setting_extension->getExtensions('total');
 
-					foreach ($results as $key => $value) {
-						$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-					}
+				// 	foreach ($results as $key => $value) {
+				// 		$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+				// 	}
 
-					array_multisort($sort_order, SORT_ASC, $results);
+				// 	array_multisort($sort_order, SORT_ASC, $results);
 
-					foreach ($results as $result) {
-						if ($this->config->get($result['code'] . '_status')) {
-							$this->load->model('total/' . $result['code']);
+				// 	foreach ($results as $result) {
+				// 		if ($this->config->get($result['code'] . '_status')) {
+				// 			$this->load->model('total/' . $result['code']);
 
-							$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-						}
+				// 			$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+				// 		}
 
-						$sort_order = array(); 
+				// 		$sort_order = array(); 
 
-						foreach ($total_data as $key => $value) {
-							$sort_order[$key] = $value['sort_order'];
-						}
+				// 		foreach ($total_data as $key => $value) {
+				// 			$sort_order[$key] = $value['sort_order'];
+				// 		}
 
-						array_multisort($sort_order, SORT_ASC, $total_data);			
-					}
-				}
+				// 		array_multisort($sort_order, SORT_ASC, $total_data);			
+				// 	}
+				// }
 
-				$json['total'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0); //sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
+				$json['total'] = $this->cart->countProducts();// + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0); //sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
 			} else {
 				$json['redirect'] = str_replace('&amp;', '&', $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']));
 			}
 		}
 
 		$this->response->setOutput(json_encode($json));		
+	}
+
+	/**
+	 * Updates cart product quantity
+	 */
+	public function updateCartProductQuantity()
+	{
+		// $product_info = $this->model_catalog_product->getProduct($product_id);
+		$data = array();
+		$key = $this->request->post['key'];
+		$quantity = $this->request->post['quantity'];
+
+
+		// Update
+		if (!empty($key) && !empty($quantity)) {
+			$this->cart->update($this->request->post['key'], $this->request->post['quantity']);
+			$this->products = $this->cart->getProducts();
+
+			$data = array(
+				'total' => number_format($this->cart->getTotal(), 2, '.', ','),
+				'productsCount' => $this->cart->countProducts(),
+				'productNewPrice' => number_format($this->products[$key]['price'] * $quantity,  2, '.', ',')
+			);
+		}
+
+		// Check rates if exist and update rates about the shipment
+
+		$this->response->setOutput(json_encode($data));
 	}
 
 	public function country() {

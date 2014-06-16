@@ -17,7 +17,7 @@
 -->
 
 
-<div id="breadcrumbs-product-page" class="breadcrumb" style="padding:70px;">
+<div id="breadcrumbs-product-page" class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb): ?>
         <?php echo $breadcrumb['separator']; ?>
 
@@ -31,6 +31,7 @@
 
 <div class="product-cover" style="background-image: url('<?php echo $header_img;?>')">
     <div class="notification green" style="display:none;"></div>
+    <!-- <div class="notification green"></div> -->
 
     <div class="product-title">
         <div class="row">
@@ -203,16 +204,18 @@
                     data: data,
                     dataType: 'json',
                     success: function(json) {
-                        $('.success, .warning, .attention, information, .error').remove();
-                        
+                        //$('.success, .warning, .attention, information, .error').remove();
+                        $('#notification, .green').hide();
+
                         if (json['error']) {
-                        
+                            alert('An error occured while processing request.');
                         } 
                         
                         if (json['success']) {
-                            $('#notification').html('<div class="success" style="display: none;">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+                            $('.green').html('<div class="success">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
                                 
-                            $('.success').fadeIn('slow');    
+                            $('.green').fadeIn('slow');  
+                            //$('.green').show();
                             $('.items-in-cart').html(json['total']);
                             
                             $('html, body').animate({ scrollTop: 0 }, 'slow'); 

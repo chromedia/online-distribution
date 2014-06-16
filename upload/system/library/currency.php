@@ -74,7 +74,7 @@ class Currency {
 		$string = '';
 
 		if (($symbol_left) && ($format)) {
-			$string .= $symbol_left;
+			$string .= $symbol_left.' ';
 		}
 
 		if ($format) {

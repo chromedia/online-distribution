@@ -22,10 +22,9 @@ class CartService
     /**
      * Prepares packages
      */
-    public function preparePackages($cart)
+    public function preparePackages($products)
     {
         $packages = array();
-        $products = $cart->getProducts();
 
         foreach ($products as $product) {
             $packages[] = array(
@@ -94,6 +93,14 @@ class CartService
                 'subject' => 'Opentech Order History'
             ));            
         }
+    }
+
+    /**
+     * Updated product quantity in cart
+     */
+    public function getCartInfoOfUpdateProductQuantity()
+    {
+        
     }
 
     /***** JUST A TODO ****/

@@ -38,9 +38,12 @@ class ControllerCheckoutShipping extends Controller {
 
             $toAddress = $shippoService->confirmAddress($toAddressData);
             $fromAddress = $shippoService->confirmAddress($fromAddressData);
+
+            $_SESSION['toAddress'] = $toAddress;
+            $_SESSION['fromAddress'] = $fromAddress;
             
             $cartService = CartService::getInstance();
-            $packages = $cartService->preparePackages($this->cart);
+            $packages = $cartService->preparePackages($this->cart->getProducts());
 
             $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
 

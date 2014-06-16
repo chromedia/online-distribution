@@ -79,6 +79,10 @@ class ShippoService
     }
 
     /**
+     * Update 
+     */
+
+    /**
      * Make parcels call
      *
      * @return array

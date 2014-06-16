@@ -37,6 +37,8 @@
 <!-- END FOOTER SECTION -->
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/foundation.min.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/app.js"></script>
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/common.js"></script>
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/loader.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/smooth-scroll.js"></script>
 
   </body>

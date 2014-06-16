@@ -28,7 +28,7 @@
   <body>
 
 <!-- BEG TOP BAR -->
-<div class="fixed" id="top">
+<!-- <div class="fixed" id="top"> -->
 <nav class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
@@ -50,7 +50,7 @@
     </ul>
   </section>
 </nav>
-</div>
+<!-- </div> -->
 <!-- END TOP BAR -->
 
 <div id="notification"></div>

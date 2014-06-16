@@ -7,7 +7,8 @@
       Modernizr = window.Modernizr;
 
   $(document).ready(function() {
-    $.fn.foundationTabs  ? $doc.foundationTabs({callback : $.foundation.customForms.appendCustomMarkup}) : null;
+    $.fn.foundationTabs     ? $doc.foundationTabs({callback : $.foundation.customForms.appendCustomMarkup}) : null;
+    $.fn.foundationButtons  ? $doc.foundationButtons() : null;
   });
 
   // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
