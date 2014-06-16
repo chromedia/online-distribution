@@ -24,7 +24,7 @@ class ControllerCheckoutCart extends Controller {
 		}
 
 		// Remove
-		if (isset($this->request->get['remove'])) {
+		/*if (isset($this->request->get['remove'])) {
 			$this->cart->remove($this->request->get['remove']);
 
 			unset($this->session->data['vouchers'][$this->request->get['remove']]);
@@ -38,67 +38,11 @@ class ControllerCheckoutCart extends Controller {
 			unset($this->session->data['reward']);  
 
 			$this->redirect($this->url->link('checkout/cart'));
-		}
+		}*/
 
-
-		/***SHIPPING INFO**/
-				// Shipping Info PHP
-
-		$this->data['text_address_existing'] = $this->language->get('text_address_existing');
-		$this->data['text_address_new'] = $this->language->get('text_address_new');
-		$this->data['text_select'] = $this->language->get('text_select');
-		$this->data['text_none'] = $this->language->get('text_none');
-
-		$this->data['entry_firstname'] = $this->language->get('entry_firstname');
-		$this->data['entry_lastname'] = $this->language->get('entry_lastname');
-		$this->data['entry_company'] = $this->language->get('entry_company');
-		$this->data['entry_address_1'] = $this->language->get('entry_address_1');
-		$this->data['entry_address_2'] = $this->language->get('entry_address_2');
-		$this->data['entry_postcode'] = $this->language->get('entry_postcode');
-		$this->data['entry_city'] = $this->language->get('entry_city');
-		$this->data['entry_country'] = $this->language->get('entry_country');
-		$this->data['entry_zone'] = $this->language->get('entry_zone');
-	
-		$this->data['button_continue'] = $this->language->get('button_continue');
-			
-		if (isset($this->session->data['shipping_address_id'])) {
-			$this->data['address_id'] = $this->session->data['shipping_address_id'];
-		} else {
-			$this->data['address_id'] = $this->customer->getAddressId();
-		}
-
-		$this->load->model('account/address');
-
-		$this->data['addresses'] = $this->model_account_address->getAddresses();
-
-		if (isset($this->session->data['shipping_postcode'])) {
-			$this->data['postcode'] = $this->session->data['shipping_postcode'];		
-		} else {
-			$this->data['postcode'] = '';
-		}
-				
-		if (isset($this->session->data['shipping_country_id'])) {
-			$this->data['country_id'] = $this->session->data['shipping_country_id'];		
-		} else {
-			$this->data['country_id'] = $this->config->get('config_country_id');
-		}
-				
-		if (isset($this->session->data['shipping_zone_id'])) {
-			$this->data['zone_id'] = $this->session->data['shipping_zone_id'];		
-		} else {
-			$this->data['zone_id'] = '';
-		}
-						
-		$this->load->model('localisation/country');
-		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
-
-		// End Shipping Info PHP
-		$this->document->setTitle($this->language->get('heading_title'));
-		$this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
-		$this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
-
-		$this->data['breadcrumbs'] = array();
+		// $this->document->setTitle($this->language->get('heading_title'));
+		// $this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
+		// $this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
 
 		$this->data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/home'),
@@ -113,16 +57,7 @@ class ControllerCheckoutCart extends Controller {
 		);
 
 		if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {	
-
 			$this->data['heading_title'] = $this->language->get('heading_title');
-
-			$this->data['column_image'] = $this->language->get('column_image');
-			$this->data['column_name'] = $this->language->get('column_name');
-			$this->data['column_model'] = $this->language->get('column_model');
-			$this->data['column_quantity'] = $this->language->get('column_quantity');
-			$this->data['column_price'] = $this->language->get('column_price');
-			$this->data['column_total'] = $this->language->get('column_total');
-
 			$this->data['action'] = $this->url->link('checkout/cart');   
 
 			if ($this->config->get('config_cart_weight')) {
@@ -131,13 +66,14 @@ class ControllerCheckoutCart extends Controller {
 				$this->data['weight'] = '';
 			}
 
-			$this->load->model('tool/image');
+			$this->data['action'] = $this->url->link('checkout/cart');
 
+			$cartTotalPrice = 0;
+			
+			$this->load->model('tool/image');
 			$this->data['products'] = array();
 
 			$products = $this->cart->getProducts();
-
-			$cartTotalPrice = 0;
 
 			foreach ($products as $product) {
 				$product_total = 0;
@@ -163,26 +99,12 @@ class ControllerCheckoutCart extends Controller {
 
 				$option_data = array();
 
-				// Display prices
-				// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				// 	$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
-				// } else {
-				// 	$price = false;
-				// }
 
-				// Display prices
-				// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				// 	$total = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity']);
-				// } else {
-				// 	$total = false;
-				// }
 				$total = $product['price'] * $product['quantity'];
 				$cartTotalPrice += $total;
 
 				$total = $this->currency->format($total);
 				$price = $this->currency->format($product['price']);
-
-				//$this->currency->format($product['price']);
 
 				$this->data['products'][] = array(
 					'id'                  => $product['product_id'],
@@ -199,44 +121,6 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			$this->data['products_in_cart_count'] = $this->cart->countProducts();
-			// Totals
-			// $this->load->model('setting/extension');
-
-			// $total_data = array();					
-			// $total = 0;
-			// $taxes = $this->cart->getTaxes();
-
-			// Display prices
-			// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-			// 	$sort_order = array(); 
-
-			// 	$results = $this->model_setting_extension->getExtensions('total');
-
-			// 	var_dump($results);exit;
-
-			// 	foreach ($results as $key => $value) {
-			// 		$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-			// 	}
-
-			// 	array_multisort($sort_order, SORT_ASC, $results);
-
-			// 	foreach ($results as $result) {
-			// 		if ($this->config->get($result['code'] . '_status')) {
-			// 			$this->load->model('total/' . $result['code']);
-
-			// 			$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-			// 		}
-
-			// 		$sort_order = array(); 
-
-			// 		foreach ($total_data as $key => $value) {
-			// 			$sort_order[$key] = $value['sort_order'];
-			// 		}
-
-			// 		array_multisort($sort_order, SORT_ASC, $total_data);			
-			// 	}
-			// }
-
 			$this->data['subTotalWithCurrency'] = $this->currency->format($cartTotalPrice);
 			$this->data['subTotal'] = $cartTotalPrice;
 
@@ -294,7 +178,6 @@ class ControllerCheckoutCart extends Controller {
 		}
 	}
 
-	
 
 	public function add() {
 		$this->language->load('checkout/cart');
@@ -318,18 +201,6 @@ class ControllerCheckoutCart extends Controller {
 				$quantity = 1;
 			}
 
-			// if (isset($this->request->post['option'])) {
-			// 	$option = array_filter($this->request->post['option']);
-			// } else {
-			// 	$option = array();	
-			// }
-
-			// if (isset($this->request->post['profile_id'])) {
-			// 	$profile_id = $this->request->post['profile_id'];
-			// } else {
-			// 	$profile_id = 0;
-			// }
-
 			if (!$json) {
 				$this->cart->add($this->request->post['product_id'], $quantity, ''/*, $option, $profile_id*/);
 
@@ -345,38 +216,10 @@ class ControllerCheckoutCart extends Controller {
 
 				$total_data = array();					
 				$total = 0;
-				//$taxes = $this->cart->getTaxes();
-
-				// Display prices
-				// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				// 	$sort_order = array(); 
-
-				// 	$results = $this->model_setting_extension->getExtensions('total');
-
-				// 	foreach ($results as $key => $value) {
-				// 		$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-				// 	}
-
-				// 	array_multisort($sort_order, SORT_ASC, $results);
-
-				// 	foreach ($results as $result) {
-				// 		if ($this->config->get($result['code'] . '_status')) {
-				// 			$this->load->model('total/' . $result['code']);
-
-				// 			$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-				// 		}
-
-				// 		$sort_order = array(); 
-
-				// 		foreach ($total_data as $key => $value) {
-				// 			$sort_order[$key] = $value['sort_order'];
-				// 		}
-
-				// 		array_multisort($sort_order, SORT_ASC, $total_data);			
-				// 	}
-				// }
+				
 
 				$json['total'] = $this->cart->countProducts();// + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0); //sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
+
 			} else {
 				$json['redirect'] = str_replace('&amp;', '&', $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']));
 			}

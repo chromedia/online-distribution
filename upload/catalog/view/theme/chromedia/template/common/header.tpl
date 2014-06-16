@@ -44,13 +44,16 @@
       <li><a href="about.html">Learn More</a></li>
       <li><a class="scroll" data-speed="500" data-easing="linear" href="#latest-news">Latest News</a></li>
       <li><a href="#">Contact Us</a></li>
+
       <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>"> 
         <span class="items-in-cart" style="color:red;"><?php echo ($totalItems ? $totalItems : '' ); ?></span> Cart
       </a></li>
     </ul>
   </section>
 </nav>
-<!-- </div> -->
+
+</div>
+
 <!-- END TOP BAR -->
 
 <div id="notification"></div>

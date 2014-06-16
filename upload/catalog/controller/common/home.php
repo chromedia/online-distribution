@@ -37,30 +37,5 @@ class ControllerCommonHome extends Controller {
         $products = $this->model_catalog_product->getFeaturedProducts(6);
 
         $this->data['products'] = $productService->getProductsThumbnailInfo($products, $this->customer, $this->url);
-
-        /*foreach($products as $product) {
-            if ($product['image']) {
-                $image = $this->model_tool_image->resize($product['image'], 301, 170);
-            } else {
-                $image = false;
-            }
-
-            if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-                $price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
-            } else {
-                $price = false;
-            }
-
-            // echo $product['product_id'].": ".strip_tags(html_entity_decode($product['description']))."<br/><br/><br/><br/>";
-                
-            $this->data['products'][] = array(
-                'product_id'  => $product['product_id'],
-                'description' => StringUtil::truncateString(strip_tags(html_entity_decode($product['description'])), 100),
-                'thumb'       => $image,
-                'name'        => $product['name'],
-                'price'       => $price,
-                'href'        => $this->url->link('product/product', 'product_id=' . $product['product_id'])
-            );
-        }*/
     }
 }
