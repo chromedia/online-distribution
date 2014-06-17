@@ -60,7 +60,7 @@
                             </div> -->
                             <input type="image" class="quantity-changed" key="<?php echo $product['key'];?>" src="catalog/view/theme/default/image/update.png"/>
                         </li>
-                        <li><a href="<?php echo $product['remove']; ?>" class="remove">remove</a></li>
+                        <li><a href="javascript:void(0);" key="<?php echo $product['key'];?>" class="remove">remove</a></li>
                     </ul>
                 </li>
             <?php endforeach;?>
@@ -69,7 +69,7 @@
         <div class="sub-total">
             <div class="shipping-cost">
                 <em>Shipping cost</em>
-                <strong></strong>
+                <strong>$ 0.00</strong>
             </div>
             <div class="sub-total-value">
                 <em>Sub Total</em>

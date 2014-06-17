@@ -219,14 +219,14 @@ class Cart {
 							'mask'        => $download['mask'],
 							'remaining'   => $download['remaining']
 						);
-					}
+					}*/
 
 					// Stock
 					if (!$product_query->row['quantity'] || ($product_query->row['quantity'] < $quantity)) {
 						$stock = false;
 					}
 
-					$recurring = false;
+					/*$recurring = false;
 					$recurring_frequency = 0;
 					$recurring_price = 0;
 					$recurring_cycle = 0;
@@ -274,7 +274,7 @@ class Cart {
 						'total'                     => ($price + $option_price) * $quantity,
 						//'reward'                    => $reward * $quantity,
 						//'points'                    => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
-						//'tax_class_id'              => $product_query->row['tax_class_id'],
+						'tax_class_id'              => $product_query->row['tax_class_id'],
 						'weight'                    => ($product_query->row['weight'] + $option_weight) * $quantity,
 						'weight_class_id'           => $product_query->row['weight_class_id'],
 						'length'                    => $product_query->row['length'],
@@ -409,7 +409,7 @@ class Cart {
 		$products = $this->getProducts();
 
 		foreach ($products as $product) {
-			$total += $product['total'];// * $product['quantity'];//$this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'];
+			$total += $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'];
 		}
 
 		return $total;

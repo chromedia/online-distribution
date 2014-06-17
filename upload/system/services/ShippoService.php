@@ -65,15 +65,17 @@ class ShippoService
 
             if (isset($parcelInfoArray['object_id'])) {
                 $shipmentInfoArray = $this->makeShipmentCall($parcelInfoArray, $addressFrom, $addressTo);
+
+                $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
+                $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
+
+                $newPackages[$key] = $package;
             }
-
-            $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
-            $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
-
-            $newPackages[$key] = $package;
         }
 
+
         $_SESSION['packages'] = $newPackages;
+
         
         return $ratesInfo['carriers'];
     }
@@ -156,9 +158,8 @@ class ShippoService
             if (!empty($rate) && !is_null($rate)) {
                 // Get rate provider
                 $provider = $rate['provider'];
-
                 // Filter by rate provider
-                if ($provider == "UPS") {
+                //if ($provider == "UPS") {
                     $serviceName = $rate['servicelevel_name'];
                     $rateId = $rate['object_id'];
 
@@ -179,8 +180,10 @@ class ShippoService
                         'service'    => $serviceName,
                         'amount'     => $rate['amount'],
                         'total'      => $total,
+                        'days'       => $rate['days'],
+                        'duration_terms' => $rate['duration_terms']
                     );
-                }
+                //}
             }
         }
 

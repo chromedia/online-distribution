@@ -44,7 +44,6 @@ class ControllerCheckoutOrder extends Controller {
                 $shippoService = ShippoService::getInstance();
                 $shippoService->requestShipping($this->request->post['service_name']);
                 //TODO:  Save to database needed fields
-
                 
 
                 $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);

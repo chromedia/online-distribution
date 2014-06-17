@@ -1,5 +1,4 @@
-
-<form class="form" action="">
+<form class="form" id="payment-form">
     <div class="secure-notice">
       <i class="icon-lock-sm"></i>
       Your information is safe and it will not be stored in our system.  
@@ -9,50 +8,67 @@
     <div class="row">
       <div class="large-6 columns">
 
-        <label for="" class="has-error">
-          First Name
-          <input type="text" class="has-error">
+        <label for="payment-name">
+          Name
+          <input type="text" id="payment-name" name="payment-name" required="required">
         </label>
+
       </div>
       <div class="large-6 columns">
-        <label for="">
-          Last Name
-          <input type="text">
-        </label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="large-6 columns">
-        <label for="">
-          Credit card number
-          <input type="text">
-        </label>
-      </div>
-      <div class="large-3 columns">
-        <label for="">
-          Security Code
-          <input type="text" class="qty-input-3">
-        </label>
-      </div>
-      <div class="large-3 columns"></div>
-    </div>
-    <div class="row">
-      <div class="large-6 columns">
-        <label for="">
-          Expiration date
-          <div>
-            <input type="text" class="qty-input inline" placeholder="mm">
-            <input type="text" class="qty-input inline" placeholder="yy">  
-          </div>
-          
+        <label for="payment-email">
+          Email
+          <input type="text" id="payment-email" name="payment-email" data-type="email" required="required">
         </label>
       </div>
     </div>
 
     <div class="row">
+      <div class="large-6 columns">
+        <label for="cc-number">
+          Credit card number
+          <input type="text" id="cc-number" name="cc-number" maxlength="16" data-stripe="number" autocomplete="off" required="required">
+        </label>
+      </div>
+
+      <div class="large-3 columns">
+        <label for="cc-securityCode">
+          Security Code
+          <input type="text" id="cc-securityCode" name="cc-securityCode" maxlength="4" data-stripe="cvc" autocomplete="off" class="qty-input-3" required="required">
+        </label>
+      </div>
+
+      <div class="large-3 columns"></div>
+    </div>
+
+    <div class="row">
+
+      <div class="large-6 columns">
+        <label for="cc-expirationYear">
+          Expiration date
+          <div>
+            <select name="cc-expirationYear" id="cc-expirationYear" data-stripe="exp-year" class="qty-input inline" required="required">
+                <?php foreach($years as $year): ?>
+                    <option value="<?php echo $year;?>" <?php if($current_year == $year):?>selected<?php endif;?>><?php echo $year;?></option>
+                <?php endforeach;?>
+            </select>
+
+            <select name="cc-expirationMonth" id="cc-expirationMonth" data-stripe="exp-month" class="qty-input inline" required="required">
+                <?php foreach($months as $month): ?>
+                    <option value="<?php echo $month;?>" <?php if($current_month == $month):?>selected<?php endif;?>><?php echo $month;?></option>
+                <?php endforeach;?>
+            </select>
+            <!-- <input type="text" class="qty-input inline" placeholder="mm"> -->
+            <!-- <input type="text" class="qty-input inline" placeholder="yy">   -->
+          </div>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row">
       <div class="mt20">
         <div class="large-12 columns">
-          <a href="" class="btn btn-checkout">Checkout</a>
+          <a href="javascript:void(0);" class="btn btn-checkout">Checkout</a>
         </div>  
       </div>
     </div>

@@ -7,43 +7,6 @@ class ControllerCheckoutCart extends Controller {
 
 	public function index() {
 		$this->language->load('checkout/cart');
-
-		// Update
-		if (!empty($this->request->post['quantity'])) {
-			foreach ($this->request->post['quantity'] as $key => $value) {
-				$this->cart->update($key, $value);
-			}
-
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
-			unset($this->session->data['payment_method']);
-			unset($this->session->data['payment_methods']); 
-			unset($this->session->data['reward']);
-
-			$this->redirect($this->url->link('checkout/cart'));  			
-		}
-
-		// Remove
-		/*if (isset($this->request->get['remove'])) {
-			$this->cart->remove($this->request->get['remove']);
-
-			unset($this->session->data['vouchers'][$this->request->get['remove']]);
-
-			$this->session->data['success'] = $this->language->get('text_remove');
-
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
-			unset($this->session->data['payment_method']);
-			unset($this->session->data['payment_methods']); 
-			unset($this->session->data['reward']);  
-
-			$this->redirect($this->url->link('checkout/cart'));
-		}*/
-
-		// $this->document->setTitle($this->language->get('heading_title'));
-		// $this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
-		// $this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
-
 		$this->data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/home'),
 			'text'      => $this->language->get('text_home'),
@@ -99,12 +62,12 @@ class ControllerCheckoutCart extends Controller {
 
 				$option_data = array();
 
-
-				$total = $product['price'] * $product['quantity'];
+				$price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
+				$total = $price * $product['quantity'];//$product['price'] * $product['quantity'];
 				$cartTotalPrice += $total;
 
-				$total = $this->currency->format($total);
-				$price = $this->currency->format($product['price']);
+				//$total = $this->currency->format($total);
+				//$price = $this->currency->format();
 
 				$this->data['products'][] = array(
 					'id'                  => $product['product_id'],
@@ -113,8 +76,8 @@ class ControllerCheckoutCart extends Controller {
 					'name'                => $product['name'],
 					'quantity'            => $product['quantity'],
 					'stock'               => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
-					'price'               => $price,
-					'total'               => $total,
+					'price'               => $this->currency->format($price),
+					'total'               => $this->currency->format($total),
 					'href'                => $this->url->link('product/product', 'product_id=' . $product['product_id']),
 					'remove'              => $this->url->link('checkout/cart', 'remove=' . $product['key']),
 				);
@@ -143,6 +106,8 @@ class ControllerCheckoutCart extends Controller {
 				// 'common/column_right',
 				// 'common/content_bottom',
 				// 'common/content_top',
+				'paymentForm'  => 'checkout/checkout/paymentForm',
+				'shippingForm' => 'checkout/checkout/shippingForm',
 				'common/footer',
 				'common/header'	
 			);
@@ -233,27 +198,48 @@ class ControllerCheckoutCart extends Controller {
 	 */
 	public function updateCartProductQuantity()
 	{
-		// $product_info = $this->model_catalog_product->getProduct($product_id);
 		$data = array();
 		$key = $this->request->post['key'];
 		$quantity = $this->request->post['quantity'];
 
-
 		// Update
 		if (!empty($key) && !empty($quantity)) {
-			$this->cart->update($this->request->post['key'], $this->request->post['quantity']);
-			$this->products = $this->cart->getProducts();
+			$this->cart->update($key, $quantity);
+
+			$products = $this->cart->getProducts();
+			$productNewPrice = $this->tax->calculate($products[$key]['price'], $products[$key]['tax_class_id'], $this->config->get('config_tax'));
 
 			$data = array(
 				'total' => number_format($this->cart->getTotal(), 2, '.', ','),
 				'productsCount' => $this->cart->countProducts(),
-				'productNewPrice' => number_format($this->products[$key]['price'] * $quantity,  2, '.', ',')
+				'productNewPrice' => number_format($productNewPrice * $quantity,  2, '.', ',')
 			);
 		}
 
 		// Check rates if exist and update rates about the shipment
-
 		$this->response->setOutput(json_encode($data));
+	}
+
+	/**
+	 * Removes product in the cart
+	 */
+	public function removeProductInCart()
+	{
+		$key = $this->request->post['key'];
+
+		if (!empty($key)) {
+			$this->cart->remove($key);
+
+			return $this->response->setOutput(json_encode(array(
+				'success' => true,
+				'total'   => number_format($this->cart->getTotal(), 2, '.', ','),
+				'productsCount' => $this->cart->countProducts()
+			)));
+
+			// TODO: Check shipments rate
+		}
+
+		return $this->response->setOutput(json_encode(array('success' => false, 'msg' => 'Invalid product key.')));		
 	}
 
 	public function country() {

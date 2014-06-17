@@ -6,6 +6,28 @@ require_once(DIR_SYSTEM . 'services/CartService.php');
 class ControllerCheckoutShipping extends Controller {
     
     /**
+     * Displays shipping form
+     */
+    public function shippingForm()
+    {
+        $this->load->model('localisation/country');
+        $this->load->model('localisation/us_states');
+        $this->load->model('localisation/canada_regions');
+
+        $this->data['countries'] = $this->model_localisation_country->getCountries();
+        $this->data['us_states'] = $this->model_localisation_us_states->getUsStates();
+        $this->data['canada_regions'] = $this->model_localisation_canada_regions->getCanadaRegions();
+
+        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/_shipment.tpl')) {
+            $this->template = $this->config->get('config_template') . '/template/checkout/_shipment.tpl';
+        } else {
+            $this->template = '';
+        }
+
+        $this->render();
+    }
+
+    /**
      * Checks shipping info/rates
      */
     public function checkShippingInfo()

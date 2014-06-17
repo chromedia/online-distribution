@@ -42,8 +42,10 @@ class ProductService
         foreach($products as $product) {
             if ($product['image']) {
                 $image = $this->imageTool->resize($product['image'], 301, 170);
-            } else {
-                $image = false;
+            }
+
+            if (!isset($image) || empty($image) || is_null($image)) {
+                $image = $this->imageTool->resize('no_image.jpg', 301, 170);
             }
 
             if (($this->config->get('config_customer_price') && $customer->isLogged()) || !$this->config->get('config_customer_price')) {
