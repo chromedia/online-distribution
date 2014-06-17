@@ -1,32 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Opentech - Products</title>
-  <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <!-- BEG TOP BAR -->
-<!-- <div class="fixed"> -->
-<nav class="top-bar" data-topbar id="top">
-  <ul class="title-area">
-    <li class="name">
-      <h1><a href="index.html"><img src="img/ICON-LOGO.png" width="46px" alt="" style="margin-top: -4px; margin-right: 10px;">Open Tech Collaborative</a></h1>
-    </li>
-  </ul>
-
-  <section class="top-bar-section">
-    <!-- Right Nav Section -->
-    <ul class="right">
-      <li><a href="about.html" >Learn More</a></li>
-      <li><a href="index.html#latest-news">Latest News</a></li>
-      <li><a href="about.html#contact-us">Contact Us</a></li>
-    </ul>
-  </section>
-</nav>
-<!-- </div> -->
-<!-- END TOP BAR -->
+<?php echo $header;?>
 
 
 <!-- CONTENT STARTS HERE -->
@@ -98,3 +70,5 @@
     </div>
   </div>
 </div>
+
+<?php echo $footer;?>

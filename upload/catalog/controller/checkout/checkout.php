@@ -1,7 +1,9 @@
 <?php 
 
+require_once(DIR_SYSTEM . 'services/StripeService.php');
 require_once(DIR_SYSTEM . 'services/ShippoService.php');
 require_once(DIR_SYSTEM . 'services/CartService.php');
+require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
 
 class ControllerCheckoutCheckout extends Controller { 
 	// public function index() {
@@ -89,11 +91,6 @@ class ControllerCheckoutCheckout extends Controller {
 	// 	$this->response->setOutput($this->render());
 	// }
 
-	// TODO: Transfer to order controller
-    // 1. Pay
-    // 2. Ship
-    // 3. Send email with transaction #, etc.
-
     /**
      * Handles final order
      */
@@ -117,24 +114,14 @@ class ControllerCheckoutCheckout extends Controller {
             ));
 
             if ($charge['paid'] === true) {
+                $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
+                $this->session->data['guest']['payment']['code'] = $charge['id'];
 
                 $shippoService = ShippoService::getInstance();
                 $shippoService->requestShipping($this->request->post['service_name']);
 
-            	$this->load->model('checkout/order');
-            	// $this->model_checkout_order->addOrder(array(
-            	// 	''
-            	// ));
-            	// Store Order in Database
-				// $sql = "INSERT INTO `" . DB_PREFIX . "order` SET order_id = '" . (int)1; 
-				// $sql .= "', order_status_id = '" . (int)true;
-				// $sql .= "', email = '" . $email;
-				// $sql .= "', shipping_code = '" . 'test';
-				// $sql .= "' ";
-
-				// $this->db->query($sql);
-
-				
+                $orderId = $this->__addOrder();
+                $this->session->data['order_id'] = $orderId;
 
                 //$cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);
                 $response = array('success' => true);
@@ -150,15 +137,137 @@ class ControllerCheckoutCheckout extends Controller {
     }
 
     /**
+     * Adds order
+     * 
+     * This is temporary
+     */
+    private function __addOrder()
+    {
+    	$data = array();
+
+		$data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
+		$data['store_id'] = $this->config->get('config_store_id');
+		$data['store_name'] = $this->config->get('config_name');
+		$data['button_confirm'] = $this->config->get('button_confirm');
+
+		if ($data['store_id']) {
+			$data['store_url'] = $this->config->get('config_url');		
+		} else {
+			$data['store_url'] = HTTP_SERVER;	
+		}
+		
+		$data['customer_id'] = 0;
+		$data['customer_group_id'] = $this->session->data['guest']['customer_group_id'];
+		$data['firstname'] = $this->session->data['guest']['firstname'];
+		$data['lastname'] = $this->session->data['guest']['lastname'];
+		$data['email'] = $this->session->data['guest']['email'];
+		$data['telephone'] = '';
+		$data['fax'] = '';
+
+		$data['payment_firstname'] = $this->session->data['guest']['payment']['firstname'];
+		$data['payment_lastname'] = '';	
+		$data['payment_company'] = '';	
+		$data['payment_company_id'] = '';	
+		$data['payment_tax_id'] = '';	
+		$data['payment_address_1'] = '';
+		$data['payment_address_2'] = '';
+		$data['payment_city'] = '';
+		$data['payment_postcode'] = '';
+		$data['payment_zone'] = '';
+		$data['payment_zone_id'] = '';
+		$data['payment_country'] = '';
+		$data['payment_country_id'] = '';
+		$data['payment_address_format'] = '';
+
+		$data['payment_method'] = '';
+		$data['payment_code'] = $this->session->data['guest']['payment']['code'];
+
+		$data['shipping_firstname'] = '';
+		$data['shipping_lastname'] = '';	
+		$data['shipping_company'] = '';	
+		$data['shipping_address_1'] = '';
+		$data['shipping_address_2'] = '';
+		$data['shipping_city'] = '';
+		$data['shipping_postcode'] = '';
+		$data['shipping_zone'] = '';
+		$data['shipping_zone_id'] = '';
+		$data['shipping_country'] = '';
+		$data['shipping_country_id'] = '';
+		$data['shipping_address_format'] = '';
+		$data['shipping_method'] = '';
+		$data['shipping_code'] = '';
+
+        $product_data = array();
+        $products = $this->cart->getProducts();
+
+        foreach ($products as $product) {
+            $option_data = array();
+
+            $product_data[] = array(
+                'product_id' => $product['product_id'],
+                'name'       => $product['name'],
+                'model'      => '',//$product['model'],
+                'option'     => array(),
+                'download'   => '',//$product['download'],
+                'quantity'   => $product['quantity'],
+                'subtract'   => '',//$product['subtract'],
+                'price'      => $product['price'],
+                'total'      => $product['total'],
+                'tax'        => $this->tax->getTax($product['price'], $product['tax_class_id']),
+                'reward'     => ''
+            ); 
+        }
+
+        $data['products'] = $product_data;
+        $data['vouchers'] = array();
+        $data['totals'] = array();
+        $data['comment'] = '';
+        $data['totals'] = array();
+        $data['total'] = 0;
+       
+        $data['affiliate_id'] = 0;
+        $data['commission'] = 0;
+        
+        $data['language_id'] = $this->config->get('config_language_id');
+        $data['currency_id'] = $this->currency->getId();
+        $data['currency_code'] = $this->currency->getCode();
+        $data['currency_value'] = $this->currency->getValue($this->currency->getCode());
+        $data['ip'] = $this->request->server['REMOTE_ADDR'];
+
+        if (!empty($this->request->server['HTTP_X_FORWARDED_FOR'])) {
+            $data['forwarded_ip'] = $this->request->server['HTTP_X_FORWARDED_FOR']; 
+        } elseif(!empty($this->request->server['HTTP_CLIENT_IP'])) {
+            $data['forwarded_ip'] = $this->request->server['HTTP_CLIENT_IP'];   
+        } else {
+            $data['forwarded_ip'] = '';
+        }
+
+        if (isset($this->request->server['HTTP_USER_AGENT'])) {
+            $data['user_agent'] = $this->request->server['HTTP_USER_AGENT'];    
+        } else {
+            $data['user_agent'] = '';
+        }
+
+        if (isset($this->request->server['HTTP_ACCEPT_LANGUAGE'])) {
+            $data['accept_language'] = $this->request->server['HTTP_ACCEPT_LANGUAGE'];  
+        } else {
+            $data['accept_language'] = '';
+        }
+
+        $this->load->model('checkout/order');
+        $this->model_checkout_order->addOrder($data);
+    }
+
+    /**
      * Successful checkout
      */
     public function onSuccess()
     {
-    	if (isset($this->session->data['order_id'])) {
+    	//if (isset($this->session->data['order_id'])) {
 			$this->cart->clear();
 
-			$cartService = CartService::getInstance();
-			$cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);
+			// $cartService = CartService::getInstance();
+			// $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $this->session->data['guest']['email']);
 			// On retrieve order for thank you message
 
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
@@ -166,7 +275,12 @@ class ControllerCheckoutCheckout extends Controller {
 	        } else {
 	            $this->template = '';
 	        }
-		}
+
+            $this->children = array(
+                'common/footer',
+                'common/header' 
+            );
+		//}
 
 		$this->response->setOutput($this->render());
     }
@@ -187,6 +301,8 @@ class ControllerCheckoutCheckout extends Controller {
                 'country' => $this->request->post['country'],
                 'email'   => $this->request->post['email']
             );
+
+            $this->__addAsGuestUser($toAddressData);
 
             $fromAddressData = array(
                 'name'      => 'Laura Behrens Wu',
@@ -222,6 +338,17 @@ class ControllerCheckoutCheckout extends Controller {
         } catch(Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * Add as guest user
+     */
+    private function __addAsGuestUser($data)
+    {
+		$this->session->data['guest']['firstname'] = $data['name'];
+		$this->session->data['guest']['lastname'] = '';
+		$this->session->data['guest']['email'] = $data['email'];
+        $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
     }
 
     /**

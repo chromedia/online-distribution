@@ -51,11 +51,12 @@ class StripeService
     private function __processResponse($response)
     {
         // TODO: Check errors
-        $jsonEncoded = json_decode($response, true);
+        $jsonDecoded = json_decode($response, true);
 
-        if (isset($jsonEncoded['paid'])) {
-            return $jsonEncoded;
+        if (isset($jsonDecoded['paid'])) {
+            return $jsonDecoded;
         } else {
+            return false;
             // TODO: check error type
             var_dump($jsonEncoded);exit;
         }

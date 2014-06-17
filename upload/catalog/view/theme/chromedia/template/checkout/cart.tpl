@@ -242,7 +242,7 @@
                             var service = rate.service;
                             var alias = service.split(' ').join('-');
 
-                            $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
+                            $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
                         });
 
                         $('#display-on-rates-checked').show();
@@ -370,7 +370,8 @@
             var data = {
                 service_name : $('.shipping-option:checked').val(),
                 customer_email : $('#shipping-email').val(),
-                token : token
+                token : token,
+                customer_name : $('#payment-name').val()
             }
 
             // Send form data to server with POST method, then retrieve json data
@@ -381,11 +382,16 @@
                     data: data,
                     dataType: 'json',     
                     success: function(jsondata){
-                        var token = jsondata.token;
-                        form.css({'opacity' : 1});
-                        $('.btn-checkout').show();
 
-                        window.location = "<?php echo $this->url->link('checkout/checkout/onSuccess', '', 'SSL');?>"
+                        if (jsondata.success) {
+                            var token = jsondata.token;
+                            form.css({'opacity' : 1});
+                            $('.btn-checkout').show();
+
+                            window.location = "<?php echo $this->url->link('checkout/checkout/onSuccess', '', 'SSL');?>"
+                        } else {
+                            alert(jsondata.errorMsg);
+                        }
                     }
                 });
             });
