@@ -2,6 +2,22 @@
 class ControllerCatalogProduct extends Controller {
 	private $error = array(); 
 
+	/*
+
+	index
+	insert
+	update
+	delete
+	copy
+	getList
+	getForm
+	validateForm
+	validateDelete
+	validateCopy
+	autocomplete
+
+	*/
+
 	public function index() {
 		$this->language->load('catalog/product');
 
@@ -19,13 +35,17 @@ class ControllerCatalogProduct extends Controller {
 
 		$this->load->model('catalog/product');
 
+		// If POST Data is Set and Validated
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+
+			// Add Product to Database
 			$this->model_catalog_product->addProduct($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$url = '';
 
+			// Add filters from before
 			if (isset($this->request->get['filter_name'])) {
 				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
 			}
@@ -58,6 +78,7 @@ class ControllerCatalogProduct extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
+			// Redirect to product list
 			$this->redirect($this->url->link('catalog/product', 'token=' . $this->session->data['token'] . $url, 'SSL'));
 		}
 
@@ -74,7 +95,7 @@ class ControllerCatalogProduct extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_product->editProduct($this->request->get['product_id'], $this->request->post);
 
-			$this->openbay->productUpdateListen($this->request->get['product_id'], $this->request->post);
+			//$this->openbay->productUpdateListen($this->request->get['product_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -128,7 +149,6 @@ class ControllerCatalogProduct extends Controller {
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $product_id) {
 				$this->model_catalog_product->deleteProduct($product_id);
-				$this->openbay->deleteProduct($product_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -344,8 +364,10 @@ class ControllerCatalogProduct extends Controller {
 
 		$this->load->model('tool/image');
 
+		// Get Total Products
 		$product_total = $this->model_catalog_product->getTotalProducts($data);
 
+		// Get Product Data
 		$results = $this->model_catalog_product->getProducts($data);
 
 		foreach ($results as $result) {
@@ -1254,22 +1276,6 @@ class ControllerCatalogProduct extends Controller {
 			}
 		}
 
-		if (isset($this->request->post['points'])) {
-			$this->data['points'] = $this->request->post['points'];
-		} elseif (!empty($product_info)) {
-			$this->data['points'] = $product_info['points'];
-		} else {
-			$this->data['points'] = '';
-		}
-
-		if (isset($this->request->post['product_reward'])) {
-			$this->data['product_reward'] = $this->request->post['product_reward'];
-		} elseif (isset($this->request->get['product_id'])) {
-			$this->data['product_reward'] = $this->model_catalog_product->getProductRewards($this->request->get['product_id']);
-		} else {
-			$this->data['product_reward'] = array();
-		}
-
 		if (isset($this->request->post['product_layout'])) {
 			$this->data['product_layout'] = $this->request->post['product_layout'];
 		} elseif (isset($this->request->get['product_id'])) {
@@ -1291,21 +1297,27 @@ class ControllerCatalogProduct extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
+	// Validate Product Info Form
 	protected function validateForm() {
+
+		// Check User Permission
 		if (!$this->user->hasPermission('modify', 'catalog/product')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
+		// Check Product Name
 		foreach ($this->request->post['product_description'] as $language_id => $value) {
 			if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 255)) {
 				$this->error['name'][$language_id] = $this->language->get('error_name');
 			}
 		}
 
+		// Check Model Name
 		if ((utf8_strlen($this->request->post['model']) < 1) || (utf8_strlen($this->request->post['model']) > 64)) {
 			$this->error['model'] = $this->language->get('error_model');
 		}
 
+		// General Error Warning if Errors Exist
 		if ($this->error && !isset($this->error['warning'])) {
 			$this->error['warning'] = $this->language->get('error_warning');
 		}

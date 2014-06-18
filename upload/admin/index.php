@@ -1,6 +1,4 @@
 <?php
-// Version
-define('VERSION', '1.5.6.4');
 
 // Configuration
 if (file_exists('config.php')) {
@@ -13,134 +11,16 @@ if (!defined('DIR_APPLICATION')) {
 	exit;
 }
 
+// Define and Sessionize Home Directory
+define('DIR_HOME', 'http://' . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/.\\') . '/');
+$_SESSION['HOME'] = DIR_HOME;
+
 // Startup
 require_once(DIR_SYSTEM . 'startup.php');
-
-// Application Classes
-require_once(DIR_SYSTEM . 'library/currency.php');
-require_once(DIR_SYSTEM . 'library/user.php');
-require_once(DIR_SYSTEM . 'library/weight.php');
-require_once(DIR_SYSTEM . 'library/length.php');
-
-// Registry
-$registry = new Registry();
-
-// Loader
-$loader = new Loader($registry);
-$registry->set('load', $loader);
-
-// Config
-$config = new Config();
-$registry->set('config', $config);
-
-// Database
-$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-$registry->set('db', $db);
-
-// Settings
-$query = $db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '0'");
-
-foreach ($query->rows as $setting) {
-	if (!$setting['serialized']) {
-		$config->set($setting['key'], $setting['value']);
-	} else {
-		$config->set($setting['key'], unserialize($setting['value']));
-	}
-}
 
 // Url
 $url = new Url(HTTP_SERVER, $config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER);	
 $registry->set('url', $url);
-
-// Log
-$log = new Log($config->get('config_error_filename'));
-$registry->set('log', $log);
-
-<<<<<<< HEAD
-function error_handler($errno, $errstr, $errfile, $errline) {
-	global $log, $config;
-	
-	switch ($errno) {
-		case E_NOTICE:
-		case E_USER_NOTICE:
-			$error = 'Notice';
-			break;
-		case E_WARNING:
-		case E_USER_WARNING:
-			$error = 'Warning';
-			break;
-		case E_ERROR:
-		case E_USER_ERROR:
-			$error = 'Fatal Error';
-			break;
-		default:
-			$error = 'Unknown';
-			break;
-	}
-		
-	if ($config->get('config_error_display')) {
-		echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b>';
-	}
-	
-	if ($config->get('config_error_log')) {
-		$log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
-	}
-
-	return true;
-}
-=======
-// function error_handler($errno, $errstr, $errfile, $errline) {
-// 	global $log, $config;
-	
-// 	switch ($errno) {
-// 		case E_NOTICE:
-// 		case E_USER_NOTICE:
-// 			$error = 'Notice';
-// 			break;
-// 		case E_WARNING:
-// 		case E_USER_WARNING:
-// 			$error = 'Warning';
-// 			break;
-// 		case E_ERROR:
-// 		case E_USER_ERROR:
-// 			$error = 'Fatal Error';
-// 			break;
-// 		default:
-// 			$error = 'Unknown';
-// 			break;
-// 	}
-		
-// 	if ($config->get('config_error_display')) {
-// 		echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b>';
-// 	}
-	
-// 	if ($config->get('config_error_log')) {
-// 		$log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
-// 	}
-
-// 	return true;
-// }
->>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
-
-// Error Handler
-set_error_handler('error_handler');
-
-// Request
-$request = new Request();
-$registry->set('request', $request);
-
-// Response
-$response = new Response();
-$response->addHeader('Content-Type: text/html; charset=utf-8');
-$registry->set('response', $response); 
-
-// Cache
-$cache = new Cache();
-$registry->set('cache', $cache); 
-
-// Session
-$session = new Session();
-$registry->set('session', $session); 
 
 // Language
 $languages = array();
@@ -158,36 +38,9 @@ $language = new Language($languages[$config->get('config_admin_language')]['dire
 $language->load($languages[$config->get('config_admin_language')]['filename']);	
 $registry->set('language', $language);
 
-// Document
-$registry->set('document', new Document()); 		
-
-// Currency
-$registry->set('currency', new Currency($registry));		
-
-// Weight
-$registry->set('weight', new Weight($registry));
-
-// Length
-$registry->set('length', new Length($registry));
-
-// User
-$registry->set('user', new User($registry));
-
-//OpenBay Pro
-<<<<<<< HEAD
-$registry->set('openbay', new Openbay($registry));
-=======
-//$registry->set('openbay', new Openbay($registry));
->>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
-
-// Front Controller
-$controller = new Front($registry);
-
 // Login
-$controller->addPreAction(new Action('common/home/login'));
-
-// Permission
-$controller->addPreAction(new Action('common/home/permission'));
+$front->addPreAction(new Action('common/home/login'));
+$front->addPreAction(new Action('common/home/permission'));
 
 // Router
 if (isset($request->get['route'])) {
@@ -197,7 +50,7 @@ if (isset($request->get['route'])) {
 }
 
 // Dispatch
-$controller->dispatch($action, new Action('error/not_found'));
+$front->dispatch($action, new Action('error/not_found'));
 
 // Output
 $response->output();
