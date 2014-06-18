@@ -235,7 +235,7 @@
                     $('.shipping-selection').remove('label');
                     shipmentFormStatus(self, true);
 
-                    if (jsondata.rates) {
+                    if (jsondata.success && jsondata.rates) {
                         var rates = jsondata.rates;
 
                         $.each(rates, function(index, rate) {
@@ -247,6 +247,12 @@
 
                         $('#display-on-rates-checked').show();
                         $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
+                    } else {
+                        var message = jsondata.errorMsg ? 'An error occured. Please make sure data are correct.';
+                        $('.notif-msg')
+                            .show()
+                            .find('.notif').html(message)
+                            .focus();
                     }
                 },
                 error: function(error) {

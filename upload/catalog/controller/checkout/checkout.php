@@ -282,14 +282,15 @@ class ControllerCheckoutCheckout extends Controller {
 
             $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
 
-            $rates = array('rates' => $info);
+            $rates = array('success' => true, 'rates' => $info);
             $_SESSION['rates'] = $info;
 
             echo json_encode($rates);
             exit;
 
         } catch(Exception $e) {
-            throw $e;
+            echo json_encode(array('success' => false, 'errorMsg' => $e->getMessage()));
+            exit;
         }
     }
 

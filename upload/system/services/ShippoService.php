@@ -70,6 +70,8 @@ class ShippoService
                 $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
 
                 $newPackages[$key] = $package;
+            } else {
+                throw new Exception(json_encode($parcelInfoArray));
             }
         }
 
