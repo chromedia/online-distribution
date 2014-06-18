@@ -32,7 +32,7 @@
 <nav class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
-      <h1><a href="#"><img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" width="46px" alt="" style="margin-top: -4px; margin-right: 10px;">Open Tech Collaborative</a></h1>
+      <h1><a href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>"><img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" width="46px" alt="" style="margin-top: -4px; margin-right: 10px;">Open Tech Collaborative</a></h1>
     </li>
   </ul>
 
