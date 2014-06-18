@@ -48,7 +48,39 @@ class ModelInstall extends Model {
 			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_encryption', value = '" . $db->escape(md5(mt_rand())) . "'");
 			
 			$db->query("UPDATE `" . $data['db_prefix'] . "product` SET `viewed` = '0'");
+
+			$this->customDatabase($db, $data);
 		}		
+	}
+
+	/**
+	 * Added loader for custom database
+	 */
+	public function customDatabase($db, $data) {		
+		$file = DIR_APPLICATION . 'opentech.custom.sql';
+		
+		if (!file_exists($file)) { 
+			exit('Could not load sql file: ' . $file); 
+		}
+		
+		$lines = file($file);
+		
+		if ($lines) {
+			$sql = '';
+
+			foreach($lines as $line) {
+				if ($line && (substr($line, 0, 2) != '--') && (substr($line, 0, 1) != '#')) {
+					$sql .= $line;
+
+					if (preg_match('/;\s*$/', $line)) {
+						$db->query($sql);
+
+						$sql = '';
+					}
+				}
+			}
+		}
+
+		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `is_featured` TINYINT NOT NULL DEFAULT '0'; ");
 	}	
 }
-?>

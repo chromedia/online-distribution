@@ -33,7 +33,12 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'DB_USERNAME\', \'' . addslashes($this->request->post['db_user']) . '\');' . "\n";
 			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
 			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
-			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n";
+			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n\n";
+
+			$output .= '// Third Party API Credentials'. "\n";
+			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
+			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
+			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
 			$output .= '?>';				
 
 			$file = fopen(DIR_OPENCART . 'config.php', 'w');
@@ -70,7 +75,12 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'DB_USERNAME\', \'' . addslashes($this->request->post['db_user']) . '\');' . "\n";
 			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
 			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
-			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n";
+			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n\n";
+
+			$output .= '// Third Party API Credentials'. "\n";
+			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
+			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
+			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
 			$output .= '?>';	
 
 			$file = fopen(DIR_OPENCART . 'admin/config.php', 'w');
@@ -191,6 +201,10 @@ class ControllerStep3 extends Controller {
 		} else {
 			$this->data['email'] = '';
 		}
+
+		$this->data['stripe_private_key'] = isset($this->request->post['stripe_private_key']) ? $this->request->post['stripe_private_key'] : '';
+		$this->data['stripe_public_key'] = isset($this->request->post['stripe_public_key']) ? $this->request->post['stripe_public_key'] : '';;
+		$this->data['shippo_authorization'] = isset($this->request->post['shippo_authorization']) ? $this->request->post['shippo_authorization'] : '';;
 
 		$this->data['back'] = $this->url->link('step_2');
 

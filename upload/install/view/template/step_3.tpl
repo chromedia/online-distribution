@@ -94,6 +94,23 @@
         </tr>
       </table>
     </fieldset>
+    <p>3. Please enter Stripe and Shippo information credentials.</p>
+    <fieldset>
+      <table class="form">
+        <tr>
+          <td>Stripe Private Key:</td>
+          <td><input type="text" name="stripe_private_key" value="<?php echo $stripe_private_key; ?>" /></td>
+        </tr>
+        <tr>
+          <td>Stripe Public Key:</td>
+          <td><input type="text" name="stripe_public_key" value="<?php echo $stripe_public_key; ?>" /></td>
+        </tr>
+        <tr>
+          <td>Shippo Authorization:</td>
+          <td><input type="text" name="shippo_authorization" value="<?php echo $shippo_authorization; ?>" /></td>
+        </tr>
+      </table>
+    </fieldset>
     <div class="buttons">
       <div class="left"><a href="<?php echo $back; ?>" class="button">Back</a></div>
       <div class="right">
