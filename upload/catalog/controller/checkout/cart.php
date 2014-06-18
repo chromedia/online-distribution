@@ -1,17 +1,12 @@
 <?php
 
 require_once(DIR_SYSTEM . 'services/CartService.php');
+require_once(DIR_SYSTEM . 'services/ProductService.php');
 
 class ControllerCheckoutCart extends Controller {
 	private $error = array();
 
 	public function index() {
-		// require_once(DIR_SYSTEM . 'services/ShippoService.php');
-
-		// $shippoService = ShippoService::getInstance();
-		// $shippoService->requestShippingInfoOfObject('64bba01845ef40d29374032599f22588');
-		// exit;
-
 		$this->language->load('checkout/cart');
 		$this->data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/home'),
@@ -25,58 +20,18 @@ class ControllerCheckoutCart extends Controller {
 			'separator' => $this->language->get('text_separator')
 		);
 
-		if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {	
+		$products = $this->cart->getProducts();
+
+		if ($products) {	
 			$this->data['heading_title'] = $this->language->get('heading_title');
 
-			$cartTotalPrice = 0;
-			
 			$this->load->model('tool/image');
 			$this->data['products'] = array();
 
-			$products = $this->cart->getProducts();
+			$productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax);
+            $this->data['products'] = $productService->getProductCheckoutInfo($products);
 
-			foreach ($products as $product) {
-				$product_total = 0;
-
-				// Loop to get quantities or products
-				foreach ($products as $product_2) {
-					if ($product_2['product_id'] == $product['product_id']) {
-						$product_total += $product_2['quantity'];
-					}
-				}
-
-				if ($product['minimum'] > $product_total) {
-					$this->data['error_warning'] = sprintf($this->language->get('error_minimum'), $product['name'], $product['minimum']);
-				}
-
-				if ($product['image']) {
-					$image = $this->model_tool_image->resize($product['image'], 55, 55/*$this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')*/);
-				}
-
-				if (!isset($image) || empty($image) || is_null($image)) {
-					$image = $this->model_tool_image->resize('no_image.jpg', 55, 55);
-				}
-
-				$option_data = array();
-
-				$price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
-				$total = $price * $product['quantity'];//$product['price'] * $product['quantity'];
-				$cartTotalPrice += $total;
-
-				$this->data['products'][] = array(
-					'id'                  => $product['product_id'],
-					'key'                 => $product['key'],
-					'thumb'               => $image,
-					'name'                => $product['name'],
-					'quantity'            => $product['quantity'],
-					'stock'               => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
-					'price'               => $this->currency->format($price),
-					'total'               => $this->currency->format($total),
-					'href'                => $this->url->link('product/product', 'product_id=' . $product['product_id']),
-					'remove'              => $this->url->link('checkout/cart', 'remove=' . $product['key']),
-				);
-			}
-
+			$cartTotalPrice = $this->cart->getTotal();
 			$this->data['products_in_cart_count'] = $this->cart->countProducts();
 			$this->data['subTotalWithCurrency'] = $this->currency->format($cartTotalPrice);
 			$this->data['subTotal'] = $cartTotalPrice;
