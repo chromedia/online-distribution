@@ -238,6 +238,8 @@
                     if (jsondata.success && jsondata.rates) {
                         var rates = jsondata.rates;
 
+                        $('.shipping-selection').children().not('h3').remove();
+
                         $.each(rates, function(index, rate) {
                             var service = rate.service;
                             var alias = service.split(' ').join('-');
@@ -248,7 +250,7 @@
                         $('#display-on-rates-checked').show();
                         $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
                     } else {
-                        var message = jsondata.errorMsg ? 'An error occured. Please make sure data are correct.';
+                        var message = jsondata.errorMsg ? jsondata.errorMsg : 'An error occured. Please make sure data are correct.';
                         $('.notif-msg')
                             .show()
                             .find('.notif').html(message)
