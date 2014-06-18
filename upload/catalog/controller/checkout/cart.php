@@ -6,6 +6,12 @@ class ControllerCheckoutCart extends Controller {
 	private $error = array();
 
 	public function index() {
+		// require_once(DIR_SYSTEM . 'services/ShippoService.php');
+
+		// $shippoService = ShippoService::getInstance();
+		// $shippoService->requestShippingInfoOfObject('64bba01845ef40d29374032599f22588');
+		// exit;
+
 		$this->language->load('checkout/cart');
 		$this->data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/home'),
@@ -14,22 +20,13 @@ class ControllerCheckoutCart extends Controller {
 		);
 
 		$this->data['breadcrumbs'][] = array(
-			'href'      => $this->url->link('checkout/cart'),
-			'text'      => $this->language->get('heading_title'),
+			'href'      => '',
+			'text'      => 'Checkout Processs',//$this->language->get('heading_title'),
 			'separator' => $this->language->get('text_separator')
 		);
 
 		if ($this->cart->hasProducts() || !empty($this->session->data['vouchers'])) {	
 			$this->data['heading_title'] = $this->language->get('heading_title');
-			$this->data['action'] = $this->url->link('checkout/cart');   
-
-			if ($this->config->get('config_cart_weight')) {
-				$this->data['weight'] = $this->weight->format($this->cart->getWeight(), $this->config->get('config_weight_class_id'), $this->language->get('decimal_point'), $this->language->get('thousand_point'));
-			} else {
-				$this->data['weight'] = '';
-			}
-
-			$this->data['action'] = $this->url->link('checkout/cart');
 
 			$cartTotalPrice = 0;
 			
@@ -66,9 +63,6 @@ class ControllerCheckoutCart extends Controller {
 				$total = $price * $product['quantity'];//$product['price'] * $product['quantity'];
 				$cartTotalPrice += $total;
 
-				//$total = $this->currency->format($total);
-				//$price = $this->currency->format();
-
 				$this->data['products'][] = array(
 					'id'                  => $product['product_id'],
 					'key'                 => $product['key'],
@@ -87,14 +81,6 @@ class ControllerCheckoutCart extends Controller {
 			$this->data['subTotalWithCurrency'] = $this->currency->format($cartTotalPrice);
 			$this->data['subTotal'] = $cartTotalPrice;
 
-			$this->data['continue'] = $this->url->link('common/home');
-
-			$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
-
-			$this->load->model('setting/extension');
-
-			$this->data['checkout_buttons'] = array();
-
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/cart.tpl')) {
 				$this->template = $this->config->get('config_template') . '/template/checkout/cart.tpl';
 			} else {
@@ -102,10 +88,6 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			$this->children = array(
-				// 'common/column_left',
-				// 'common/column_right',
-				// 'common/content_bottom',
-				// 'common/content_top',
 				'paymentForm'  => 'checkout/checkout/paymentForm',
 				'shippingForm' => 'checkout/checkout/shippingForm',
 				'common/footer',
@@ -116,25 +98,15 @@ class ControllerCheckoutCart extends Controller {
 		} else {
 			$this->data['heading_title'] = $this->language->get('heading_title');
 
-			$this->data['text_error'] = $this->language->get('text_empty');
+			$this->data['text_error'] = 'No products added yet.';
 
-			$this->data['button_continue'] = $this->language->get('button_continue');
-
-			$this->data['continue'] = $this->url->link('common/home');
-
-			unset($this->session->data['success']);
-
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/error/not_found.tpl')) {
-				$this->template = $this->config->get('config_template') . '/template/error/not_found.tpl';
+			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/empty_cart.tpl')) {
+				$this->template = $this->config->get('config_template') . '/template/checkout/empty_cart.tpl';
 			} else {
 				$this->template = 'default/template/error/not_found.tpl';
 			}
 
 			$this->children = array(
-				// 'common/column_left',
-				// 'common/column_right',
-				// 'common/content_top',
-				// 'common/content_bottom',
 				'common/footer',
 				'common/header'	
 			);

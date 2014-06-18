@@ -33,8 +33,6 @@ class CurlUtil
                 case "POST":
                     curl_setopt($ch, CURLOPT_POST, 1);
 
-                    // var_dump($data);exit;
-
                     if (!empty($data)) {
                         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
                         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
@@ -45,7 +43,7 @@ class CurlUtil
             
             // getting response from server 
             $httpResponse = curl_exec($ch);
-            @curl_close($ch);
+            // @curl_close($ch);
             
             if (!$httpResponse) {
                 throw new Exception('API call failed: '.curl_error($ch));

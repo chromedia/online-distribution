@@ -100,8 +100,9 @@ class ControllerCheckoutCheckout extends Controller {
         try {
             $cartService = CartService::getInstance();
             $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
+            $cartTotal = $this->cart->getTotal();
 
-            $amount = $this->cart->getTotal() + $shippingAmount;
+            $amount = $cartTotal + $shippingAmount;
             $email = $this->request->post['customer_email'];
             $response = array();
 
@@ -122,6 +123,7 @@ class ControllerCheckoutCheckout extends Controller {
 
                 $orderId = $this->__addOrder();
                 $this->session->data['order_id'] = $orderId;
+                $this->session->data['shipping_cost'] = $shippingAmount;
 
                 //$cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);
                 $response = array('success' => true);
@@ -208,7 +210,7 @@ class ControllerCheckoutCheckout extends Controller {
                 'name'       => $product['name'],
                 'model'      => '',//$product['model'],
                 'option'     => array(),
-                'download'   => '',//$product['download'],
+                'download'   => array(),//$product['download'],
                 'quantity'   => $product['quantity'],
                 'subtract'   => '',//$product['subtract'],
                 'price'      => $product['price'],
@@ -255,7 +257,7 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         $this->load->model('checkout/order');
-        $this->model_checkout_order->addOrder($data);
+        return $this->model_checkout_order->addOrder($data);
     }
 
     /**
@@ -263,26 +265,87 @@ class ControllerCheckoutCheckout extends Controller {
      */
     public function onSuccess()
     {
-    	//if (isset($this->session->data['order_id'])) {
-			$this->cart->clear();
+        if (isset($this->session->data['order_id'])) {
+            $cartService = CartService::getInstance();
+            $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), ShippoService::getInstance(), $this->session->data['guest']['email']);
 
-			// $cartService = CartService::getInstance();
-			// $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $this->session->data['guest']['email']);
-			// On retrieve order for thank you message
+            $this->data['breadcrumbs'][] = array(
+                'href'      => $this->url->link('common/home'),
+                'text'      => $this->language->get('text_home'),
+                'separator' => false
+            );
 
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
-	            $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
-	        } else {
-	            $this->template = '';
-	        }
+            $this->data['breadcrumbs'][] = array(
+                'href'      => '',
+                'text'      => 'Checkout Success',
+                'separator' => $this->language->get('text_separator')
+            );
+
+            // $cartTotalPrice = 0;
+
+            if ($this->cart->hasProducts()) {   
+                $this->data['heading_title'] = $this->language->get('heading_title');                
+                $this->load->model('tool/image');
+                $products = $this->cart->getProducts();
+
+                foreach ($products as $product) {
+                    $product_total = 0;
+                    foreach ($products as $product_2) {
+                        if ($product_2['product_id'] == $product['product_id']) {
+                            $product_total += $product_2['quantity'];
+                        }
+                    }
+
+                    if ($product['image']) {
+                        $image = $this->model_tool_image->resize($product['image'], 55, 55/*$this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')*/);
+                    }
+
+                    if (!isset($image) || empty($image) || is_null($image)) {
+                        $image = $this->model_tool_image->resize('no_image.jpg', 55, 55);
+                    }
+
+                    $price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
+                    $total = $price * $product['quantity'];//$product['price'] * $product['quantity'];
+                    // $cartTotalPrice += $total;
+
+                    $this->data['products'][] = array(
+                        'id'                  => $product['product_id'],
+                        'key'                 => $product['key'],
+                        'thumb'               => $image,
+                        'name'                => $product['name'],
+                        'quantity'            => $product['quantity'],
+                        'price'               => $this->currency->format($price),
+                        'total'               => $this->currency->format($total)
+                    );
+                }
+            }
+
+            $cartTotalPrice = $this->cart->getTotal();
+            $this->data['products_in_cart_count'] = $this->cart->countProducts();
+            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping_cost']);
+            $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
+            $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping_cost']);
+
+            // On retrieve order for thank you message
+            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
+                $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
+            } else {
+                $this->template = '';
+            }
+
+            $this->cart->clear();
+            unset($this->session->data['order_id']);
+            unset($this->session->data['packages']);
 
             $this->children = array(
                 'common/footer',
                 'common/header' 
             );
-		//}
 
-		$this->response->setOutput($this->render());
+            $this->response->setOutput($this->render());
+        } else {
+            $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+        }
     }
 
     /**
