@@ -23,6 +23,9 @@ strong{
 .card-footer{
   padding: 20px 15px;
 }
+.card-body{
+  height: 100px;
+}
 .card-title a{
   
   color: #4F555B;
@@ -103,7 +106,17 @@ a.btn-checkout{
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center 50%;
+  background-color: #232323;
   position: relative;
+}
+.shipping-info-row{
+  margin: 0 0 20px 0;
+}
+.shipping-summary{
+  font-size: 14px;
+}
+.shipping-summary h3{
+  margin-bottom: 20px;
 }
 .product-title{
   position: absolute;
@@ -365,7 +378,21 @@ label.use-cc-info{
   position: relative;
   top: -3px;
 }
-
+.breadcrumbs{
+  margin-bottom: 0;
+  border-radius: 0
+}
+.top-nav li{
+  position: relative;
+}
+.items-in-cart{
+  padding: 5px 8px;
+  color: #fff;
+  line-height: 1;
+  background-color: #DF6D6D;
+  display: inline-block;
+  border-radius: 50%;
+}
 @media only screen and (min-width: 40.063em) and (max-width: 64em) { 
   .product-sidebar{
     top: 0;
