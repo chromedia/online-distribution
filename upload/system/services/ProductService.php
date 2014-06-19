@@ -66,4 +66,46 @@ class ProductService
 
         return $data;
     }
+
+    /**
+     * Returns product cart info
+     */
+    public function getProductCheckoutInfo($products)
+    {
+        $data = array();
+
+        foreach ($products as $product) {
+            $product_total = 0;
+
+            foreach ($products as $product_2) {
+                if ($product_2['product_id'] == $product['product_id']) {
+                    $product_total += $product_2['quantity'];
+                }
+            }
+
+            if ($product['image']) {
+                $image = $this->imageTool->resize($product['image'], 55, 55/*$this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')*/);
+            }
+
+            if (!isset($image) || empty($image) || is_null($image)) {
+                $image = $this->imageTool->resize('no_image.jpg', 55, 55);
+            }
+
+            $price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
+            $total = $price * $product['quantity'];//$product['price'] * $product['quantity'];
+            // $cartTotalPrice += $total;
+
+            $data[] = array(
+                'id'                  => $product['product_id'],
+                'key'                 => $product['key'],
+                'thumb'               => $image,
+                'name'                => $product['name'],
+                'quantity'            => $product['quantity'],
+                'price'               => $this->currency->format($price),
+                'total'               => $this->currency->format($total)
+            );
+        }
+
+        return $data;
+    }
 }

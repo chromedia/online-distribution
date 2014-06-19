@@ -71,6 +71,14 @@
         return hasError;
     }
 
+    var focusElement = function(element) {
+        var offset = element.offset();
+
+        $('html, body').animate({
+          scrollTop: offset.top - 10
+        }, 1000);
+    }
+
     var removeErrors = function(form) {
         form.find('.has-error').each(function() {
             $(this).removeClass('has-error');
@@ -79,6 +87,16 @@
         $('.notif-msg')
             .hide()
             .find('.notif').empty();
+    }
+
+    var showCheckoutGeneralError = function(message) {
+        $('.notif-msg')
+            .show()
+            .find('.notif').html(message)
+            .focus();
+
+        focusElement($('.notif-msg'));
+
     }
 </script>
 
@@ -120,44 +138,6 @@
         $('.items-in-cart').html(productsCount);
     }
 
-    var removeProduct = function(element) {
-        var removeProductConfirm = confirm("Are you sure you want to remove this product?");
-
-        if (removeProductConfirm == true) {
-            var closestContainer = element.closest('.group');
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo $this->url->link('checkout/cart/removeProductInCart', '', 'SSL'); ?>",
-                data: {key : element.attr('key')},
-                dataType: 'json',
-                beforeSend: function() {
-                    closestContainer.css({'opacity' : 0.5});
-                    closestContainer.find('input').attr('readonly', true);
-                },
-                success: function(jsondata) {
-                    if (jsondata.success) {
-                        closestContainer.remove();
-
-                        updateSubTotal(jsondata.total);
-                        updateProductsCount(jsondata.productsCount);
-                    } else {
-                        closestContainer.css({'opacity' : 1});
-                        closestContainer.find('input').attr('readonly', false);
-
-                        alert(jsondata.msg);
-                    }
-                },
-                error: function(error) {
-                    closestContainer.css({'opacity' : 1});
-                    closestContainer.find('input').attr('readonly', false);
-
-                    alert(error);
-                }
-            });
-        }
-    }
-
     var activateStep2 = function() {
         $('.steps-bar').find('.step1')
             .removeClass('active')
@@ -183,6 +163,69 @@
         $('#payment-email').val(shipmentData.email);
     }
 
+    var retrieveShipmentRates = function(form, event) {
+        removeErrors(form);
+        var hasError = showFormErrors(form);
+
+        shipmentFormStatus(form, false);
+        
+        if (!hasError) {
+            var data = form.serialize();    
+
+            setShipmentData(data);
+
+            // Send POST data to server
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $this->url->link('checkout/checkout/checkShippingInfo', '', 'SSL'); ?>",
+                data: data,
+                dataType: 'json',
+                success: function(jsondata) {
+                    $('.shipping-selection').remove('label');
+                    shipmentFormStatus(form, true);
+
+                    if (jsondata.success && jsondata.rates) {
+                        var rates = jsondata.rates;
+
+                        $('.shipping-selection').children().not('h3').remove();
+
+                        if (jsondata.rates_count > 0) {
+                            $.each(rates, function(index, rate) {
+                                var service = rate.service;
+                                var alias = service.split(' ').join('-');
+
+                                $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
+                            });
+
+                            $('#display-on-rates-checked').show();
+                            $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
+                        } else {
+                            showCheckoutGeneralError('Shippo could not retrieve shipment rates. Please update provided address and products.');
+                        }
+
+                    } else {
+                        var message = jsondata.errorMsg ? jsondata.errorMsg : 'An error occured. Please make sure data are correct.';
+                        showCheckoutGeneralError(message);
+                    }
+                },
+                error: function(error) {
+                    shipmentFormStatus(form, true);
+                    alert('error');
+                }
+            }); 
+        } else {
+            shipmentFormStatus(form, true);
+        }
+    }
+
+     var refreshShipmentData = function() {
+        $('#display-on-rates-checked').hide();
+        
+        if ($('.shipping-selection').find('.shipping-option').length > 0) {
+            retrieveShipmentRates($('#shipment-form'));
+        }
+    }
+
     var shipmentFormStatus = function(form, is_active) {
         if (is_active) {
             form.children().css({'opacity' : '1'});
@@ -192,6 +235,46 @@
             form.children(':not(.loader)').css({'opacity' : '0.3'});
             form.showLoader({'size' : 'small'});
             form.find('input[type="submit"]').show();
+        }
+    }
+
+    var removeProduct = function(element) {
+        var removeProductConfirm = confirm("Are you sure you want to remove this product?");
+
+        if (removeProductConfirm == true) {
+            var closestContainer = element.closest('.group');
+
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $this->url->link('checkout/cart/removeProductInCart', '', 'SSL'); ?>",
+                data: {key : element.attr('key')},
+                dataType: 'json',
+                beforeSend: function() {
+                    closestContainer.css({'opacity' : 0.5});
+                    closestContainer.find('input').attr('readonly', true);
+                },
+                success: function(jsondata) {
+                    if (jsondata.success) {
+                        closestContainer.remove();
+
+                        updateSubTotal(jsondata.total);
+                        updateProductsCount(jsondata.productsCount);
+
+                        refreshShipmentData();
+                    } else {
+                        closestContainer.css({'opacity' : 1});
+                        closestContainer.find('input').attr('readonly', false);
+
+                        alert(jsondata.msg);
+                    }
+                },
+                error: function(error) {
+                    closestContainer.css({'opacity' : 1});
+                    closestContainer.find('input').attr('readonly', false);
+
+                    alert(error);
+                }
+            });
         }
     }
 
@@ -212,51 +295,10 @@
         updateShipment(shippingAmount);
     });
 
-    $('#shipment-form').on('submit', function(e) {
-        var self = $(this);
+    $('#shipment-form').off('submit').on('submit', function(e) {
         e.preventDefault();
 
-        removeErrors(self);
-        var hasError = showFormErrors(self);
-        shipmentFormStatus(self, false);
-        
-        if (!hasError) {
-            var data = $(this).serialize();    
-
-            setShipmentData(data);
-
-            // Send POST data to server
-            $.ajax({
-                type: "POST",
-                url: "<?php echo $this->url->link('checkout/checkout/checkShippingInfo', '', 'SSL'); ?>",
-                data: data,
-                dataType: 'json',
-                success: function(jsondata) {
-                    $('.shipping-selection').remove('label');
-                    shipmentFormStatus(self, true);
-
-                    if (jsondata.rates) {
-                        var rates = jsondata.rates;
-
-                        $.each(rates, function(index, rate) {
-                            var service = rate.service;
-                            var alias = service.split(' ').join('-');
-
-                            $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
-                        });
-
-                        $('#display-on-rates-checked').show();
-                        $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
-                    }
-                },
-                error: function(error) {
-                    shipmentFormStatus(self, true);
-                    alert('error');
-                }
-            }); 
-        } else {
-            shipmentFormStatus(true);
-        }
+        retrieveShipmentRates($(this));
     });
 
     $('#shipping-country').on('change', function() {
@@ -306,6 +348,8 @@
 
                     updateSubTotal(jsondata.total);
                     updateProductsCount(jsondata.productsCount);
+
+                    refreshShipmentData();
                 },
                 error: function(error) {
                     qtyInput.css({'opacity' : 1});

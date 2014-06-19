@@ -3,93 +3,10 @@
 require_once(DIR_SYSTEM . 'services/StripeService.php');
 require_once(DIR_SYSTEM . 'services/ShippoService.php');
 require_once(DIR_SYSTEM . 'services/CartService.php');
+require_once(DIR_SYSTEM . 'services/ProductService.php');
 require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
 
 class ControllerCheckoutCheckout extends Controller { 
-	// public function index() {
-	// 	// Validate cart has products and has stock.
-	// 	if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-	// 		$this->redirect($this->url->link('checkout/cart'));
-	// 	}
-
-	// 	// Validate minimum quantity requirments.			
-	// 	$products = $this->cart->getProducts();
-
-	// 	foreach ($products as $product) {
-	// 		$product_total = 0;
-
-	// 		foreach ($products as $product_2) {
-	// 			if ($product_2['product_id'] == $product['product_id']) {
-	// 				$product_total += $product_2['quantity'];
-	// 			}
-	// 		}		
-
-	// 		if ($product['minimum'] > $product_total) {
-	// 			$this->redirect($this->url->link('checkout/cart'));
-	// 		}				
-	// 	}
-
-	// 	$this->language->load('checkout/checkout');
-
-	// 	$this->document->setTitle($this->language->get('heading_title')); 
-	// 	$this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
-	// 	$this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
-
-	// 	$this->data['breadcrumbs'] = array();
-
-	// 	$this->data['breadcrumbs'][] = array(
-	// 		'text'      => $this->language->get('text_home'),
-	// 		'href'      => $this->url->link('common/home'),
-	// 		'separator' => false
-	// 	);
-
-	// 	$this->data['breadcrumbs'][] = array(
-	// 		'text'      => $this->language->get('text_cart'),
-	// 		'href'      => $this->url->link('checkout/cart'),
-	// 		'separator' => $this->language->get('text_separator')
-	// 	);
-
-	// 	$this->data['breadcrumbs'][] = array(
-	// 		'text'      => $this->language->get('heading_title'),
-	// 		'href'      => $this->url->link('checkout/checkout', '', 'SSL'),
-	// 		'separator' => $this->language->get('text_separator')
-	// 	);
-
-	// 	$this->data['heading_title'] = $this->language->get('heading_title');
-
-	// 	$this->data['text_checkout_option'] = $this->language->get('text_checkout_option');
-	// 	$this->data['text_checkout_account'] = $this->language->get('text_checkout_account');
-	// 	$this->data['text_checkout_payment_address'] = $this->language->get('text_checkout_payment_address');
-	// 	$this->data['text_checkout_shipping_address'] = $this->language->get('text_checkout_shipping_address');
-	// 	$this->data['text_checkout_shipping_method'] = $this->language->get('text_checkout_shipping_method');
-	// 	$this->data['text_checkout_payment_method'] = $this->language->get('text_checkout_payment_method');		
-	// 	$this->data['text_checkout_confirm'] = $this->language->get('text_checkout_confirm');
-	// 	$this->data['text_modify'] = $this->language->get('text_modify');
-
-	// 	$this->data['logged'] = $this->customer->isLogged();
-	// 	$this->data['shipping_required'] = $this->cart->hasShipping();	
-
-	// 	if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/checkout.tpl')) {
-	// 		$this->template = $this->config->get('config_template') . '/template/checkout/checkout.tpl';
-	// 	} else {
-	// 		$this->template = 'default/template/checkout/checkout.tpl';
-	// 	}
-
-	// 	$this->children = array(
-	// 		'common/column_left',
-	// 		'common/column_right',
-	// 		'common/content_top',
-	// 		'common/content_bottom',
-	// 		'common/footer',
-	// 		'common/header'	
-	// 	);
-
-	// 	if (isset($this->request->get['quickconfirm'])) {
-	// 		$this->data['quickconfirm'] = $this->request->get['quickconfirm'];
-	// 	}
-
-	// 	$this->response->setOutput($this->render());
-	// }
 
     /**
      * Handles final order
@@ -100,8 +17,9 @@ class ControllerCheckoutCheckout extends Controller {
         try {
             $cartService = CartService::getInstance();
             $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
+            $cartTotal = $this->cart->getTotal();
 
-            $amount = $this->cart->getTotal() + $shippingAmount;
+            $amount = $cartTotal + $shippingAmount;
             $email = $this->request->post['customer_email'];
             $response = array();
 
@@ -122,6 +40,7 @@ class ControllerCheckoutCheckout extends Controller {
 
                 $orderId = $this->__addOrder();
                 $this->session->data['order_id'] = $orderId;
+                $this->session->data['shipping_cost'] = $shippingAmount;
 
                 //$cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);
                 $response = array('success' => true);
@@ -208,7 +127,7 @@ class ControllerCheckoutCheckout extends Controller {
                 'name'       => $product['name'],
                 'model'      => '',//$product['model'],
                 'option'     => array(),
-                'download'   => '',//$product['download'],
+                'download'   => array(),//$product['download'],
                 'quantity'   => $product['quantity'],
                 'subtract'   => '',//$product['subtract'],
                 'price'      => $product['price'],
@@ -255,7 +174,7 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         $this->load->model('checkout/order');
-        $this->model_checkout_order->addOrder($data);
+        return $this->model_checkout_order->addOrder($data);
     }
 
     /**
@@ -263,26 +182,60 @@ class ControllerCheckoutCheckout extends Controller {
      */
     public function onSuccess()
     {
-    	//if (isset($this->session->data['order_id'])) {
-			$this->cart->clear();
+        if (isset($this->session->data['order_id'])) {
+            $cartService = CartService::getInstance();
+            $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), ShippoService::getInstance(), $this->session->data['guest']['email']);
 
-			// $cartService = CartService::getInstance();
-			// $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $this->session->data['guest']['email']);
-			// On retrieve order for thank you message
+            $this->data['breadcrumbs'][] = array(
+                'href'      => $this->url->link('common/home'),
+                'text'      => $this->language->get('text_home'),
+                'separator' => false
+            );
 
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
-	            $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
-	        } else {
-	            $this->template = '';
-	        }
+            $this->data['breadcrumbs'][] = array(
+                'href'      => '',
+                'text'      => 'Checkout Success',
+                'separator' => $this->language->get('text_separator')
+            );
+
+            // $cartTotalPrice = 0;
+
+            $products = $this->cart->getProducts();
+
+            if ($products) {   
+                $this->data['heading_title'] = $this->language->get('heading_title');                
+                $this->load->model('tool/image');
+
+                $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax);
+                $this->data['products'] = $productService->getProductCheckoutInfo($products);
+            }
+
+            $cartTotalPrice = $this->cart->getTotal();
+            $this->data['products_in_cart_count'] = $this->cart->countProducts();
+            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping_cost']);
+            $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
+            $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping_cost']);
+
+            // On retrieve order for thank you message
+            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
+                $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
+            } else {
+                $this->template = '';
+            }
+
+            $this->cart->clear();
+            unset($this->session->data['order_id']);
+            unset($this->session->data['packages']);
 
             $this->children = array(
                 'common/footer',
                 'common/header' 
             );
-		//}
 
-		$this->response->setOutput($this->render());
+            $this->response->setOutput($this->render());
+        } else {
+            $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+        }
     }
 
     /**
@@ -329,14 +282,15 @@ class ControllerCheckoutCheckout extends Controller {
 
             $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
 
-            $rates = array('rates' => $info);
+            $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
             $_SESSION['rates'] = $info;
 
             echo json_encode($rates);
             exit;
 
         } catch(Exception $e) {
-            throw $e;
+            echo json_encode(array('success' => false, 'errorMsg' => $e->getMessage()));
+            exit;
         }
     }
 
@@ -386,12 +340,12 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         for ($ctr = 1; $ctr <= 12; $ctr++) {
-            $months[$ctr] = date("m", strtotime(date('Y').'-'.$ctr.'-'.date('d')));
+            $months[$ctr] = date("F", strtotime(date('Y').'-'.$ctr.'-'.date('d')));
         }
 
         $this->data['years'] = $years;
         $this->data['months'] = $months;
-        $this->data['current_month'] = date("m");
+        $this->data['current_month'] = date("F");
         $this->data['current_year'] = date("y");
 
 

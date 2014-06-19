@@ -3,40 +3,6 @@
         <span class="items-header">You have <strong class="products-count"><?php echo $products_in_cart_count; ?></strong> <?php echo $products_in_cart_count > 1 ? 'items' : 'item';?> in your shopping cart</span>
 
         <ul class="cart-list">
-          <!-- <li class="group">
-            <div class="product-thumb"></div>
-            <ul class="product-cart-details">
-              <li><h3><a href="#">The Opensource Beehives Project</a></h3></li>
-              <li>
-                <div class="cart-dd">
-                  <em>Quantity </em>
-                  <input class="qty-input" type="text" value="1">
-                </div> 
-                <div class="cart-dd">
-                  <em>Price</em> <strong class="price">$120</strong>    
-                </div>
-              </li>
-              <li><a href="" class="remove">remove</a></li>
-              
-            </ul>
-          </li>
-          <li class="group">
-            <div class="product-thumb"></div>
-            <ul class="product-cart-details">
-              <li><h3><a href="#">The Opensource Beehives Project</a></h3></li>
-              <li>
-                <div class="cart-dd">
-                  <em>Quantity </em>
-                  <input class="qty-input" type="text" value="1">
-                </div> 
-                <div class="cart-dd">
-                  <em>Price</em> <strong class="price">$120</strong>    
-                </div>
-              </li>
-              <li><a href="" class="remove">remove</a></li>
-              
-            </ul>
-          </li> -->
             <?php foreach ($products as $product): ?>
                 <li class="group">
                     <div class="product-thumb">

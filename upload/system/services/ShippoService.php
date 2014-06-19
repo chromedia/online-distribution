@@ -65,11 +65,10 @@ class ShippoService
 
             if (isset($parcelInfoArray['object_id'])) {
                 $shipmentInfoArray = $this->makeShipmentCall($parcelInfoArray, $addressFrom, $addressTo);
-
                 $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
-                $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
-
                 $newPackages[$key] = $package;
+            } else {
+                throw new Exception(json_encode($parcelInfoArray));
             }
         }
 
@@ -147,6 +146,7 @@ class ShippoService
      */
     public function checkRates($ratesUrl, $carriers = array())
     {
+        sleep(1);
         $response = $this->curlUtil->call($ratesUrl, 'GET', SHIPPO_AUTHORIZATION);
         $response = json_decode($response, true);
 
@@ -224,7 +224,7 @@ class ShippoService
                     $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
                     $object = json_decode($response, true);
 
-                    $package['transaction'] = $response;
+                    $package['shipping_transaction'] = $response;
                     $newPackages[$key] = $package;
                 }
             }
@@ -235,6 +235,18 @@ class ShippoService
         }
 
         throw new Exception('Session timeout while processing shipping due to inactivity. Please repeat process.');
+    }
+
+    /**
+     * Request shipping info given object id
+     */
+    public function requestShippingInfoOfObject($objectId)
+    {
+        $url = self::END_POINT.'transactions/'.$objectId;
+        $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION);
+        $object = json_decode($response, true);
+
+        return $object;
     }
 
     /**

@@ -68,7 +68,7 @@ class CartService
     /**
      * Do email customer for order confirmation
      */
-    public function emailCustomerForConfirmation($mailUtil, $recipientEmail = '')
+    public function emailCustomerForConfirmation($mailUtil, $shippoService, $recipientEmail = '')
     {
         $orderInfo = '';
 
@@ -76,15 +76,23 @@ class CartService
             $packages = $_SESSION['packages'];
             
             foreach ($packages as $package) {
-                $transaction = json_decode($package['transaction'], true);
+                $transaction = json_decode($package['shipping_transaction'], true);
 
                 if (isset($transaction['tracking_number']) && !empty($transaction['tracking_number'])) {
                     $trackingNumber = $transaction['tracking_number'];
                 } else {
-                    $trackingNumber = '<em>Please inquire this from our admin.</em>';
+                    /*$transactionResponse = $shippoService->requestShippingInfoOfObject($transaction['object_id']);
+
+                    if (isset($transactionResponse['tracking_number']) && !empty($transaction['tracking_number'])) {
+                        $trackingNumber = $transactionResponse['tracking_number'];
+                    } else {
+                        $trackingNumber = $transactionResponse['tracking_status']['status'].' <em> Please inquire this from our admin.</em';
+                    }*/
+
+                    $trackingNumber = $transaction['tracking_status']['status'].' <em> Please inquire status from our admin.</em';
                 }
 
-                $orderInfo .= '<p>'.$package['content']['product_name'].' - '.$trackingNumber.'</p>';
+                $orderInfo .= '<p>'.$package['content']['product_name'].' - '. $trackingNumber.'</p>';
             }
 
             $mailUtil->sendEmail(array(
