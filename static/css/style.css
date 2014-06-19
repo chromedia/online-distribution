@@ -365,6 +365,10 @@ label.use-cc-info{
   position: relative;
   top: -3px;
 }
+.breadcrumbs{
+  margin-bottom: 0;
+  border-radius: 0
+}
 
 @media only screen and (min-width: 40.063em) and (max-width: 64em) { 
   .product-sidebar{
