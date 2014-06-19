@@ -1,6 +1,9 @@
 <?php  
 
 require_once(DIR_SYSTEM . 'services/ProductService.php');
+require_once(DIR_SYSTEM . 'utilities/StringUtil.php');
+require_once(DIR_SYSTEM . 'utilities/UrlUtil.php');
+require_once(DIR_SYSTEM . 'utilities/CurlUtil.php');
 
 class ControllerCommonHome extends Controller {
 
@@ -8,6 +11,13 @@ class ControllerCommonHome extends Controller {
         /**load needed models**/
         $this->load->model('catalog/product');
         $this->load->model('tool/image');
+        $this->load->model('news/news');
+
+        $this->data['news'] = $this->model_news_news->getPublishedPosts(0, 4);
+        $this->data['string_util'] = StringUtil::getInstance();
+        $this->data['url_util'] = UrlUtil::getInstance(CurlUtil::getInstance());
+
+        //UrlUtil::getInstance(CurlUtil::getInstance())->shortenUrl('http://www.google.com/');exit;
 
         $this->document->setTitle($this->config->get('config_title'));
         $this->document->setDescription($this->config->get('config_meta_description'));

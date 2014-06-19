@@ -53,10 +53,12 @@ class ProductService
             } else {
                 $price = false;
             }
+
+            $stringUtil = StringUtil::getInstance();
                 
             $data[] = array(
                 'product_id'  => $product['product_id'],
-                'description' => StringUtil::truncateString(strip_tags(html_entity_decode($product['description'])), 100),
+                'description' => $stringUtil->truncateString(strip_tags(html_entity_decode($product['description'])), 100),
                 'thumb'       => $image,
                 'name'        => $product['name'],
                 'price'       => $price,

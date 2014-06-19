@@ -53,8 +53,8 @@
             </select>
 
             <select name="cc-expirationMonth" id="cc-expirationMonth" data-stripe="exp-month" class="qty-input inline" required="required">
-                <?php foreach($months as $month): ?>
-                    <option value="<?php echo $month;?>" <?php if($current_month == $month):?>selected<?php endif;?>><?php echo $month;?></option>
+                <?php foreach($months as $value => $month): ?>
+                    <option value="<?php echo $value;?>" <?php if($current_month == $month):?>selected<?php endif;?>><?php echo $month;?></option>
                 <?php endforeach;?>
             </select>
             <!-- <input type="text" class="qty-input inline" placeholder="mm"> -->

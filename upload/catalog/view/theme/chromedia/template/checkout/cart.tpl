@@ -392,11 +392,7 @@
             addFieldError(form.find('#cc-securityCode'));
             // $form.find('#error-security-code').text("Please enter a valid security code");
         }   else {
-            $('.notif-msg')
-                .show()
-                .find('.notif').html(response.error.message)
-                .focus();
-            // $form.find('.payment-errors').text(response.error.message);
+            showCheckoutGeneralError(response.error.message);
         }
     }
 
@@ -426,15 +422,15 @@
                     data: data,
                     dataType: 'json',     
                     success: function(jsondata){
+                        form.css({'opacity' : 1});
+                        $('.btn-checkout').show();
 
                         if (jsondata.success) {
                             var token = jsondata.token;
-                            form.css({'opacity' : 1});
-                            $('.btn-checkout').show();
 
                             window.location = "<?php echo $this->url->link('checkout/checkout/onSuccess', '', 'SSL');?>"
                         } else {
-                            alert(jsondata.errorMsg);
+                            showCheckoutGeneralError(jsondata.errorMsg);
                         }
                     }
                 });
