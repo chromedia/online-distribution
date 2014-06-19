@@ -66,10 +66,14 @@ class ShippoService
             if (isset($parcelInfoArray['object_id'])) {
                 $shipmentInfoArray = $this->makeShipmentCall($parcelInfoArray, $addressFrom, $addressTo);
 
-                $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
-                $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
+                if (isset($shipmentInfoArray['rates_url']) && $shipmentInfoArray['rates_url']) {
+                    $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
+                    $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
 
-                $newPackages[$key] = $package;
+                    $newPackages[$key] = $package;
+                } else {
+                    throw new Exception(json_encode($shipmentInfoArray));
+                }
             } else {
                 throw new Exception(json_encode($parcelInfoArray));
             }
