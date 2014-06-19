@@ -1,4 +1,4 @@
-<form class="form" id="shipment-form">
+<form class="form" id="shipment-form" method="POST">
   <div class="row">
 
     <div class="large-6 columns">

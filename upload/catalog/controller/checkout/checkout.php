@@ -282,7 +282,7 @@ class ControllerCheckoutCheckout extends Controller {
 
             $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
 
-            $rates = array('success' => true, 'rates' => $info);
+            $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
             $_SESSION['rates'] = $info;
 
             echo json_encode($rates);
@@ -340,12 +340,12 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         for ($ctr = 1; $ctr <= 12; $ctr++) {
-            $months[$ctr] = date("m", strtotime(date('Y').'-'.$ctr.'-'.date('d')));
+            $months[$ctr] = date("F", strtotime(date('Y').'-'.$ctr.'-'.date('d')));
         }
 
         $this->data['years'] = $years;
         $this->data['months'] = $months;
-        $this->data['current_month'] = date("m");
+        $this->data['current_month'] = date("F");
         $this->data['current_year'] = date("y");
 
 
