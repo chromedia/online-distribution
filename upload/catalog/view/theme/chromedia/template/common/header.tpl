@@ -45,8 +45,9 @@
       <li><a class="scroll" data-speed="500" data-easing="linear" href="#latest-news">Latest News</a></li>
       <li><a href="#">Contact Us</a></li>
 
-      <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>"> 
-        <span class="items-in-cart" style="color:red;"><?php echo ($totalItems ? $totalItems : '' ); ?></span> Cart
+      <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">
+            <span class="items-in-cart" <?php if($totalItems == 0): ?> style="display:none;"<?php endif;?>><?php echo $totalItems; ?></span>
+            Cart
       </a></li>
     </ul>
   </section>

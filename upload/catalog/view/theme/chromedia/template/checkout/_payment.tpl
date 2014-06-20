@@ -57,80 +57,58 @@
                     <option value="<?php echo $value;?>" <?php if($current_month == $month):?>selected<?php endif;?>><?php echo $month;?></option>
                 <?php endforeach;?>
             </select>
-            <!-- <input type="text" class="qty-input inline" placeholder="mm"> -->
-            <!-- <input type="text" class="qty-input inline" placeholder="yy">   -->
           </div>
         </label>
       </div>
-
     </div>
 
     <div class="row">
-      <div class="mt20">
-        <div class="large-12 columns">
-          <a href="javascript:void(0);" class="btn btn-checkout">Checkout</a>
-        </div>  
-      </div>
+        <div class="mt20">
+            <div class="large-12 columns">
+                <p>
+                    <a href="javascript:void(0);" class="btn btn-checkout">Checkout</a>
+                </p>
+              
+                <div class="paypal">
+                    <a href="#"> or Pay with PayPal <i class="icon-paypal"></i> </a> 
+                </div>
+
+                <div class="shipping-summary">
+                    <h3>Shipping Information</h3>
+                    <div class="row">
+                        <div class="shipping-info-row group">
+                            <div class="large-4 columns">Name</div>  
+                            <div class="large-8 columns shipping-info-name"></div>
+                        </div>
+                      
+                    </div>
+                    <div class="row">
+                      <div class="shipping-info-row group">
+                        <div class="large-4 columns">Email</div>  
+                        <div class="large-8 columns shipping-info-email"></div>  
+                      </div>
+                      
+                    </div>
+                    <div class="row">
+                      <div class="shipping-info-row group">
+                        <div class="large-4 columns">Address</div>  
+                        <div class="large-8 columns shipping-info-address"></div>  
+                      </div>
+                      
+                    </div>
+                    <div class="row">
+                      <div class="shipping-info-row group">
+                        <div class="large-4 columns">Shipping Speed</div>  
+                        <div class="large-8 columns shipping-info-speed"></div>  
+                      </div>
+                    </div>
+                    <div class="shipping-info-row">
+                      <a href="javascript:void(0);" class="edit-shipping">Edit shippping information</a>
+                    </div>
+                </div>
+                
+            </div>  
+        </div>
     </div>
-  </form>
 
-<?php if(false): ?>
-  <div id="block-payment-info" style="padding:30px;">
-
-    <h2>Payment Info</h2>
-     
-     <!-- Payment Form -->
-    <form action="" method="POST" id="payment-form">
-    <span class="payment-errors" id="payment-errors"></span>
-
-    <!-- <input type="text" name="email" id="email" value="floricel.colibao@chromedia.com" /> -->
-
-      <!-- Card Number -->
-      <div id="column-card-number">
-        <div>Credit Card Number</div>
-        <div><input type="text" id="field-card-number" maxlength="16" data-stripe="number" autocomplete="off" class="card-number input-medium field-payment" value="4242424242424242"></div>
-      </div>
-      <div id="error-card-number" class="error-payment"></div>
-
-      <!-- Expiry Date -->
-      <div id="column-card-expiration">
-        <div>Expiration Date</div>
-        <select id="field-card-month" data-stripe="exp-month" class="card-expiry-month input-mini field-payment">
-            <?php 
-            for ($i=1; $i<13; $i++){
-                // Add 0 to single digit numbers
-                if (strlen((string)$i) < 2) { 
-                    $show = '0' . (string)$i;
-                }
-                else {
-                    $show = $i;
-                }
-                ?><option value="<?php echo $i; ?>"><?php echo $show; ?></option><?php
-            }
-            ?>  
-         </select>
-          
-          <select id="field-card-year" data-stripe="exp-year" class="card-expiry-year input-mini field-payment">
-                <?php 
-                $year = date("Y");
-                $yearlimit = $year + 8;
-                for ($i=$year; $i<$yearlimit; $i++){
-                  ?><option value="<?php echo $i; ?>"><?php echo $i; ?></option><?php
-                  }
-                ?>  
-          </select>
-      </div>
-
-      <!-- Security Code -->
-    <div id="column-card-security">
-      <div>Security Code</div>
-      <div><input type="text" id="field-card-code" maxlength="4" data-stripe="cvc" autocomplete="off" class="card-cvc input-mini field-payment" value="424"></div>
-    </div>
-    <div id="error-security-code" class="error-payment"></div>
-
-      <input type="submit" class="btn" value="Process Order"/>
-      <!-- <button id="pay-button">Pay</button> -->
-    </form>
-
-  </div>
-<?php endif;?>
+</form>
