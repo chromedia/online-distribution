@@ -8,30 +8,30 @@ require_once(DIR_SYSTEM . 'utilities/CurlUtil.php');
 class ControllerCommonHome extends Controller {
 
     public function index() {
-        // $products = $this->cart->getProducts();
+        $products = $this->cart->getProducts();
 
-        // if ($products) {                 
-        //     $this->load->model('tool/image');
+        if ($products) {                 
+            $this->load->model('tool/image');
 
-        //     $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
-        //     $this->data['products'] = $productService->getProductCheckoutInfo($products);
-        // }
+            $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
+            $this->data['products'] = $productService->getProductCheckoutInfo($products);
+        }
 
-        // require_once(DIR_SYSTEM . 'services/CartService.php');
-        // require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
-        // require_once(DIR_SYSTEM . 'services/ShippoService.php');
-        // $emailData = array(
-        //     'recipient' => 'floricel.colibao@gmail.com',
-        //     'total'     => '$ 100.98',
-        //     'subTotal'  => '$ 80.80',
-        //     'shippingCost' => '$ 20.18',
-        //     'products'  => $this->data['products']
-        // );
+        require_once(DIR_SYSTEM . 'services/CartService.php');
+        require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
+        require_once(DIR_SYSTEM . 'services/ShippoService.php');
+        $emailData = array(
+            'recipient' => 'floricel.colibao@gmail.com',
+            'total'     => '$ 100.98',
+            'subTotal'  => '$ 80.80',
+            'shippingCost' => '$ 20.18',
+            'products'  => $this->data['products']
+        );
 
-        // $cartService = CartService::getInstance();
-        // $cartService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
+        $cartService = CartService::getInstance();
+        $cartService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
 
-        // exit;
+        exit;
         // temporary, for testing
         
         /**load needed models**/
