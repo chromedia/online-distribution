@@ -17,10 +17,10 @@
  
 <!-- DISPLAY PRODUCTS -->
 <?php if(!empty($news)): ?>
-    <?php $divideByTwo = (count($news) + 1) / 2; ?>
+    <?php $noOfSections = (count($news) + 1) / 2; ?>
 
-    <?php for ($ctr = 0; $ctr < $divideByTwo; $ctr++): ?>
-        <?php $sectionNews = array_slice($news, $ctr, ($ctr == 0 ? ($ctr+1) : $ctr) * 2); ?>
+    <?php for ($ctr = 0; $ctr < $noOfSections; $ctr++): ?>
+        <?php $sectionNews = array_slice($news, $ctr*2, ($ctr == 0 ? ($ctr+1) : $ctr) * 2); ?>
 
         <section class="row <?php echo (0 == $ctr ? '' : 'latest-news');?>">
 
