@@ -31,7 +31,7 @@
 </div>
 
 <!-- TODO: transfer this to other file for modularity -->
-
+<script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/cart.js"></script>
 <script type="text/javascript">
     var addFieldError = function(field) {
         if (!field.hasClass('has-error')) {
@@ -138,17 +138,47 @@
         $('.items-in-cart').html(productsCount);
     }
 
+    var activateStep1 = function() {
+        $('#step-shipping').show();
+        $('#step-payment').hide();
+        removeErrors($('#step-shipping').find('form'));
+
+        $('.steps-bar').find('.step1')
+            .addClass('active')
+            .find('i').remove();
+
+        $('.steps-bar').find('.step2').removeClass('active');
+        focusElement($('.steps-bar'));
+    }
+
     var activateStep2 = function() {
+        removeErrors($('#step-payment').find('form'))
+        $('#step-shipping').hide();
+        $('#step-payment').show();
+
         $('.steps-bar').find('.step1')
             .removeClass('active')
             .prepend('<i class="icon-green-check"></i>');
         $('.steps-bar').find('.step2').addClass('active');
+
+        focusElement($('.steps-bar'));
     }
 
     var setShipmentData = function() {
+        var address = [
+            $('#shipping-street-address').val(),
+            $('#shipping-city').val(),
+            getState(),
+            $('#field-shipping-postcode').val()
+        ]
+
+        var shipmentOption = $('input[name="shipping-option"]:checked');
+
         shipmentData = {
-            name : $('#shipment-form').find('#shipping-name').val(),
-            email : $('#shipment-form').find('#shipping-email').val()
+            name : $('#shipping-name').val(),
+            email : $('#shipping-email').val(),
+            address : address.join(', '),
+            shipment: shipmentOption.val()+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')'
         }
     }
 
@@ -156,11 +186,37 @@
         return shipmentData;
     }
 
+    var getState = function() {
+        var stateField = $('label[for="state"]').children('select:visible');
+
+        if (stateField.length > 0) {
+            return stateField.find(':selected').text();
+        } else {
+            return $('label[for="state"]').children('input:visible');
+        }
+    }
+
     var populateCCInfoBasedOnShipmentInfo = function() {
         var shipmentData = getShipmentData();
 
-        $('#payment-name').val(shipmentData.name);
-        $('#payment-email').val(shipmentData.email);
+        if ($('#use-cc-info-checkbox').is(':checked')) {
+            $('#payment-name').val(shipmentData.name);
+            $('#payment-email').val(shipmentData.email);
+        } else {
+            $('#payment-name').val('');
+            $('#payment-email').val('');
+        }
+    }
+
+    var populateShipmentReviewInfoInPaymentStep = function() {
+        var summaryContainer = $('.shipping-summary');
+        
+        var shipment = getShipmentData();
+
+        summaryContainer.find('.shipping-info-name').text(shipment.name);
+        summaryContainer.find('.shipping-info-email').text(shipment.email);
+        summaryContainer.find('.shipping-info-address').text(shipment.address);
+        summaryContainer.find('.shipping-info-speed').text(shipment.shipment);
     }
 
     var retrieveShipmentRates = function(form, event) {
@@ -171,8 +227,6 @@
         
         if (!hasError) {
             var data = form.serialize();    
-
-            setShipmentData(data);
 
             // Send POST data to server
             $.ajax({
@@ -194,11 +248,13 @@
                                 var service = rate.service;
                                 var alias = service.split(' ').join('-');
 
-                                $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
+                                $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
                             });
 
                             $('#display-on-rates-checked').show();
                             $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
+
+                            setShipmentData();
                         } else {
                             showCheckoutGeneralError('Shippo could not retrieve shipment rates. Please update provided address and products.');
                         }
@@ -279,12 +335,8 @@
     }
 
     $('#step2-trigger-btn').off('click').on('click', function() {
-        $('#step-shipping').hide();
-        $('#step-payment').show();
-
-        if ($('#use-cc-info-checkbox').is(':checked')) {
-            populateCCInfoBasedOnShipmentInfo();
-        }
+        populateCCInfoBasedOnShipmentInfo();
+        populateShipmentReviewInfoInPaymentStep();
 
         activateStep2();
     });
@@ -299,6 +351,10 @@
         e.preventDefault();
 
         retrieveShipmentRates($(this));
+    });
+
+    $('.edit-shipping').off('click').on('click', function() {
+        activateStep1();
     });
 
     $('#shipping-country').on('change', function() {
@@ -322,143 +378,16 @@
         }
     });
 
-    $('.quantity-changed').off('click').on('click', function() {
-        var btn = $(this);
-        var qtyInput = btn.parent('li').find('.qty-input');
-        var quantity = qtyInput.val();
-
-        if (quantity) {
-            var data = {
-                quantity : quantity,
-                key : $(this).attr('key')
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo $this->url->link('checkout/cart/updateCartProductQuantity', '', 'SSL'); ?>",
-                data: data,
-                dataType: 'json',
-                beforeSend: function() {
-                    qtyInput.css({'opacity' : 0.5});
-                    qtyInput.attr('readonly', true);
-                },
-                success: function(jsondata) {
-                    qtyInput.css({'opacity' : 1});
-                    qtyInput.prop('readonly', false);
-
-                    updateSubTotal(jsondata.total);
-                    updateProductsCount(jsondata.productsCount);
-
-                    refreshShipmentData();
-                },
-                error: function(error) {
-                    qtyInput.css({'opacity' : 1});
-                    qtyInput.prop('readonly', false);
-
-                    alert('error');
-                }
-            });
-        }
-    });
-
-    $('.remove').off('click').on('click', function() {
-        removeProduct($(this));
-    });
+    
 </script>
 
 
 <!-- Stripe JS Library -->
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-
-<!-- payment -->
 <script type="text/javascript">
     var publishableKey = "<?php echo STRIPE_PUBLIC_KEY; ?>";
     Stripe.setPublishableKey(publishableKey);
-
-    var showCreditCardError = function(response) {
-        var form = $('#payment-form');
-        var errorCode = response.error.code;
-
-        if (errorCode == "incorrect_number" || errorCode == "incorrect_number" || errorCode == "invalid_number") {
-            addFieldError(form.find('#cc-number'));
-            // $form.find('#error-card-number').text("Please enter a valid card number");
-        } else if (errorCode == "invalid_expiry_month") {
-            addFieldError(form.find('#cc-expirationMonth'));
-            // $form.find('#error-expiry-month').text("Please enter a valid expiry month");
-        } else if (errorCode == "invalid_expiry_year") {
-            addFieldError(form.find('#cc-expirationYear'));
-            // $form.find('#error-expiry-year').text("Please enter a valid expiry year");
-        } else if (errorCode == "invalid_cvc") {
-            addFieldError(form.find('#cc-securityCode'));
-            // $form.find('#error-security-code').text("Please enter a valid security code");
-        }   else {
-            $('.notif-msg')
-                .show()
-                .find('.notif').html(response.error.message)
-                .focus();
-            // $form.find('.payment-errors').text(response.error.message);
-        }
-    }
-
-    var stripeResponseHandler = function(status, response) {
-        var form = $('#payment-form');
-
-        if (response.error) {
-            form.css({'opacity' : 1});
-            $('.btn-checkout').show();
-
-            showCreditCardError(response);
-        } else {
-            var token = response.id;
-
-            var data = {
-                service_name : $('.shipping-option:checked').val(),
-                customer_email : $('#shipping-email').val(),
-                token : token,
-                customer_name : $('#payment-name').val()
-            }
-
-            // Send form data to server with POST method, then retrieve json data
-            $(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "<?php echo $this->url->link('checkout/checkout/processOrder', '', 'SSL'); ?>",
-                    data: data,
-                    dataType: 'json',     
-                    success: function(jsondata){
-
-                        if (jsondata.success) {
-                            var token = jsondata.token;
-                            form.css({'opacity' : 1});
-                            $('.btn-checkout').show();
-
-                            window.location = "<?php echo $this->url->link('checkout/checkout/onSuccess', '', 'SSL');?>"
-                        } else {
-                            alert(jsondata.errorMsg);
-                        }
-                    }
-                });
-            });
-        }
-    }
-
-    $('.btn-checkout').on('click', function(e) {
-        e.preventDefault();
-        $(this).hide();
-
-        var form = $('#payment-form');
-        form.css({'opacity' : 0.5 });
-
-        removeErrors(form);
-        var hasError = showFormErrors(form);
-
-        if (!hasError) {
-            Stripe.card.createToken(form, stripeResponseHandler);
-        } else {
-            form.css({'opacity' : 1});
-            $(this).show();
-        }
-    });
 </script>
+<script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/payment.js"></script>
 
 <?php echo $footer;?>

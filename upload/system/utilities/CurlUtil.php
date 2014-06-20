@@ -5,10 +5,32 @@
  */
 class CurlUtil
 {
+    // TODO: Refactor this class to be more flexible
+    // flexible headers
+    // flexible setting of tokens
+
+    private static $instance;
+
+    const URL_ENCODED_DATA = 'application/x-www-form-urlencoded';
+
+    const JSON_ENCODED_DATA = 'application/json';
+    
+    /**
+     * Returns instance
+     */
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new CurlUtil();
+        }
+
+        return self::$instance;
+    }
+
     /**
      * Curl call to third party
      */
-    public function call($url, $method, $credentials, $data = array())
+    public function call($url, $method, $credentials = '', $data = array(), $contentType = self::URL_ENCODED_DATA)
     {
         try {
             $url = (string) trim(strip_tags($url));
@@ -23,7 +45,10 @@ class CurlUtil
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
             curl_setopt($ch, CURLOPT_HEADER, FALSE);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_USERPWD, $credentials);
+
+            if (!empty($credentials)) {
+                curl_setopt($ch, CURLOPT_USERPWD, $credentials);
+            }
 
             switch ($method)
             {
@@ -34,8 +59,8 @@ class CurlUtil
                     curl_setopt($ch, CURLOPT_POST, 1);
 
                     if (!empty($data)) {
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$contentType));
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->formatData($data, $contentType));
                     }
 
                     break;
@@ -52,6 +77,19 @@ class CurlUtil
             return $httpResponse;
         } catch(Exception $e) {
             throw $e;
+        }
+    }
+
+    /**
+     * Formats data
+     */ 
+    private function formatData($data, $contentType)
+    {
+        switch($contentType) {
+            case self::URL_ENCODED_DATA:
+                return http_build_query($data);
+            case self::JSON_ENCODED_DATA:
+                return json_encode($data);
         }
     }
 

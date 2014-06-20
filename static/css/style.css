@@ -214,26 +214,26 @@ dd.dd-price,.dd-price{
   width: 10px;
   height: 19px;
   display: inline-block;
-  background-image: url('../img/icon-arrow-right.png');
+  background-image: url('../image/icon-arrow-right.png');
   vertical-align: middle;
 }
 .icon-green-check{
   width: 21px;
   height: 21px;
   display: inline-block;
-  background-image: url('../img/icon-green-check.png');
+  background-image: url('../image/icon-green-check.png');
   vertical-align: middle
 }
 .icon-lock-sm{
   width: 16px;
   height: 16px;
-  background-image: url('../img/icon-lock-sm.png');
+  background-image: url('../image/icon-lock-sm.png');
   display: inline-block;
 }
 .icon-paypal{
   width: 29px;
   height: 18px;
-  background-image: url('../img/icon-paypal.png');
+  background-image: url('../image/icon-paypal.png');
   display: inline-block;
   vertical-align: middle
 }
@@ -352,11 +352,13 @@ label.use-cc-info{
   font-size: 14px;
   
 }
+.total-payment,
 .shipping-cost,
 .sub-total-value{
   padding: 13px 0;
   text-align: right;
 }
+.total-payment em,
 .shipping-cost em,
 .sub-total-value em{
   color: #999;

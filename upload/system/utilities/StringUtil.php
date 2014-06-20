@@ -5,10 +5,24 @@
  */
 class StringUtil
 {
+    private static $instance;
+    
+    /**
+     * Returns instance
+     */
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new StringUtil();
+        }
+
+        return self::$instance;
+    }
+
     /**
      * Truncates string
      */
-    public static function truncateString($string, $limit, $delimiter = " ", $pad = "...")
+    public function truncateString($string, $limit, $delimiter = " ", $pad = "...")
     {
         if (strlen($string) <= $limit) {
             return $string;

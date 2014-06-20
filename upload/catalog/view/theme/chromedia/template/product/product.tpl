@@ -189,43 +189,25 @@
 <?php endif;?>
 
 <!-- Add to Cart Javascript -->
-<script type="text/javascript">  
-    jQuery(function($) {
-        $('.add-to-cart-btn').on('click', function(e) {
-            e.preventDefault();
-            // add data to cart
-            var data = { product_id: $('input[name="product_id"]').val(), quantity: $('input[name="quantity"]').val() };
-
-            // Send POST data to server
-            $(function() {
-                $.ajax({
-                    url: 'index.php?route=checkout/cart/add',
-                    type: 'post',
-                    data: data,
-                    dataType: 'json',
-                    success: function(json) {
-                        //$('.success, .warning, .attention, information, .error').remove();
-                        $('#notification, .green').hide();
-
-                        if (json['error']) {
-                            alert('An error occured while processing request.');
-                        } 
-                        
-                        if (json['success']) {
-                            $('.green').html('<div class="success">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
-                                
-                            $('.green').fadeIn('slow');  
-                            //$('.green').show();
-                            $('.items-in-cart').html(json['total']);
-                            
-                            $('html, body').animate({ scrollTop: 0 }, 'slow'); 
-                        }   
-                    }
-                });
-            });
-        });
+<script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/cart.js"></script>
+<script type="text/javascript">
+    $('.add-to-cart-btn').addToCart({
+        'product_id' : $('input[name="product_id"]').val(),
+        'quantity'   : $('input[name="quantity"]').val(),
+        'on_success' : function(json) {
+            $('#notification, .green').hide();
+            if (json.error) {
+                alert('An error occured while processing request.');
+            } 
+            
+            if (json.success) {
+                $('.green').html('<div class="success">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+                    
+                $('.green').fadeIn('slow');  
+                $('html, body').animate({ scrollTop: 0 }, 'slow'); 
+            }  
+        }
     });
 </script>
-
 
 <?php echo $footer;?>
