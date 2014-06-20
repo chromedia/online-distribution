@@ -12,10 +12,10 @@ class ProductService
     /**
      * Returns instance
      */
-    public static function getInstance($config, $currency, $imageTool = null, $tax = null)
+    public static function getInstance($config, $currency, $imageTool = null, $tax = null, $url = null)
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ProductService($config, $currency, $imageTool, $tax);
+            self::$instance = new ProductService($config, $currency, $imageTool, $tax, $url);
         }
 
         return self::$instance;
@@ -24,18 +24,19 @@ class ProductService
     /**
      * Instantiates this service class
      */
-    public function __construct($config, $currency, $imageTool = null, $tax = null)
+    public function __construct($config, $currency, $imageTool = null, $tax = null, $url = null)
     {
         $this->config = $config;
         $this->imageTool = $imageTool;
         $this->currency = $currency;
         $this->tax = $tax;
+        $this->url = $url;
     }
 
     /**
      * Get product thumbnail info
      */
-    public function getProductsThumbnailInfo($products, $customer, $url)
+    public function getProductsThumbnailInfo($products, $customer)
     {
         $data = array();
 
@@ -62,7 +63,7 @@ class ProductService
                 'thumb'       => $image,
                 'name'        => $product['name'],
                 'price'       => $price,
-                'href'        => $url->link('product/product', 'product_id=' . $product['product_id'])
+                'href'        => $this->url->link('product/product', 'product_id=' . $product['product_id'])
             );
         }
 
@@ -94,17 +95,17 @@ class ProductService
             }
 
             $price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
-            $total = $price * $product['quantity'];//$product['price'] * $product['quantity'];
-            // $cartTotalPrice += $total;
+            $total = $price * $product['quantity'];
 
             $data[] = array(
-                'id'                  => $product['product_id'],
-                'key'                 => $product['key'],
-                'thumb'               => $image,
-                'name'                => $product['name'],
-                'quantity'            => $product['quantity'],
-                'price'               => $this->currency->format($price),
-                'total'               => $this->currency->format($total)
+                'id'        => $product['product_id'],
+                'key'       => $product['key'],
+                'thumb'     => $image,
+                'name'      => $product['name'],
+                'quantity'  => $product['quantity'],
+                'price'     => $this->currency->format($price),
+                'total'     => $this->currency->format($total),
+                'href'      => $this->url->link('product/product', 'product_id=' . $product['product_id'])
             );
         }
 

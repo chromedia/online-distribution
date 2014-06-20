@@ -16,7 +16,8 @@
                         <li>
                             <div class="cart-dd">
                                 <em>Quantity </em>
-                                <input class="qty-input" type="text" value="<?php echo $product['quantity']; ?>">
+                                <input class="qty-input" type="text" key="<?php echo $product['key'];?>" value="<?php echo $product['quantity']; ?>">
+                                <input class="qty-input-hidden" type="hidden" value="<?php echo $product['quantity']; ?>">
                             </div> 
                             <div class="cart-dd">
                                 <em>Price</em> <strong class="price"><?php echo $product['price']; ?></strong>    
@@ -24,7 +25,7 @@
                            <!--  <div class="cart-dd product-total-price">
                                 <em>Extended Price</em> <strong class="total"><?php echo $product['total']; ?></strong>    
                             </div> -->
-                            <input type="image" class="quantity-changed" key="<?php echo $product['key'];?>" src="catalog/view/theme/default/image/update.png"/>
+                           <!--  <input type="image" class="quantity-changed" key="<?php echo $product['key'];?>" src="catalog/view/theme/default/image/update.png"/> -->
                         </li>
                         <li><a href="javascript:void(0);" key="<?php echo $product['key'];?>" class="remove">remove</a></li>
                     </ul>

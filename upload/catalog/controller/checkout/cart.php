@@ -28,7 +28,7 @@ class ControllerCheckoutCart extends Controller {
 			$this->load->model('tool/image');
 			$this->data['products'] = array();
 
-			$productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax);
+			$productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
             $this->data['products'] = $productService->getProductCheckoutInfo($products);
 
 			$cartTotalPrice = $this->cart->getTotal();

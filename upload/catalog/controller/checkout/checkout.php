@@ -183,9 +183,6 @@ class ControllerCheckoutCheckout extends Controller {
     public function onSuccess()
     {
         if (isset($this->session->data['order_id'])) {
-            $cartService = CartService::getInstance();
-            $cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), ShippoService::getInstance(), $this->session->data['guest']['email']);
-
             $this->data['breadcrumbs'][] = array(
                 'href'      => $this->url->link('common/home'),
                 'text'      => $this->language->get('text_home'),
@@ -198,15 +195,13 @@ class ControllerCheckoutCheckout extends Controller {
                 'separator' => $this->language->get('text_separator')
             );
 
-            // $cartTotalPrice = 0;
-
             $products = $this->cart->getProducts();
 
             if ($products) {   
                 $this->data['heading_title'] = $this->language->get('heading_title');                
                 $this->load->model('tool/image');
 
-                $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax);
+                $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
                 $this->data['products'] = $productService->getProductCheckoutInfo($products);
             }
 
@@ -215,6 +210,17 @@ class ControllerCheckoutCheckout extends Controller {
             $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping_cost']);
             $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
             $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping_cost']);
+
+            $emailData = array(
+                'recipient' => $this->session->data['guest']['email'],
+                'total'     => $this->data['total'],
+                'subTotal'  => $this->data['subTotal'],
+                'shippingCost' => $this->data['shippingCost'],
+                'products'  => $this->data['products']
+            );
+
+            $cartService = CartService::getInstance();
+            $cartService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
 
             // On retrieve order for thank you message
             if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {

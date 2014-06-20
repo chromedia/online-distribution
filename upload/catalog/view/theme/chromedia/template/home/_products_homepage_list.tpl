@@ -20,6 +20,7 @@
           </div>
           <div class="card-footer">
             <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>" class="btn-view-small">View</a>
+            <!-- <a href="javascript:void(0);" class="btn-view-small">Add to Cart</a> -->
             <span class="price">
               <?php echo $product['price'];?>  
             </span>  

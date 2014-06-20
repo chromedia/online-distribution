@@ -69,9 +69,6 @@
 </div>
 
 <!-- END EMAIL SECTION -->
-<<<<<<< HEAD
-
-=======
   <?php if(!empty($products)): ?>
     <section class="row block-product-nav">
         <div class="small-12 columns">
@@ -104,7 +101,6 @@
     </section>
   <?php endif;?>
   
->>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 <!-- BEG LATEST NEWS SECTION -->
 
 <section class="row">

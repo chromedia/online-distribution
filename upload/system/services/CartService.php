@@ -65,10 +65,42 @@ class CartService
         return $amount;
     }
 
+    public function emailCustomerForConfirmation($emailData, $mailUtil, $shippoService)
+    {
+        $products = $emailData['products'];
+        $itemsBody = '';
+
+        foreach ($products as $product) {
+            $itemsBody .= $this->getCartItemEmailTemplate(array(
+                'imageSrc'         => $product['thumb'],
+                'productLink'      => $product['href'],
+                'productName'      => $product['name'],
+                'productPrice'     => $product['price'],
+                'productQuantity'  => $product['quantity']
+            ));
+        }
+
+        $message = $this->getOrderConfirmationEmailTemplate(array(
+            'items'        => $itemsBody,
+            'shippingCost' => $emailData['shippingCost'],
+            'subTotal'     => $emailData['subTotal'],
+            'total'        => $emailData['total']
+        ));
+
+        $mailUtil->sendEmail(array(
+            'message' => $message,
+            'email'   => $emailData['recipient'],
+            'subject' => 'Opentech Collaborative Order'
+        ));  
+    }
+
+
     /**
      * Do email customer for order confirmation
+     *
+     * This is temporarily not used
      */
-    public function emailCustomerForConfirmation($mailUtil, $shippoService, $recipientEmail = '')
+    public function emailCustomerForConfirmation2($emailData, $mailUtil, $shippoService)
     {
         $orderInfo = '';
 
@@ -81,19 +113,25 @@ class CartService
                 if (isset($transaction['tracking_number']) && !empty($transaction['tracking_number'])) {
                     $trackingNumber = $transaction['tracking_number'];
                 } else {
-                    /*$transactionResponse = $shippoService->requestShippingInfoOfObject($transaction['object_id']);
+                    // $transactionResponse = $shippoService->requestShippingInfoOfObject($transaction['object_id']);
 
-                    if (isset($transactionResponse['tracking_number']) && !empty($transaction['tracking_number'])) {
-                        $trackingNumber = $transactionResponse['tracking_number'];
-                    } else {
-                        $trackingNumber = $transactionResponse['tracking_status']['status'].' <em> Please inquire this from our admin.</em';
-                    }*/
+                    // if (isset($transactionResponse['tracking_number']) && !empty($transaction['tracking_number'])) {
+                    //     $trackingNumber = $transactionResponse['tracking_number'];
+                    // } else {
+                    //     $trackingNumber = $transactionResponse['tracking_status']['status'].' <em> Please inquire this from our admin.</em';
+                    // }
 
                     $trackingNumber = $transaction['tracking_status']['status'].' <em> Please inquire status from our admin.</em';
                 }
-
-                $orderInfo .= '<p>'.$package['content']['product_name'].' - '. $trackingNumber.'</p>';
+                // $orderInfo .= '<p>'.$package['content']['product_name'].' - '. $trackingNumber.'</p>';
             }
+
+            $body = $this->getOrderConfirmationEmailTemplate(array(
+                'items' => $items,
+                'shippingCost' => $shippingCost,
+                'subTotal' => $subTotal,
+                'total' => $total
+            ));
 
             $mailUtil->sendEmail(array(
                 'message' => $orderInfo,
@@ -103,12 +141,27 @@ class CartService
         }
     }
 
+
     /**
-     * Updated product quantity in cart
-     */
-    public function getCartInfoOfUpdateProductQuantity()
+     * Create order confirmation email template
+     */ 
+    public function getOrderConfirmationEmailTemplate($data)
     {
-        
+        $contents = file_get_contents(DIR_SYSTEM . 'email_templates/checkout_confirmation.php');
+        $contents = sprintf($contents, $data['items'], $data['shippingCost'], $data['subTotal'], $data['total']);
+
+        return $contents;
+    }
+
+    /**
+     * Create order cart item template
+     */
+    public function getCartItemEmailTemplate($data)
+    {
+        $contents = file_get_contents(DIR_SYSTEM . 'email_templates/_order_information.php');
+        $contents = sprintf($contents, $data['imageSrc'], $data['productLink'], $data['productName'], $data['productQuantity'], $data['productPrice']);
+
+        return $contents;
     }
 
     /***** JUST A TODO ****/
