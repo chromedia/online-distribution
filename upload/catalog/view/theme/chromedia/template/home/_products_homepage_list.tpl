@@ -27,6 +27,6 @@
         </div>
       </div>
     <?php endforeach; ?>
-    <a href="<?php echo $this->url->link('product/display/all'); ?>">View Product List</a>
+    <!-- <a href="<?php //echo $this->url->link('product/display/all'); ?>">View Product List</a> -->
   </section>
 <?php endif;?>
