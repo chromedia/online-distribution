@@ -53,21 +53,30 @@ $(document).ready(function(){
 
 <body>
 
+<!-- HEADER STARTS -->
+<?php if ($logged) { ?>
 <div id="header">
 
-    
-	
+
+	<!-- Top Block -->
+	<div class="div1">
+ 		<!-- Dashboard -->
+    	<a class="div2 mark" href="<?php echo $home; ?>"><?php echo $text_dashboard; ?></a>
+    	<!-- Storefront -->
+    	<a class="div2 mark" href="<?php echo $store; ?>" target="_blank"><?php echo $text_front; ?></a>
+    	<!-- Right Block -->
+		<div class="right">
+			<!-- Logged In As -->
+			<span class="div2"><?php echo $logged; ?></span>
+			<!-- Logout -->
+      		<a class="div2 mark" href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a>
+  		</div>
+  	</div>
+
     <!-- Menu -->
-    <?php if ($logged) { ?>
     <div id="menu">
 
     <ul class="left" style="display: none;">
-
-    <!-- Dashboard -->    
-    <li id="dashboard"><a href="<?php echo $home; ?>" class="top"><?php echo $text_dashboard; ?></a></li>
-
-    <!-- Storefront -->
-	<li id="storefront"><a href="<?php echo $store; ?>" target="_blank" class="top"><?php echo $text_front; ?></a></li>
 
     <!-- Users -->
     <li id="sale"><a class="top">Users</a>
@@ -104,8 +113,9 @@ $(document).ready(function(){
       </li>
 
     <!-- Orders -->
-    <li id="orders"><a class="top" href="<?php echo $order; ?>"><?php echo $text_order; ?></a>
+    <li id="orders"><a class="top"><?php echo $text_order; ?></a>
         <ul>
+          <li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>	
           <li><a href="<?php echo $recurring_profile; ?>"><?php echo $text_recurring_profile; ?></a></li>
           <li><a href="<?php echo $return; ?>"><?php echo $text_return; ?></a></li>  
         </ul>	
@@ -185,25 +195,6 @@ $(document).ready(function(){
 
     </ul>
 
-
-
-
-
-
-<!-- Right Side -->
-
-    <!-- Admin Login -->
-    <?php if (!$logged) { ?>
-        <a id="admin_home" title="<?php echo $heading_title; ?>" href="<?php echo $home; ?>" />Admin Login</a>
-    <?php } ?>
-
-    <!-- Logged In As -->
-    <?php if ($logged) { ?>
-        <div id="admin_logged">&nbsp;<?php echo $logged; ?></div>
-    <?php } ?>
-
-    <!-- Logout -->
-    <a id="admin_logout" href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a>
 
     </div>
   <?php } ?>
