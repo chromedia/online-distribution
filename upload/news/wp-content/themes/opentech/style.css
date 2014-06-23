@@ -7,6 +7,24 @@ Author URI: http://chriscoyier.net
 Version: 1
 */
 
+.items-in-cart{
+  padding: 5px 8px;
+  color: #fff;
+  line-height: 1;
+  background-color: #DF6D6D;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.breadcrumbs{
+  margin-bottom: 0;
+  border-radius: 0
+}
+
+.top-nav li{
+  position: relative;
+}
+
 @media screen {
 
 * { margin: 0; padding: 0; }
