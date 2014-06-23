@@ -13,6 +13,8 @@ class ControllerCommonHome extends Controller {
         $this->load->model('tool/image');
         $this->load->model('news/news');
 
+        $_SESSION['test'] = 'test';
+
         $this->data['news'] = $this->model_news_news->getPublishedPosts(0, 4);
         $this->data['string_util'] = StringUtil::getInstance();
         $this->data['url_util'] = UrlUtil::getInstance(CurlUtil::getInstance());

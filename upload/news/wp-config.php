@@ -14,6 +14,9 @@
  * @package WordPress
  */
 
+// added configuration for Opentech OpenCart
+define('DIR_HOME', 'http://' . $_SERVER['HTTP_HOST']);
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', 'opentech_blog');

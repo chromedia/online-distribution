@@ -41,5 +41,16 @@
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/loader.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/smooth-scroll.js"></script>
 
+    <script type="text/javascript">
+      // modify news link
+      if ($('#latest-news').length > 0) {
+        $('.news-link')
+          .attr('href', '#latest-news')
+          .addClass('scroll')
+          .attr('data-speed', "500")
+          .attr('data-easing', "linear");
+      }
+    </script>
+
   </body>
 </html>
