@@ -1,28 +1,17 @@
 <?php echo $header;?>
 
 <!-- Breadcrumbs -->
-<!-- TODO: put to a partial template -->
-<div id="breadcrumbs-product-page" class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb): ?>
-          <?php echo $breadcrumb['separator']; ?>
+<?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
 
-        <?php if($breadcrumb['href']): ?>
-          <a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-        <?php else: ?>
-          <?php echo $breadcrumb['text']; ?>
-        <?php endif;?>
-        
-      <?php endforeach; ?>
-</div>
- 
 <!-- DISPLAY PRODUCTS -->
 <?php if(!empty($news)): ?>
     <?php $noOfSections = (count($news) + 1) / 2; ?>
 
+
     <?php for ($ctr = 0; $ctr < $noOfSections; $ctr++): ?>
         <?php $sectionNews = array_slice($news, $ctr*2, ($ctr == 0 ? ($ctr+1) : $ctr) * 2); ?>
 
-        <section class="row <?php echo (0 == $ctr ? '' : 'latest-news');?>">
+        <section class="row <?php echo (0 == $ctr ? '' : 'latest-news');?> mtb-20">
 
             <?php foreach($sectionNews as $newsItem): ?>
 

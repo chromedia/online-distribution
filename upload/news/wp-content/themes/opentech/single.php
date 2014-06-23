@@ -1,4 +1,16 @@
 <?php get_header(); ?>
+<ul class="breadcrumbs">
+    <li>
+        <a href="/">Home</a>
+    </li>
+    <li>
+        <a href="/">News List</a>
+    </li>
+    <li>
+        <?php the_title(); ?>
+    </li>
+</ul>
+
 <section class="blog-article">
 	
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>

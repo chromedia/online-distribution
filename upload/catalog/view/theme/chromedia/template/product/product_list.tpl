@@ -1,19 +1,7 @@
 <?php echo $header;?>
 
 <!-- Breadcrumbs -->
-<!-- TODO: put to a partial template -->
-<div id="breadcrumbs-product-page" class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb): ?>
-          <?php echo $breadcrumb['separator']; ?>
-
-        <?php if($breadcrumb['href']): ?>
-          <a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-        <?php else: ?>
-          <?php echo $breadcrumb['text']; ?>
-        <?php endif;?>
-        
-      <?php endforeach; ?>
-</div>
+<?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
  
 <!-- DISPLAY PRODUCTS -->
 <?php if(!empty($products)): ?>

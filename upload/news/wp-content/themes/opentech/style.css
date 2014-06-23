@@ -16,6 +16,15 @@ Version: 1
   border-radius: 50%;
 }
 
+.breadcrumbs{
+  margin-bottom: 0;
+  border-radius: 0
+}
+
+.top-nav li{
+  position: relative;
+}
+
 @media screen {
 
 * { margin: 0; padding: 0; }
