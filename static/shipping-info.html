@@ -86,6 +86,15 @@
               <input type="text">
             </label>
           </div>
+          <div class="large-6 columns">
+            <label for="">
+              Country
+              
+            </label>
+            <select name="" id="">
+                <option value="">United States</option>
+              </select>
+          </div>
         </div>
         <div class="row">
           <div class="large-9 columns">
@@ -105,7 +114,10 @@
           <div class="large-12 columns">
             <div class="shipping-selection">
               <h3>Choose a shipping speed</h3>
-            
+                <div data-alert class="alert-box alert radius">
+                  Sorry, we don't ship to this country.
+                  
+                </div>
                 <label for="ship-regular">
                   <input type="radio" id="ship-regular" name="shipping-speed" checked> Regular  <em>(average of 5 to 10 days)</em>
                 </label>  
