@@ -37,52 +37,50 @@ label {
 #header {
 	position: relative;	
 	background-color: #FFFFFF;	
-	height: 90px;
+	height: auto;
 	z-index: 99;
-	-moz-box-shadow:    0px 3px 5px 4px #DBDEE1;
-	-webkit-box-shadow: 0px 3px 5px 4px #DBDEE1;
-	box-shadow:         0px 3px 5px 4px #DBDEE1;
+	padding: none;
+	margin: none;
+}
+#header .div1 {
+	height: 50px;
+	line-height: 50px;
+	background-color: #FFFFFF;
+	min-width: 900px;
+}
+#header .div2 {
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	display: inline-block;	
+	float: left;	
+	vertical-align: center;
+	color: #222222;
+	padding: 3px 10px 3px 10px;
+}
+#header .right {
+	float: right;
+}
+#header .div2 span {
+	font-weight: bold;
+}
+#header .mark:hover {
+	padding: 0px 10px 3px 10px;
+	border-top: 3px solid #3399FF;
 }
 
-#header #admin_home {
-	position: absolute;
-	display: inline;
-	color: #222222;
-	line-height: 90px;
-	right: 3%;
-	font-size: 20px;
-	padding: 0;
-	text-decoration: none;
-}
-#header #admin_logged {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #222222;
-	text-align: right;
-	padding: 15px 0px 0px 0px;
-	float: right;
-	margin-right: 3%;
-}
-#header #admin_logout {
-	position: absolute;
-	display: inline;
-	color: #222222;
-	line-height: 90px;
-	right: 3%;
-	font-size: 20px;
-	padding: 0;
-	text-decoration: none;	
+#menu {
+	background-color: #505050;
+	z-index: 1;
+	height: 40px;
+	line-height: 40px;
+	clear: both;
 }
 
 .top {
-	display: inline-block;
-	text-decoration: none;	
-	line-height: 90px;
+	color: #FFFFFF;
 	padding-left: 15px;
 	padding-right: 15px;
-	font-size: 18px;
-	color: #222222;
-	background-color: #FFFFFF;
+	font-size: 16px;
 }
 .top:hover {
 	color: #FFFFFF;
@@ -116,7 +114,6 @@ label {
 }
 #menu > ul .top {
 	font-family: Arial, Helvetica, sans-serif;
-	color: #222222;
 	text-align: center;
 	margin: 0;
 	padding-right: 10px;
@@ -162,13 +159,26 @@ body > #container {
 	min-height: 100%;
 }
 #content {
-	background: #FFFFFF url('../image/background.png') 0px 1px repeat-x;
 	padding: 10px 30px 0px 30px;
 	min-width: 900px;
 	padding-bottom: 128px;
 }
 /* login */
+.login {
+	padding-top: 10%;
+	margin: 0;
+	text-align: center;
+}
+.login-heading {
+	font-size: 2em;
+	color: #222222;
+}
+.login-element {
+	margin: 1em;
+}
 .portal_input {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;	
 	width: 300px;
 	height: 50px;
 	font-size: 15px;
@@ -180,17 +190,20 @@ body > #container {
 	color: #5B5C5C;		
 }
 .portal_button {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;	
 	width: 300px;
 	height: 50px;
 	font-size: 15px;
 	text-align: center;	
 	border-radius: 3px;	
 	border: 1px solid #CCC;
-	background-color: #FFFCCC;
-	color: #5B5C5C;
+	background-color: #3686bb;
+	color: #FFFFFF;
 }
 #forgot_password {
 	text-decoration: none;
+	color: #5B5C5C;
 }
 /* sticky footer */
 /*http://mystrd.at/modern-clean-css-sticky-footer/*/

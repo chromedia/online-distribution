@@ -70,6 +70,7 @@ class CartService
         $products = $emailData['products'];
         $itemsBody = '';
 
+        // todo: thumbnail changed to absolute url
         foreach ($products as $product) {
             $itemsBody .= $this->getCartItemEmailTemplate(array(
                 'imageSrc'         => $product['thumb'],
