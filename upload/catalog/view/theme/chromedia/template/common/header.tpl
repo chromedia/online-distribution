@@ -14,13 +14,13 @@
     <script src="catalog/view/theme/chromedia/javascripts/foundation/modernizr.foundation.js"></script>
     <script src="catalog/view/theme/chromedia/javascripts/jquery/jquery.min.js"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-46786512-1', 'opentechcollaborative.cc');
-  ga('send', 'pageview');
+  ga('send', 'pageview');*/
 
 </script>
 
@@ -37,12 +37,14 @@
   </ul>
 
   <section class="top-bar-section">
-    <?php $totalItems = $this->cart->countProducts(); ?>
+      <?php $totalItems = $this->cart->countProducts(); ?>
+
+      <!-- class="scroll" data-speed="500" data-easing="linear" href="#latest-news" -->
 
     <!-- Right Nav Section -->
     <ul class="right">
       <li><a href="about.html">Learn More</a></li>
-      <li><a class="scroll" data-speed="500" data-easing="linear" href="#latest-news">Latest News</a></li>
+      <li><a class="news-link" href="<?php echo $this->url->link('information/news', '', 'SSL'); ?>">Latest News</a></li>
       <li><a href="#">Contact Us</a></li>
 
       <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">
