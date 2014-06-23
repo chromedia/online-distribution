@@ -76,6 +76,10 @@ a.btn-view-small{
   cursor: pointer;
   border-radius: 3px;
 }
+a.btn-small{
+  padding: 5px 10px;
+  font-size: 12px;
+}
 a.btn-checkout{
   width: 280px;
   padding: 10px;
