@@ -94,7 +94,7 @@
             } 
             
             if (json.success) {
-                $('.green').html('<div class="success">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+                $('.green').html('<div class="success">' + json['success'] + '</div>');
                     
                 $('.green').fadeIn('slow');  
                 $('html, body').animate({ scrollTop: 0 }, 'slow'); 

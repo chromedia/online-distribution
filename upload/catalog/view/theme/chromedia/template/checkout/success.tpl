@@ -1,17 +1,6 @@
 <?php echo $header;?>
 
-<div id="breadcrumbs-product-page" class="breadcrumb">
-    <?php foreach ($breadcrumbs as $breadcrumb): ?>
-          <?php echo $breadcrumb['separator']; ?>
-
-        <?php if($breadcrumb['href']): ?>
-          <a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-        <?php else: ?>
-          <?php echo $breadcrumb['text']; ?>
-        <?php endif;?>
-        
-      <?php endforeach; ?>
-</div>
+<?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
 
 <!-- CONTENT STARTS HERE -->
 <div class="bar">
@@ -75,55 +64,6 @@
             </div>
         </div>
     </div>
-
-
-    <?php if(false): ?>
-        <div class="large-5 columns">
-          You have <strong>2</strong> items in your shopping cart
-          <ul class="cart-list">
-            <li class="group">
-              <div class="product-thumb"></div>
-              <ul class="product-cart-details">
-                <li><h3><a href="#">The Opensource Beehives Project</a></h3></li>
-                <li>
-                  <div class="cart-dd">
-                    <em>Quantity </em>
-                    1
-                  </div> 
-                  <div class="cart-dd">
-                    <em>Price</em> <strong class="price">$120</strong>    
-                  </div>
-                </li>
-              </ul>
-            </li>
-            <li class="group">
-              <div class="product-thumb"></div>
-              <ul class="product-cart-details">
-                <li><h3><a href="#">The Opensource Beehives Project</a></h3></li>
-                <li>
-                  <div class="cart-dd">
-                    <em>Quantity </em>
-                    1
-                  </div> 
-                  <div class="cart-dd">
-                    <em>Price</em> <strong class="price">$120</strong>    
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <div class="sub-total">
-            <div class="shipping-cost">
-              <em>Shipping cost</em>
-              <strong>$18.50</strong>
-            </div>
-            <div class="sub-total-value">
-              <em>Sub Total</em>
-              <strong>$258.50</strong>
-            </div>
-          </div>
-        </div>
-    <?php endif;?>
   </div>
 </div>
 
