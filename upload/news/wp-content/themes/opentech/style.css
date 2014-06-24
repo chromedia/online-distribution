@@ -172,3 +172,6 @@ a { text-decoration: none; color: black; }
   font-size: 13px;
   margin-bottom: 20px;
 }
+.blog-box-left{
+  height: 550px;
+}
