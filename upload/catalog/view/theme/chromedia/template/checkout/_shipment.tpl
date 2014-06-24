@@ -101,8 +101,7 @@
       </div>
   </div>
 
-  <!-- <div class="row display-on-rates-checked"  style="display:none;"> -->
-   <div class="row display-on-rates-checked">
+  <div class="row display-on-rates-checked" style="display:none;">
       <div class="mt20">
         <div class="large-12 columns">
           <a href="javascript:void(0);" id="step2-trigger-btn" class="btn">Next: Enter your credit card details</a>
