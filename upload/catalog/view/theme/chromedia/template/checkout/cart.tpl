@@ -224,6 +224,7 @@
         var hasError = showFormErrors(form);
 
         shipmentFormStatus(form, false);
+        $('.display-on-rates-checked').hide();
         
         if (!hasError) {
             var data = form.serialize();    
@@ -235,7 +236,9 @@
                 data: data,
                 dataType: 'json',
                 success: function(jsondata) {
+                    $('.shipping-selection').find('.alert-box').remove();
                     $('.shipping-selection').remove('label');
+                    
                     shipmentFormStatus(form, true);
 
                     if (jsondata.success && jsondata.rates) {
@@ -251,12 +254,13 @@
                                 $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
                             });
 
-                            $('#display-on-rates-checked').show();
+                            $('.display-on-rates-checked').show();
                             $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
 
                             setShipmentData();
                         } else {
-                            showCheckoutGeneralError('Shippo could not retrieve shipment rates. Please update provided address and products.');
+                            $('.display-on-rates-checked:first').show();
+                            $('<div data-alert class="alert-box alert radius">Sorry, no shipping is available for the provided address.</div>').insertAfter($('.shipping-selection').children('h3'));
                         }
 
                     } else {
@@ -275,7 +279,7 @@
     }
 
      var refreshShipmentData = function() {
-        $('#display-on-rates-checked').hide();
+        $('.display-on-rates-checked').hide();
         
         if ($('.shipping-selection').find('.shipping-option').length > 0) {
             retrieveShipmentRates($('#shipment-form'));

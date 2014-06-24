@@ -8,8 +8,6 @@
 
   <section class="row mtb20">
     <h1 style="margin: 1em auto 1em auto;" name="latest_news">All Offered Products</h1>
-    <?php $default_image_src = 'catalog/view/theme/chromedia/image/beehive-image.jpg'; ?>
-
     <?php foreach ($products as $product): ?>
       <div class="large-4 columns">
         <div class="card-bordered">
