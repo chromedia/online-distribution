@@ -39,13 +39,14 @@
   <section class="top-bar-section">
       <?php $totalItems = $this->cart->countProducts(); ?>
 
-      <!-- class="scroll" data-speed="500" data-easing="linear" href="#latest-news" -->
-
     <!-- Right Nav Section -->
     <ul class="right">
-      <li><a href="about.html">Learn More</a></li>
-      <li><a class="news-link" href="<?php echo $this->url->link('information/news', '', 'SSL'); ?>">Latest News</a></li>
-      <li><a href="#">Contact Us</a></li>
+      <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL'); ?>">Learn More</a></li>
+      <li>
+          <a class="news-link-scroll scroll" data-speed="500" data-easing="linear" href="#latest-news" style="display:none;">Latest News</a>
+          <a class="news-link" href="<?php echo $this->url->link('information/news', '', 'SSL'); ?>">Latest News</a>
+      </li>
+      <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL').'#contact-us'; ?>">Contact Us</a></li>
 
       <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">
             <span class="items-in-cart" <?php if($totalItems == 0): ?> style="display:none;"<?php endif;?>><?php echo $totalItems; ?></span>

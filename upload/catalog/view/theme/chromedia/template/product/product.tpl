@@ -18,13 +18,7 @@
 
 
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
-<<<<<<< HEAD
-=======
 
->>>>>>> f0912160781822aef580d265ccf87676071fa2ed
-
-
-<?php if(1): ?>
 <div class="product-cover" style="background-image: url('<?php echo $header_img;?>')">
     <div class="notification green" style="display:none;"></div>
     <!-- <div class="notification green"></div> -->
@@ -80,15 +74,12 @@
       </div>
     </div>
 </div>
-<?php endif;?>
+
 
 <!-- Add to Cart Javascript -->
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/cart.js"></script>
-<<<<<<< HEAD
-=======
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/tab.js"></script>
 
->>>>>>> f0912160781822aef580d265ccf87676071fa2ed
 <script type="text/javascript">
     $('.add-to-cart-btn').addToCart({
         'product_id' : $('input[name="product_id"]').val(),
@@ -100,11 +91,7 @@
             } 
             
             if (json.success) {
-<<<<<<< HEAD
-                $('.green').html('<div class="success">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
-=======
                 $('.green').html('<div class="success">' + json['success'] + '</div>');
->>>>>>> f0912160781822aef580d265ccf87676071fa2ed
                     
                 $('.green').fadeIn('slow');  
                 $('html, body').animate({ scrollTop: 0 }, 'slow'); 
@@ -112,10 +99,7 @@
         }
     });
 
-<<<<<<< HEAD
-=======
     $('.product-tabs li a').tab();
 </script>
 
->>>>>>> f0912160781822aef580d265ccf87676071fa2ed
 <?php echo $footer;?>

@@ -36,24 +36,17 @@
 
 <!-- END FOOTER SECTION -->
 
-    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/foundation.js"></script>
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/foundation.min.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/app.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/loader.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/smooth-scroll.js"></script>
 
-<<<<<<< HEAD
-=======
-    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/components/foundation.tab.js"></script>
-
->>>>>>> f0912160781822aef580d265ccf87676071fa2ed
     <script type="text/javascript">
-      // modify news link
       if ($('#latest-news').length > 0) {
-        $('.news-link')
-          .attr('href', '#latest-news')
-          .addClass('scroll')
-          .attr('data-speed', "500")
-          .attr('data-easing', "linear");
+        $('.news-link').remove();
+        $('.news-link-scroll').show();
+      } else {
+        $('.news-link-scroll').remove();
       }
     </script>
 

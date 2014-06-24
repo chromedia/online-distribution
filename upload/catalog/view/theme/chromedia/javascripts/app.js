@@ -1,4 +1,4 @@
-//$(document).foundation();
+$(document).foundation();
 
 ;(function ($, window, undefined) {
   'use strict';

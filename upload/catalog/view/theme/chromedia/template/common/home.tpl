@@ -24,13 +24,6 @@
 </div>
 <!-- END LANDING SECTION -->
 
-<<<<<<< HEAD
-=======
-<!-- DISPLAY PRODUCTS -->
-
-<!-- DISPLAY PRODUCTS -->
-
->>>>>>> 2cb8057bb2071b3c899fc2a459154aa01515936b
 <!-- BEG EMAIL SECTION -->
 
 <div id="newsletter">

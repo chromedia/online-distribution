@@ -13,13 +13,9 @@ class ControllerCommonHome extends Controller {
         $this->load->model('tool/image');
         $this->load->model('news/news');
 
-        $_SESSION['test'] = 'test';
-
         $this->data['news'] = $this->model_news_news->getPublishedPosts(0, 4);
         $this->data['string_util'] = StringUtil::getInstance();
         $this->data['url_util'] = UrlUtil::getInstance(CurlUtil::getInstance());
-
-        //UrlUtil::getInstance(CurlUtil::getInstance())->shortenUrl('http://www.google.com/');exit;
 
         $this->document->setTitle($this->config->get('config_title'));
         $this->document->setDescription($this->config->get('config_meta_description'));
