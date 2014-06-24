@@ -75,7 +75,7 @@ class CartService
             foreach ($products as $product) {
                 $trackingNumber = '';
 
-                foreach ($packages as $key => $package) {
+                /*foreach ($packages as $key => $package) {
                     if ($package['content']['product_id'] == $product['product_id']) {
                         $transaction = json_decode($package['shipping_transaction'], true);
 
@@ -87,7 +87,7 @@ class CartService
 
                         break;
                     }
-                }
+                }*/
 
                 $itemsBody .= $this->getCartItemEmailTemplate(array(
                     'imageSrc'         => DIR_HOME.$product['thumb'],
