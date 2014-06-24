@@ -339,8 +339,8 @@
     }
 
     $('#step2-trigger-btn').off('click').on('click', function() {
-        populateCCInfoBasedOnShipmentInfo();
-        populateShipmentReviewInfoInPaymentStep();
+        // populateCCInfoBasedOnShipmentInfo();
+        // populateShipmentReviewInfoInPaymentStep();
 
         activateStep2();
     });

@@ -42,7 +42,6 @@ class ControllerCheckoutCheckout extends Controller {
                 $this->session->data['order_id'] = $orderId;
                 $this->session->data['shipping_cost'] = $shippingAmount;
 
-                //$cartService->emailCustomerForConfirmation(MailUtil::getInstance($this->config), $email);
                 $response = array('success' => true);
             } else {
                 $response = array('success' => false, 'errorMsg' => 'Payment System Error!');
@@ -207,9 +206,9 @@ class ControllerCheckoutCheckout extends Controller {
 
             $cartTotalPrice = $this->cart->getTotal();
             $this->data['products_in_cart_count'] = $this->cart->countProducts();
-            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping_cost']);
             $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
             $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping_cost']);
+            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping_cost']);
 
             $emailData = array(
                 'recipient' => $this->session->data['guest']['email'],
@@ -230,6 +229,7 @@ class ControllerCheckoutCheckout extends Controller {
             }
 
             $this->cart->clear();
+            unset($this->session->data['shipping_cost']);
             unset($this->session->data['order_id']);
             unset($this->session->data['packages']);
 

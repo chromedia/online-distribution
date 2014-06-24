@@ -215,12 +215,6 @@
     /* Be sure to place a .clear element after each set of columns, just to be safe */
     .clear { display: block; clear: both; }
 
-
-
-
-
-
-
     /* ------------------------------------------- 
             PHONE
             For clients that support media queries.
@@ -276,7 +270,7 @@
                         <td>
                             <h3>Thank you! Payment is successful</h3>
                             
-                            <p>You have successfully purchased the items listed below. You will receive a summary of your orders through your email. If you have any questions just email us at shipping@opentechcollaborative.cc</p>
+                            <p>You have successfully purchased the items listed below. If you have any questions just email us at shipping@opentechcollaborative.cc</p>
                             <!-- Callout Panel -->
                             
                             <ul class="cart-list" style="border-bottom: 1px solid #e8e8e8; padding: 16px 16px 16px 85px; position: relative;">

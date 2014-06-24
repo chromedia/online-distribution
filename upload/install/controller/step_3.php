@@ -38,6 +38,10 @@ class ControllerStep3 extends Controller {
 			$output .= '// Third Party API Credentials'. "\n";
 			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
 			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
+
+			// $output .= 'define(\'PAYPAL_CLIENT_ID\', \'' . addslashes($this->request->post['paypal_client_id']) . '\');' . "\n";
+			// $output .= 'define(\'PAYPAL_CLIENT_SECRET\', \'' . addslashes($this->request->post['paypal_client_secret']) . '\');' . "\n\n";
+
 			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
 			$output .= '?>';				
 
@@ -80,6 +84,10 @@ class ControllerStep3 extends Controller {
 			$output .= '// Third Party API Credentials'. "\n";
 			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
 			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
+
+			// $output .= 'define(\'PAYPAL_CLIENT_ID\', \'' . addslashes($this->request->post['paypal_client_id']) . '\');' . "\n";
+			// $output .= 'define(\'PAYPAL_CLIENT_SECRET\', \'' . addslashes($this->request->post['paypal_client_secret']) . '\');' . "\n\n";
+
 			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
 			$output .= '?>';	
 
@@ -203,8 +211,12 @@ class ControllerStep3 extends Controller {
 		}
 
 		$this->data['stripe_private_key'] = isset($this->request->post['stripe_private_key']) ? $this->request->post['stripe_private_key'] : '';
-		$this->data['stripe_public_key'] = isset($this->request->post['stripe_public_key']) ? $this->request->post['stripe_public_key'] : '';;
-		$this->data['shippo_authorization'] = isset($this->request->post['shippo_authorization']) ? $this->request->post['shippo_authorization'] : '';;
+		$this->data['stripe_public_key'] = isset($this->request->post['stripe_public_key']) ? $this->request->post['stripe_public_key'] : '';
+
+		// $this->data['paypal_client_id'] = isset($this->request->post['paypal_client_id']) ? $this->request->post['paypal_client_id'] : '';
+		// $this->data['paypal_client_secret'] = isset($this->request->post['paypal_client_secret']) ? $this->request->post['paypal_client_secret'] : '';
+
+		$this->data['shippo_authorization'] = isset($this->request->post['shippo_authorization']) ? $this->request->post['shippo_authorization'] : '';
 
 		$this->data['back'] = $this->url->link('step_2');
 

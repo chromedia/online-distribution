@@ -67,32 +67,51 @@ class CartService
 
     public function emailCustomerForConfirmation($emailData, $mailUtil, $shippoService)
     {
-        $products = $emailData['products'];
-        $itemsBody = '';
+        if (isset($_SESSION['packages'])) {
+            $packages = $_SESSION['packages'];
+            $products = $emailData['products'];
+            $itemsBody = '';
 
-        // todo: thumbnail changed to absolute url
-        foreach ($products as $product) {
-            $itemsBody .= $this->getCartItemEmailTemplate(array(
-                'imageSrc'         => $product['thumb'],
-                'productLink'      => $product['href'],
-                'productName'      => $product['name'],
-                'productPrice'     => $product['price'],
-                'productQuantity'  => $product['quantity']
+            foreach ($products as $product) {
+                $trackingNumber = '';
+
+                foreach ($packages as $key => $package) {
+                    if ($package['content']['product_id'] == $product['product_id']) {
+                        $transaction = json_decode($package['shipping_transaction'], true);
+
+                        if (isset($transaction['tracking_number']) && !empty($transaction['tracking_number'])) {
+                            $trackingNumber = $transaction['tracking_number'];
+                        }
+
+                        unset($packages[$key]);
+
+                        break;
+                    }
+                }
+
+                $itemsBody .= $this->getCartItemEmailTemplate(array(
+                    'imageSrc'         => DIR_HOME.$product['thumb'],
+                    'productLink'      => $product['href'],
+                    'productName'      => $product['name'],
+                    'productPrice'     => $product['price'],
+                    'productQuantity'  => $product['quantity'],
+                    'trackingNumber'   => $trackingNumber
+                ));
+            }
+
+            $message = $this->getOrderConfirmationEmailTemplate(array(
+                'items'        => $itemsBody,
+                'shippingCost' => $emailData['shippingCost'],
+                'subTotal'     => $emailData['subTotal'],
+                'total'        => $emailData['total']
             ));
-        }
 
-        $message = $this->getOrderConfirmationEmailTemplate(array(
-            'items'        => $itemsBody,
-            'shippingCost' => $emailData['shippingCost'],
-            'subTotal'     => $emailData['subTotal'],
-            'total'        => $emailData['total']
-        ));
-
-        $mailUtil->sendEmail(array(
-            'message' => $message,
-            'email'   => $emailData['recipient'],
-            'subject' => 'Opentech Collaborative Order'
-        ));  
+            $mailUtil->sendEmail(array(
+                'message' => $message,
+                'email'   => $emailData['recipient'],
+                'subject' => 'Opentech Collaborative Order'
+            )); 
+        } 
     }
 
 
@@ -124,7 +143,6 @@ class CartService
 
                     $trackingNumber = $transaction['tracking_status']['status'].' <em> Please inquire status from our admin.</em';
                 }
-                // $orderInfo .= '<p>'.$package['content']['product_name'].' - '. $trackingNumber.'</p>';
             }
 
             $body = $this->getOrderConfirmationEmailTemplate(array(
@@ -160,7 +178,7 @@ class CartService
     public function getCartItemEmailTemplate($data)
     {
         $contents = file_get_contents(DIR_SYSTEM . 'email_templates/_order_information.php');
-        $contents = sprintf($contents, $data['imageSrc'], $data['productLink'], $data['productName'], $data['productQuantity'], $data['productPrice']);
+        $contents = sprintf($contents, $data['imageSrc'], $data['productLink'], $data['productName'], $data['productQuantity'], $data['productPrice'], $data['trackingNumber']);
 
         return $contents;
     }

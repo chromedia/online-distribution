@@ -52,6 +52,14 @@
                 <td><textarea name="product_description[<?php echo $language['language_id']; ?>][description]" id="description<?php echo $language['language_id']; ?>"><?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['description'] : ''; ?></textarea></td>
               </tr>
               <tr>
+                <td><?php echo $entry_details; ?></td>
+                <td><textarea name="product_description[<?php echo $language['language_id']; ?>][details]" id="details<?php echo $language['language_id']; ?>"><?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['details'] : ''; ?></textarea></td>
+              </tr>
+              <tr>
+                <td><?php echo $entry_documentation; ?></td>
+                <td><textarea name="product_description[<?php echo $language['language_id']; ?>][documentation]" id="documentation<?php echo $language['language_id']; ?>"><?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['documentation'] : ''; ?></textarea></td>
+              </tr>
+              <tr>
                 <td><?php echo $entry_tag; ?></td>
                 <td><input type="text" name="product_description[<?php echo $language['language_id']; ?>][tag]" value="<?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['tag'] : ''; ?>" size="80" /></td>
               </tr>
@@ -766,15 +774,24 @@
 </div>
 <script type="text/javascript" src="view/javascript/ckeditor/ckeditor.js"></script> 
 <script type="text/javascript"><!--
+  var modifyToCkEditor = function(id) {
+    CKEDITOR.replace(id, {
+      filebrowserBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+      filebrowserImageBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+      filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+      filebrowserUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+      filebrowserImageUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
+      filebrowserFlashUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>'
+    });
+  }
+
 <?php foreach ($languages as $language) { ?>
-CKEDITOR.replace('description<?php echo $language['language_id']; ?>', {
-	filebrowserBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
-	filebrowserImageBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
-	filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
-	filebrowserUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
-	filebrowserImageUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',
-	filebrowserFlashUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>'
-});
+    var languageId = '<?php echo $language['language_id']; ?>';
+
+    modifyToCkEditor('description'+languageId);
+    modifyToCkEditor('details'+languageId);
+    modifyToCkEditor('documentation'+languageId);
+
 <?php } ?>
 //--></script> 
 <script type="text/javascript"><!--

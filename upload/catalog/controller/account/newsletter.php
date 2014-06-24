@@ -74,5 +74,19 @@ class ControllerAccountNewsletter extends Controller {
 
 		$this->response->setOutput($this->render());
 	}
+
+	/**
+	 * Subscribe to newsletter
+	 */
+	public function subscribeToNewsletter()
+	{
+		$email = $this->request->post['email'];
+
+		if ($email) {
+			$this->load->model('account/customer');
+			$this->model_account_customer->addNewsletterSubscriber($this->request->post['newsletter']);
+
+			$this->response->setOutput(json_encode(array('success' => true)));	
+		}
+	}
 }
-?>

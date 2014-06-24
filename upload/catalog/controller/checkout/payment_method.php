@@ -204,5 +204,10 @@ class ControllerCheckoutPaymentMethod extends Controller {
 
 		$this->response->setOutput(json_encode($json));
 	}
+
+	/**Added payment**/
+	public function payWithPaypal()
+	{
+		
+	}
 }
-?>

@@ -44,11 +44,11 @@
         </div>
 
         <div class="product-description" id="details"> 
-            <?php echo 'details temporary'; ?>
+            <?php echo $details; ?>
         </div>
 
         <div class="product-description" id="documentation"> 
-            <?php  echo 'documentation temporary'; ?>
+            <?php  echo $documentation; ?>
         </div>
     </div>
 

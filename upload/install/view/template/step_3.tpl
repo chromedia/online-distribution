@@ -111,6 +111,27 @@
         </tr>
       </table>
     </fieldset>
+
+    <!-- <p>4. Paypal credentials for alternative payment method.</p>
+    <fieldset>
+      <table class="form">
+        <tr>
+          <td>Paypal Environment:</td>
+          <td>
+            <input type="radio" name="paypal_environment" value="sandbox" checked /> Sandbox
+            <input type="radio" name="paypal_environment" value="production" /> Production
+          </td>
+        </tr>
+        <tr>
+          <td>Paypal Client Id:</td>
+          <td><input type="text" name="paypal_client_id" value="<?php echo $paypal_client_id; ?>" /></td>
+        </tr>
+        <tr>
+          <td>Paypal Client Secret:</td>
+          <td><input type="text" name="paypal_client_secret" value="<?php echo $paypal_client_secret; ?>" /></td>
+        </tr>
+      </table>
+    </fieldset> -->
     <div class="buttons">
       <div class="left"><a href="<?php echo $back; ?>" class="button">Back</a></div>
       <div class="right">

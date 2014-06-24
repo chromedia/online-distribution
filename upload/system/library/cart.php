@@ -451,7 +451,7 @@ class Cart {
 		$shipping = false;
 
 		foreach ($this->getProducts() as $product) {
-			if ($product['shipping']) {
+			if (isset($product['shipping']) && $product['shipping']) {
 				$shipping = true;
 
 				break;

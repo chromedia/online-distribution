@@ -21,7 +21,6 @@ class ModelCatalogProduct extends Model {
 	*/
 
 	public function addProduct($data) {
-
 		// Set Product ID as model number 
 		$product_id = $this->db->escape($data['model']);
 
@@ -75,7 +74,7 @@ class ModelCatalogProduct extends Model {
 
 		// Description
 		foreach ($data['product_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "product_description SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', description = '" . $this->db->escape($value['description']) . "', tag = '" . $this->db->escape($value['tag']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "product_description SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', description = '" . $this->db->escape($value['description']) .  "', details = '" . $this->db->escape($value['details']) .  "', documentation = '" . $this->db->escape($value['documentation']) . "', tag = '" . $this->db->escape($value['tag']) . "'");
 		}
 
 		// Attributes
@@ -227,8 +226,9 @@ class ModelCatalogProduct extends Model {
 		// Description
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_description WHERE product_id = '" . (int)$product_id . "'");
 
+		// Description
 		foreach ($data['product_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "product_description SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', description = '" . $this->db->escape($value['description']) . "', tag = '" . $this->db->escape($value['tag']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "product_description SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', description = '" . $this->db->escape($value['description']) .  "', details = '" . $this->db->escape($value['details']) .  "', documentation = '" . $this->db->escape($value['documentation']) . "', tag = '" . $this->db->escape($value['tag']) . "'");
 		}
 
 		// Attributes
@@ -490,6 +490,8 @@ class ModelCatalogProduct extends Model {
 			$product_description_data[$result['language_id']] = array(
 				'name'             => $result['name'],
 				'description'      => $result['description'],
+				'details'          => $result['details'],
+				'documentation'    => $result['documentation'],
 				'meta_keyword'     => $result['meta_keyword'],
 				'meta_description' => $result['meta_description'],
 				'tag'              => $result['tag']

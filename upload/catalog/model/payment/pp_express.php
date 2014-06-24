@@ -14,20 +14,29 @@ class ModelPaymentPPExpress extends Model {
 	}
 
 	public function call($data) {
-
-		if ($this->config->get('pp_express_test') == 1) {
+		if (PAYPAL_ENVIRONMENT == 'sandbox') {
 			$api_endpoint = 'https://api-3t.sandbox.paypal.com/nvp';
 		} else {
 			$api_endpoint = 'https://api-3t.paypal.com/nvp';
 		}
 
-		$settings = array(
+		/*$settings = array(
 			'USER' => $this->config->get('pp_express_username'),
 			'PWD' => $this->config->get('pp_express_password'),
 			'SIGNATURE' => $this->config->get('pp_express_signature'),
 			'VERSION' => '65.2',
 			'BUTTONSOURCE' => 'OpenCart_Cart_EC',
+		);*/
+
+		$settings = array(
+			'USER' => 'opentech_api1.gmail.com',
+			'PWD' => '1403599206',
+			'SIGNATURE' => 'AErfVUrwyqdtjXcFeRKYILFoEEUIAHWESlLn6n0UdZ0l2AVUO9jAVt-z',
+			'VERSION' => '65.2',
+			//'BUTTONSOURCE' => 'OpenCart_Cart_EC',
 		);
+
+		//$settings = array();
 
 		$this->log($data, 'Call data');
 
@@ -48,8 +57,10 @@ class ModelPaymentPPExpress extends Model {
 		$ch = curl_init();
 
 		curl_setopt_array($ch, $defaults);
+		$result = curl_exec($ch);
 
-		if( ! $result = curl_exec($ch)) {
+
+		if( !$result ) {
 			$this->log(array('error' => curl_error($ch), 'errno' => curl_errno($ch)), 'cURL failed');
 		}
 
@@ -153,29 +164,15 @@ class ModelPaymentPPExpress extends Model {
 		$i = 0;
 		$item_total = 0;
 
-		foreach ($this->cart->getProducts() as $item) {
+		$products = $this->cart->getProducts();
+
+		foreach ($products as $item) {
 			$data['L_PAYMENTREQUEST_0_DESC' . $i] = '';
-
-			$option_count = 0;
-			foreach ($item['option'] as $option) {
-				if ($option['type'] != 'file') {
-					$value = $option['option_value'];
-				} else {
-					$filename = $this->encryption->decrypt($option['option_value']);
-					$value = utf8_substr($filename, 0, utf8_strrpos($filename, '.'));
-				}
-
-				$data['L_PAYMENTREQUEST_0_DESC' . $i] .= ($option_count > 0 ? ', ' : '') . $option['name'] . ':' . (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value);
-
-				$option_count++;
-			}
-
 			$data['L_PAYMENTREQUEST_0_DESC' . $i] = substr($data['L_PAYMENTREQUEST_0_DESC' . $i], 0, 126);
 
-			$item_price = $this->currency->format($item['price'], false, false, false);
+			$item_price = $this->tax->calculate($item['price'], $item['tax_class_id'], $this->config->get('config_tax'));
 
 			$data['L_PAYMENTREQUEST_0_NAME' . $i] = $item['name'];
-			$data['L_PAYMENTREQUEST_0_NUMBER' . $i] = $item['model'];
 			$data['L_PAYMENTREQUEST_0_AMT' . $i] = $item_price;
 			$item_total += number_format($item_price * $item['quantity'], 2);
 			$data['L_PAYMENTREQUEST_0_QTY' . $i] = $item['quantity'];
@@ -201,19 +198,6 @@ class ModelPaymentPPExpress extends Model {
 			$i++;
 		}
 
-		if (!empty($this->session->data['vouchers'])) {
-			foreach ($this->session->data['vouchers'] as $voucher) {
-				$item_total += $this->currency->format($voucher['amount'], false, false, false);;
-
-				$data['L_PAYMENTREQUEST_0_DESC' . $i] = '';
-				$data['L_PAYMENTREQUEST_0_NAME' . $i] = $voucher['description'];
-				$data['L_PAYMENTREQUEST_0_NUMBER' . $i] = 'VOUCHER';
-				$data['L_PAYMENTREQUEST_0_QTY' . $i] = 1;
-				$data['L_PAYMENTREQUEST_0_AMT' . $i] = $this->currency->format($voucher['amount'], false, false, false);
-				$i++;
-			}
-		}
-
 		// Totals
 		$this->load->model('setting/extension');
 
@@ -222,79 +206,50 @@ class ModelPaymentPPExpress extends Model {
 		$taxes = $this->cart->getTaxes();
 
 		// Display prices
-		if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-			$sort_order = array();
+		// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+		// 	$sort_order = array();
 
-			$results = $this->model_setting_extension->getExtensions('total');
+		// 	$results = $this->model_setting_extension->getExtensions('total');
 
-			foreach ($results as $key => $value) {
-				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-			}
+		// 	foreach ($results as $key => $value) {
+		// 		$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+		// 	}
 
-			array_multisort($sort_order, SORT_ASC, $results);
+		// 	array_multisort($sort_order, SORT_ASC, $results);
 
-			foreach ($results as $result) {
-				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
+		// 	foreach ($results as $result) {
+		// 		if ($this->config->get($result['code'] . '_status')) {
+		// 			$this->load->model('total/' . $result['code']);
 
-					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-				}
+		// 			$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+		// 		}
 
-				$sort_order = array();
+		// 		$sort_order = array();
 
-				foreach ($total_data as $key => $value) {
-					$sort_order[$key] = $value['sort_order'];
-				}
+		// 		foreach ($total_data as $key => $value) {
+		// 			$sort_order[$key] = $value['sort_order'];
+		// 		}
 
-				array_multisort($sort_order, SORT_ASC, $total_data);
-			}
-		}
+		// 		array_multisort($sort_order, SORT_ASC, $total_data);
+		// 	}
+		// }
 
-		foreach ($total_data as $total_row) {
-			if (!in_array($total_row['code'], array('total', 'sub_total'))) {
-				if ($total_row['value'] != 0) {
-					$item_price = $this->currency->format($total_row['value'], false, false, false);
-					$data['L_PAYMENTREQUEST_0_NUMBER' . $i] = $total_row['code'];
-					$data['L_PAYMENTREQUEST_0_NAME' . $i] = $total_row['title'];
-					$data['L_PAYMENTREQUEST_0_AMT' . $i] = $this->currency->format($total_row['value'], false, false, false);
-					$data['L_PAYMENTREQUEST_0_QTY' . $i] = 1;
-					$item_total = number_format($item_total + $item_price, 2);
-					$i++;
-				}
-			}
-		}
+		// foreach ($total_data as $total_row) {
+		// 	if (!in_array($total_row['code'], array('total', 'sub_total'))) {
+		// 		if ($total_row['value'] != 0) {
+		// 			$item_price = $this->currency->format($total_row['value'], false, false, false);
+		// 			$data['L_PAYMENTREQUEST_0_NUMBER' . $i] = $total_row['code'];
+		// 			$data['L_PAYMENTREQUEST_0_NAME' . $i] = $total_row['title'];
+		// 			$data['L_PAYMENTREQUEST_0_AMT' . $i] = $this->currency->format($total_row['value'], false, false, false);
+		// 			$data['L_PAYMENTREQUEST_0_QTY' . $i] = 1;
+		// 			$item_total = number_format($item_total + $item_price, 2);
+		// 			$i++;
+		// 		}
+		// 	}
+		// }
 
 		$data['PAYMENTREQUEST_0_ITEMAMT'] = number_format($item_total, 2, '.', '');
 		$data['PAYMENTREQUEST_0_AMT'] = number_format($item_total, 2, '.', '');
-
-		$z = 0;
-
-		$recurring_products = $this->cart->getRecurringProducts();
-		if(!empty($recurring_products)) {
-
-			$this->language->load('payment/pp_express');
-
-			foreach($recurring_products as $item) {
-				$data['L_BILLINGTYPE' . $z] = 'RecurringPayments';
-
-				if($item['recurring_trial'] == 1) {
-					$trial_amt = $this->currency->format($this->tax->calculate($item['recurring_trial_price'], $item['tax_class_id'], $this->config->get('config_tax')), false, false, false) * $item['quantity'].' '.$this->currency->getCode();
-					$trial_text =  sprintf($this->language->get('text_trial'), $trial_amt, $item['recurring_trial_cycle'], $item['recurring_trial_frequency'], $item['recurring_trial_duration']);
-				} else {
-					$trial_text = '';
-				}
-
-				$recurring_amt = $this->currency->format($this->tax->calculate($item['recurring_price'], $item['tax_class_id'], $this->config->get('config_tax')), false, false, false)  * $item['quantity'].' '.$this->currency->getCode();
-				$recurring_description = $trial_text . sprintf($this->language->get('text_recurring'), $recurring_amt, $item['recurring_cycle'], $item['recurring_frequency']);
-
-				if($item['recurring_duration'] > 0) {
-					$recurring_description .= sprintf($this->language->get('text_length'), $item['recurring_duration']);
-				}
-
-				$data['L_BILLINGAGREEMENTDESCRIPTION' . $z] = $recurring_description;
-				$z++;
-			}
-		}
 
 		return $data;
 	}

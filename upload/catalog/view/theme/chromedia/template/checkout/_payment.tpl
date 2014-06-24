@@ -70,7 +70,7 @@
                 </p>
               
                 <div class="paypal">
-                    <a href="#"> or Pay with PayPal <i class="icon-paypal"></i> </a> 
+                    <a href="<?php echo $this->url->link('payment/ppExpress/express');?>"> or Pay with PayPal <i class="icon-paypal"></i> </a> 
                 </div>
 
                 <div class="shipping-summary">

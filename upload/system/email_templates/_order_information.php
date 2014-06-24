@@ -10,6 +10,9 @@
         <div class="cart-dd">
           <em>Price</em> <strong class="price">%s</strong>    
         </div>
+        <div class="cart-dd">
+          <em>Tracking</em> <strong class="tracking">%s</strong>    
+        </div>
       </li>
     </ul>
 </li>

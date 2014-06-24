@@ -19,14 +19,14 @@
       <h3>Thank you! Payment is successful</h3>
       <p>You have successfully purchased the items listed below. 
           You will receive a summary of your orders through your email. 
-          If you have any questions just email us at <a href="#">shipping@opentechcollaborative.cc</a>
+          If you have any questions just email us at <a href="mailto:shipping@opentechcollaborative.cc">shipping@opentechcollaborative.cc</a>
       </p>
       <p>Thank you, <br> OpenTechCollaborative</p>
     </div>
     <div class="large-5 columns">
         
         <span>You have <strong><?php echo $products_in_cart_count; ?></strong> <?php echo $products_in_cart_count > 1 ? 'items' : 'item';?> in your shopping cart</span>
-        <ul>
+        <ul class="cart-list">
             <?php foreach($products as $product): ?>
                 <li class="group">
                     <div class="product-thumb"><img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" /></div>
