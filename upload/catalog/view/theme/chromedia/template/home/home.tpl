@@ -1,5 +1,7 @@
 <?php echo $header;?>
 
+<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?> 
+
 <!-- BEG LANDING SECTION -->
 <div class="home-hero text-center">
   <div class="small-12 columns">
