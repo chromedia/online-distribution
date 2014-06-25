@@ -304,46 +304,6 @@
         }
     }
 
-    var removeProduct = function(element) {
-        var removeProductConfirm = confirm("Are you sure you want to remove this product?");
-
-        if (removeProductConfirm == true) {
-            var closestContainer = element.closest('.group');
-
-            $.ajax({
-                type: "POST",
-                url: "<?php echo $this->url->link('checkout/cart/removeProductInCart', '', 'SSL'); ?>",
-                data: {key : element.attr('key')},
-                dataType: 'json',
-                beforeSend: function() {
-                    closestContainer.css({'opacity' : 0.5});
-                    closestContainer.find('input').attr('readonly', true);
-                },
-                success: function(jsondata) {
-                    if (jsondata.success) {
-                        closestContainer.remove();
-
-                        updateSubTotal(jsondata.total);
-                        updateProductsCount(jsondata.productsCount);
-
-                        refreshShipmentData();
-                    } else {
-                        closestContainer.css({'opacity' : 1});
-                        closestContainer.find('input').attr('readonly', false);
-
-                        alert(jsondata.msg);
-                    }
-                },
-                error: function(error) {
-                    closestContainer.css({'opacity' : 1});
-                    closestContainer.find('input').attr('readonly', false);
-
-                    alert(error);
-                }
-            });
-        }
-    }
-
     $('#step2-trigger-btn').off('click').on('click', function() {
         populateCCInfoBasedOnShipmentInfo();
         populateShipmentReviewInfoInPaymentStep();
@@ -387,7 +347,6 @@
             $('#shipping-province').attr('required', 'required');
         }
     });
-
     
 </script>
 

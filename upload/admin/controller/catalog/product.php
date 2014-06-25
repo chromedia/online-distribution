@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+require_once(DIR_SYSTEM . 'utilities/VideoUtilTypeFactory.php');
+
 class ControllerCatalogProduct extends Controller {
 	private $error = array(); 
 
@@ -654,6 +657,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['tab_discount'] = $this->language->get('tab_discount');
 		$this->data['tab_special'] = $this->language->get('tab_special');
 		$this->data['tab_image'] = $this->language->get('tab_image');
+	
 		$this->data['tab_links'] = $this->language->get('tab_links');
 		$this->data['tab_reward'] = $this->language->get('tab_reward');
 		$this->data['tab_design'] = $this->language->get('tab_design');
@@ -1290,6 +1294,21 @@ class ControllerCatalogProduct extends Controller {
 
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
+		// custom code, single video for now //
+
+		$this->data['tab_video'] = $this->language->get('tab_video');
+		$productVideo = $this->model_catalog_product->getProductVideo($this->request->get['product_id']);
+		$this->data['video_tag'] = '';
+
+		if (!empty($productVideo)) {
+			$video = $productVideo[0];
+
+			$factory = VideoUtilTypeFactory::getInstance($video['url_link']);
+			$videoUtil = $factory->getVideoUtility();
+
+			$this->data['video_tag'] = $videoUtil->getVideoEmbedTag($video['video_key'], 700, 350);
+		}
+
 		$this->template = 'catalog/product_form.tpl';
 		$this->children = array(
 			'common/header',
@@ -1447,5 +1466,38 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		$this->response->setOutput(json_encode($json));
+	}
+
+	// Custom codes
+	public function checkVideo()
+	{
+		$factory = VideoUtilTypeFactory::getInstance($this->request->post['video_link']);
+		$videoUtil = $factory->getVideoUtility();
+
+		try {
+			$videoId = $videoUtil->getVideoId();
+
+			if ($videoId) {
+				$videoTag = $videoUtil->getVideoEmbedTag($videoId, $this->request->post['width'], $this->request->post['height']);
+				$videoThumbnail = $videoUtil->getVideoThumbnail($videoId);
+
+				$this->response->setOutput(json_encode(array(
+					'success'  => true,
+					'url'      => $this->request->post['video_link'],
+					'videoTag' => $videoTag,
+					'videoId'  => $videoId,
+					'videoThumbnail' => $videoThumbnail
+				)));
+			} else {
+				throw new Exception('Wrong url format.');
+			}
+			
+		} catch(Exception $e) {
+			$this->response->setOutput(json_encode(array(
+				'success' => false,
+				'error'   => $e->getMessage()
+			)));
+		}
+
 	}
 }

@@ -35,6 +35,45 @@
     };
 })(jQuery);
 
+ var removeProduct = function(element) {
+    var closestContainer = element.closest('.group');
+
+    $.ajax({
+        type: "POST",
+        url: "index.php?route=checkout/cart/removeProductInCart",
+        data: {key : element.attr('key')},
+        dataType: 'json',
+        beforeSend: function() {
+            closestContainer.css({'opacity' : 0.5});
+            closestContainer.find('input').attr('readonly', true);
+        },
+        success: function(jsondata) {
+            if (jsondata.success) {
+                closestContainer.remove();
+
+                if (jsondata.total == 0) {
+                    window.location = 'index.php?route=checkout/cart';
+                }
+
+                updateSubTotal(jsondata.total);
+                updateProductsCount(jsondata.productsCount);
+
+                refreshShipmentData();
+            } else {
+                closestContainer.css({'opacity' : 1});
+                closestContainer.find('input').attr('readonly', false);
+
+                alert(jsondata.msg);
+            }
+        },
+        error: function(error) {
+            closestContainer.css({'opacity' : 1});
+            closestContainer.find('input').attr('readonly', false);
+
+            alert(error);
+        }
+    });
+}
 
 $('.qty-in-cart').on('input', function() {
     var qtyInput = $(this);
@@ -77,5 +116,8 @@ $('.qty-in-cart').on('input', function() {
 });
 
 $('.remove').off('click').on('click', function() {
-    removeProduct($(this));
+    $(this).showConfirmationModal({
+        'contentMessage' : 'Are you sure you want to remove this product?',
+        'onConfirm'      : removeProduct
+    });
 }); 

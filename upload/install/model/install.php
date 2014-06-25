@@ -82,8 +82,29 @@ class ModelInstall extends Model {
 		}
 
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `is_featured` TINYINT NOT NULL DEFAULT '0'; ");
+		// $db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `video_link` VARCHAR(500) NOT NULL DEFAULT ''; ");
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `details` TEXT NOT NULL DEFAULT ''; ");
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `documentation` TEXT NOT NULL DEFAULT ''; ");
 
-	}	
+		$this->createVideoTable($db, $data['db_prefix']);
+
+	}
+
+	/**
+	 * Creates video table
+	 */	
+	public function createVideoTable($db, $prefix)
+	{
+		$sql = "
+			CREATE TABLE IF NOT EXISTS `".$prefix."product_video` (
+			  `id` int(11) NOT NULL AUTO_INCREMENT,
+			  `product_id` int(11) NOT NULL,
+			  `video_key` varchar(30) NOT NULL DEFAULT '',
+			  `thumbnail_link` varchar(500) NOT NULL DEFAULT '',
+			  `url_link` varchar(500) NOT NULL DEFAULT '',
+			  PRIMARY KEY (`id`)
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+		";
+		$db->query($sql);
+	}
 }

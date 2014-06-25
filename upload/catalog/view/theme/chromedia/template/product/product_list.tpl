@@ -1,5 +1,9 @@
 <?php echo $header;?>
 
+
+<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?> 
+
+
 <!-- Breadcrumbs -->
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
  
@@ -15,9 +19,15 @@
             <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>"><?php echo $product['name']; ?></a>  
           </div>
           <div class="card-thumb">
-            <a href="">
-              <img src="<?php echo !empty($product['thumb']) ? $product['thumb'] : $default_image_src; ?>" alt="<?php echo $product['name']; ?>">
-            </a>
+            <?php if(isset($product['videoEmbedTag']) && $product['videoEmbedTag']): ?>
+              <a class="product-video-trigger" embed-video='<?php echo $product['videoEmbedTag'];?>'>
+                <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
+              </a>
+            <?php else:?>
+              <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
+                <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
+              </a>
+            <?php endif;?>
             
           </div>
           <div class="card-body">
@@ -39,6 +49,12 @@
 <?php endif;?>
 <!-- ALL PRODUCTS -->
 
+<script type="text/javascript">
+  $('.product-video-trigger').off('click').on('click', function() {
+    $('#videoModal').find('.flex-video').html($(this).attr('embed-video'));
+    $('#videoModal').foundation('reveal', 'open');
+  });
+</script>
 
 <?php echo $footer;?>
 

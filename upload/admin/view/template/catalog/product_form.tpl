@@ -19,7 +19,7 @@
     </div>
 
     <div class="content">
-      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-data"><?php echo $tab_data; ?></a><a href="#tab-links"><?php echo $tab_links; ?></a><a href="#tab-attribute"><?php echo $tab_attribute; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-profile"><?php echo $tab_profile; ?></a><a href="#tab-discount"><?php echo $tab_discount; ?></a><a href="#tab-special"><?php echo $tab_special; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-reward"><?php echo $tab_reward; ?></a><a href="#tab-design"><?php echo $tab_design; ?></a></div>
+      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-data"><?php echo $tab_data; ?></a><a href="#tab-links"><?php echo $tab_links; ?></a><a href="#tab-attribute"><?php echo $tab_attribute; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-profile"><?php echo $tab_profile; ?></a><a href="#tab-discount"><?php echo $tab_discount; ?></a><a href="#tab-special"><?php echo $tab_special; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-video"><?php echo $tab_video; ?></a><a href="#tab-reward"><?php echo $tab_reward; ?></a><a href="#tab-design"><?php echo $tab_design; ?></a></div>
 
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
@@ -671,6 +671,7 @@
             </tfoot>
           </table>
         </div>
+
         <div id="tab-image">
           <table id="images" class="list">
             <thead>
@@ -702,6 +703,22 @@
             </tfoot>
           </table>
         </div>
+
+        <!-- Added tab video -->
+          <div id="tab-video">
+            <div class="video-container" style="width: 700px; height: 350px; background: #eee; position: relative; margin:20px auto 40px auto">
+              <?php echo $video_tag; ?>
+            </div>
+
+            <div style="position:relative; margin:20px auto 40px 310px">
+              <input type="text" class="video-link-input" size="120" name="video_link"/>
+              <input type="hidden" name="thumbnail_link"/>
+              <input type="hidden" name="video_id"/>
+
+              <a id="check-video"  class="button">Go Check</a>
+            </div>
+          </div>
+        <!-- Cusomtization end -->
         <div id="tab-reward">
           <table class="form">
             <tr>
@@ -1369,5 +1386,51 @@ function addProfile() {
 
 
 //--></script>
+
+<script type="text/javascript">
+  var video = '';
+
+  $('#check-video').off('click').on('click', function() {
+    var link = $('.video-link-input').val();
+
+    if (link.length > 0) {
+      var onInvalidVideoUrl = function()
+      {
+        $('.video-container').html('');
+        $('.video-link-input').val('');
+
+        if (!$('.video-link-input').hasClass('error')) {
+          $('.video-link-input').addClass('error');
+        }
+      }
+
+      $.ajax({
+            type: "POST",
+            url: 'index.php?route=catalog/product/checkVideo&token=<?php echo $_SESSION["token"];?>',
+            data: { video_link : link, width: 700, height: 350 },
+            dataType: 'json',
+            success: function(jsondata) {
+              if (jsondata.success) {
+                video = jsondata.url;
+
+                $('input[name="thumbnail_link"]').val(jsondata.videoThumbnail);
+                $('input[name="video_id"]').val(jsondata.videoId);
+
+                $('.video-container').html(jsondata.videoTag);
+
+              } else {
+                onInvalidVideoUrl();
+              }
+              
+            },
+            error: function(error) {
+              onInvalidVideoUrl();
+            }
+        });
+    } else {
+      $('.video-container').html('');
+    }
+  });
+</script>
 
 <?php echo $footer; ?>

@@ -88,6 +88,7 @@ $_['tab_ip']                        = 'IP Addresses';
 $_['tab_links']                     = 'Links';
 $_['tab_log']                       = 'Log';
 $_['tab_image']                     = 'Image';
+$_['tab_video']                     = 'Video';
 $_['tab_option']                    = 'Option';
 $_['tab_server']                    = 'Server';
 $_['tab_store']                     = 'Store';

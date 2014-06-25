@@ -40,6 +40,7 @@
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/app.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/loader.js"></script>
     <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/smooth-scroll.js"></script>
+    <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/modal.js"></script>
 
     <script type="text/javascript">
       if ($('#latest-news').length > 0) {

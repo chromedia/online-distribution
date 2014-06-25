@@ -165,7 +165,20 @@ class ModelCatalogProduct extends Model {
 			foreach ($data['product_profiles'] as $profile) {
 				$this->db->query("INSERT INTO `" . DB_PREFIX . "product_profile` SET `product_id` = " . (int)$product_id . ", customer_group_id = " . (int)$profile['customer_group_id'] . ", `profile_id` = " . (int)$profile['profile_id']);
 			}
-		} 
+		}
+
+		// Video
+		if (isset($data['video_link']) && !empty($data['video_link'])) {
+			$sql = "
+				INSERT INTO ".DB_PREFIX."product_video
+				SET product_id = ".(int)$product_id."
+				thumbnail_link = '".$this->db->escape($data['thumbnail_link'])."'
+				url_link = '".$this->db->escape($data['video_link'])."'
+				video_id = '".$this->db->escape($data['video_id'])."'
+			";
+
+			$this->db->query($sql);
+		}
 
 		// Cache Delete Product
 		$this->cache->delete('product');
@@ -335,6 +348,32 @@ class ModelCatalogProduct extends Model {
 
 		// Profiles
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_profile` WHERE product_id = " . (int)$product_id);		if (isset($data['product_profiles'])) {			foreach ($data['product_profiles'] as $profile) {				$this->db->query("INSERT INTO `" . DB_PREFIX . "product_profile` SET `product_id` = " . (int)$product_id . ", customer_group_id = " . (int)$profile['customer_group_id'] . ", `profile_id` = " . (int)$profile['profile_id']);			}		}		$this->cache->delete('product');
+		
+		// Video
+		if ($data['video_link']) {
+			$query = $this->db->query("SELECT COUNT(*) AS video_count FROM " . DB_PREFIX . "product_video WHERE product_id = '" . (int)$product_id . "'");
+			$count = (int)$query->row['video_count'];
+
+			if ($count) {
+				$sql = "
+					UPDATE ".DB_PREFIX."product_video
+					SET thumbnail_link = '".$this->db->escape($data['thumbnail_link'])."',
+					url_link = '".$this->db->escape($data['video_link'])."',
+					video_key = '".$this->db->escape($data['video_id'])."'
+					WHERE product_id = ".(int)$product_id ."
+				";
+			} else {
+				$sql = "
+					INSERT INTO ".DB_PREFIX."product_video
+					SET product_id = ".(int)$product_id.",
+					thumbnail_link = '".$this->db->escape($data['thumbnail_link'])."',
+					url_link = '".$this->db->escape($data['video_link'])."',
+					video_key = '".$this->db->escape($data['video_id'])."'
+				";
+			}
+
+			$this->db->query($sql);
+		}
 	}
 
 	public function copyProduct($product_id) {
@@ -745,5 +784,10 @@ class ModelCatalogProduct extends Model {
 
 		return $query->row['total'];
 	}
+
+	public function getProductVideo($product_id) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_video WHERE product_id = '" . (int)$product_id . "'");
+
+		return $query->rows;
+	}
 }
-?>

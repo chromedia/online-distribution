@@ -60,4 +60,4 @@
 
 <!-- END TOP BAR -->
 
-<div id="notification"></div>
+<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/common_modal.tpl'); ?> 
