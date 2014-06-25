@@ -16,16 +16,11 @@
                         <li>
                             <div class="cart-dd">
                                 <em>Quantity </em>
-                                <input class="qty-input" type="text" key="<?php echo $product['key'];?>" value="<?php echo $product['quantity']; ?>">
-                                <input class="qty-input-hidden" type="hidden" value="<?php echo $product['quantity']; ?>">
+                                <input class="qty-input qty-in-cart" type="text" key="<?php echo $product['key'];?>" value="<?php echo $product['quantity']; ?>">
                             </div> 
                             <div class="cart-dd">
                                 <em>Price</em> <strong class="price"><?php echo $product['price']; ?></strong>    
                             </div>
-                           <!--  <div class="cart-dd product-total-price">
-                                <em>Extended Price</em> <strong class="total"><?php echo $product['total']; ?></strong>    
-                            </div> -->
-                           <!--  <input type="image" class="quantity-changed" key="<?php echo $product['key'];?>" src="catalog/view/theme/default/image/update.png"/> -->
                         </li>
                         <li><a href="javascript:void(0);" key="<?php echo $product['key'];?>" class="remove">remove</a></li>
                     </ul>
@@ -48,22 +43,4 @@
             </div>
         </div>
     </div>
-<?php endif;?>
-
-<?php if(false): ?>
-    <?php foreach ($products as $product): ?>
-      <tr>
-        <td class="image"><?php if ($product['thumb']) { ?>
-          <a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" /></a>
-          <?php } ?></td>
-
-        <td class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></td>
-        <td class="model"><?php echo $product['model']; ?></td>
-        <td class="quantity"><input type="text" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" /></td>
-        <td class="price"><?php echo $product['price']; ?></td>
-        <td class="total"><?php echo $product['total']; ?></td>
-        <td class="action">  <input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
-          &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a></td>
-      </tr>
-     <?php endforeach;?>
 <?php endif;?>

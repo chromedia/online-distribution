@@ -108,7 +108,6 @@ class ShippoService
 
         // Run call
         $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
-        // var_dump($response);exit;
         $parcel = json_decode($response, true);
 
         // TODO: check for errors/invalidities

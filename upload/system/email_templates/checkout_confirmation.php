@@ -273,7 +273,7 @@
                             <p>You have successfully purchased the items listed below. If you have any questions just email us at shipping@opentechcollaborative.cc</p>
                             <!-- Callout Panel -->
                             
-                            <ul class="cart-list" style="border-bottom: 1px solid #e8e8e8; padding: 16px 16px 16px 85px; position: relative;">
+                            <ul class="cart-list" style="border-bottom: 1px solid #e8e8e8; list-style: none; margin: 20px 0; padding: 0; border: 1px solid #e8e8e8;">
                               %s
                             </ul>
                             <div class="sub-total">
@@ -312,9 +312,9 @@
                     <tr>
                         <td align="center">
                             <p>
-                                <a href="">Latest News</a> |
-                                <a href="">About Us</a> | 
-                                <a href="">Shop More</a>
+                                <a href="<?php echo DIR_HOME.'index.php?route=information/news'; ?>">Latest News</a> |
+                                <a href="<?php echo DIR_HOME.'index.php?route=information/learnmore'; ?>">About Us</a> | 
+                                <a href="<?php echo DIR_HOME.'index.php?route=product/display/all'; ?>">Shop More</a>
                             </p>
                         </td>
                     </tr>

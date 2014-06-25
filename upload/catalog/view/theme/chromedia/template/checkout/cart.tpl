@@ -139,6 +139,9 @@
     }
 
     var activateStep1 = function() {
+        $('.remove').show();
+        $('.qty-in-cart').prop('disabled', false);
+
         $('#step-shipping').show();
         $('#step-payment').hide();
         removeErrors($('#step-shipping').find('form'));
@@ -152,6 +155,9 @@
     }
 
     var activateStep2 = function() {
+        $('.remove').hide();
+        $('.qty-in-cart').prop('disabled', true);
+        
         removeErrors($('#step-payment').find('form'))
         $('#step-shipping').hide();
         $('#step-payment').show();
@@ -260,7 +266,7 @@
                             setShipmentData();
                         } else {
                             $('.display-on-rates-checked:first').show();
-                            $('<div data-alert class="alert-box alert radius">Sorry, no shipping is available for the provided address.</div>').insertAfter($('.shipping-selection').children('h3'));
+                            $('<div data-alert class="alert-box alert radius">Sorry, no shipping is available for the provided address or the amount of products.</div>').insertAfter($('.shipping-selection').children('h3'));
                         }
 
                     } else {

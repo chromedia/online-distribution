@@ -1,14 +1,14 @@
 (function($){
     $.fn.addToCart = function(options){
         var settings = $.extend({
-            'product_id' : 0,
-            'quantity'   : 1,
-            'on_success' : function() {},
-            'on_error'   : null
+            'product_id'     : 0,
+            'quantity_input' : $('input[name="quantity"]'),
+            'on_success'     : function() {},
+            'on_error'       : null
         }, options);
 
         this.off('click').on('click', function() {
-            var data = {product_id : settings.product_id, quantity : settings.quantity};
+            var data = { product_id : settings.product_id, quantity : settings.quantity_input.val() };
         
             // Send POST data to server
             $(function() {
@@ -36,7 +36,7 @@
 })(jQuery);
 
 
-$('.qty-input').on('input', function() {
+$('.qty-in-cart').on('input', function() {
     var qtyInput = $(this);
     var quantity = qtyInput.val();
 
@@ -50,7 +50,7 @@ $('.qty-input').on('input', function() {
 
         $.ajax({
             type: "POST",
-            url: 'index.php?route=checkout/cart/updateCartProductQuantity',//"<?php echo $this->url->link('checkout/cart/updateCartProductQuantity', '', 'SSL'); ?>",
+            url: 'index.php?route=checkout/cart/updateCartProductQuantity',
             data: data,
             dataType: 'json',
             beforeSend: function() {
@@ -58,7 +58,6 @@ $('.qty-input').on('input', function() {
                 qtyInput.attr('readonly', true);
             },
             success: function(jsondata) {
-                $('.qty-input-hidden').val(quantity)
                 qtyInput.css({'opacity' : 1});
                 qtyInput.prop('readonly', false);
 

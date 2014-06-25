@@ -1,4 +1,4 @@
-<form class="form" id="payment-form">
+<form class="form" id="payment-form" method="POST">
     <div class="secure-notice">
       <i class="icon-lock-sm"></i>
       Your information is safe and it will not be stored in our system.  
@@ -70,7 +70,7 @@
                 </p>
               
                 <div class="paypal">
-                    <a href="<?php echo $this->url->link('payment/ppExpress/express');?>"> or Pay with PayPal <i class="icon-paypal"></i> </a> 
+                    <a href="javascript:void(0);" class="pay-via-paypal"> or Pay with PayPal <i class="icon-paypal"></i> </a> 
                 </div>
 
                 <div class="shipping-summary">

@@ -3,11 +3,11 @@ class ControllerCommonHeader extends Controller {
     protected function index() {
         // $this->data['title'] = $this->document->getTitle();
 
-        // if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
-        //     $server = $this->config->get('config_ssl');
-        // } else {
-        //     $server = $this->config->get('config_url');
-        // }
+        if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+            $server = $this->config->get('config_ssl');
+        } else {
+            $server = $this->config->get('config_url');
+        }
 
         // if (isset($this->session->data['error']) && !empty($this->session->data['error'])) {
         //     $this->data['error'] = $this->session->data['error'];
@@ -119,6 +119,14 @@ class ControllerCommonHeader extends Controller {
         //         );
         //     }
         // }
+
+        // if ($this->config->get('config_logo') && file_exists(DIR_IMAGE . $this->config->get('config_logo'))) {
+        //     $this->data['logo'] = $server  . 'image/' . $this->config->get('config_logo');
+        // } else {
+        //     $this->data['logo'] = 'catalog/view/theme/chromedia/image/ICON-LOGO.png';
+        // }
+
+        $this->data['logo'] = 'catalog/view/theme/chromedia/image/ICON-LOGO.png';
 
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/header.tpl')) {
             $this->template = $this->config->get('config_template') . '/template/common/header.tpl';

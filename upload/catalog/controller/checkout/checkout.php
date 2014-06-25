@@ -6,6 +6,8 @@ require_once(DIR_SYSTEM . 'services/CartService.php');
 require_once(DIR_SYSTEM . 'services/ProductService.php');
 require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
 
+// TODO: Refactor classes
+
 class ControllerCheckoutCheckout extends Controller { 
 
     /**
@@ -13,7 +15,6 @@ class ControllerCheckoutCheckout extends Controller {
      */
     public function processOrder()
     {
-        // Process Order
         try {
             $cartService = CartService::getInstance();
             $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
@@ -32,7 +33,7 @@ class ControllerCheckoutCheckout extends Controller {
             ));
 
             if ($charge['paid'] === true) {
-                $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
+                // $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
                 $this->session->data['guest']['payment']['code'] = $charge['id'];
 
                 $shippoService = ShippoService::getInstance();
@@ -52,6 +53,122 @@ class ControllerCheckoutCheckout extends Controller {
 
         echo json_encode($response);
         exit;   
+    }
+
+    /**
+     * Pay via paypal
+     */
+    public function payViaPaypal()
+    {
+        if ((!$this->cart->hasProducts())) {
+            $this->redirect($this->url->link('checkout/cart'));
+        }
+
+        unset($this->session->data['shipping_method']);
+        unset($this->session->data['shipping_methods']);
+        unset($this->session->data['payment_method']);
+        unset($this->session->data['payment_methods']);
+
+        $this->session->data['shipping']['service_name'] = $this->request->post['service_name'];
+
+        $cartService = CartService::getInstance();
+        $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->session->data['shipping']['service_name']);
+        $this->session->data['shipping']['amount'] = $shippingAmount;
+
+        $this->load->model('payment/pp_express');
+        $this->load->model('tool/image');
+
+        $max_amount = $this->currency->convert($this->cart->getTotal(), $this->config->get('config_currency'), 'USD');
+        $max_amount = min($max_amount * 1.5, 10000);
+        $max_amount = $this->currency->format($max_amount, $this->currency->getCode(), '', false);
+
+        $data = array(
+            'METHOD' => 'SetExpressCheckout',
+            'MAXAMT' => $max_amount,
+            'RETURNURL' => $this->url->link('checkout/checkout/paymentDone', '', 'SSL'),
+            'CANCELURL' => $this->url->link('checkout/cart'),
+            'REQCONFIRMSHIPPING' => 0,
+            'NOSHIPPING' => 1,//$shipping,
+            'ALLOWNOTE' => $this->config->get('pp_express_allow_note'),
+            'LOCALECODE' => 'EN',
+            'LANDINGPAGE' => 'Login',
+            'HDRIMG' => $this->model_tool_image->resize('image/'.$this->config->get('config_logo'), 790, 90),
+            'HDRBORDERCOLOR' => $this->config->get('pp_express_border_colour'),
+            'HDRBACKCOLOR' => $this->config->get('pp_express_header_colour'),
+            'PAYFLOWCOLOR' => $this->config->get('pp_express_page_colour'),
+            'CHANNELTYPE' => 'Merchant',
+
+        );
+
+        //$products = $this->cart->getProducts();
+        //$count = count($products);
+
+        // $data['L_PAYMENTREQUEST_0_DESC' . $count] = 'Shipping Cost';
+        // $data['L_PAYMENTREQUEST_0_NAME' . $count] = $this->session->data['shipping']['service_name'];
+        // $data['L_PAYMENTREQUEST_0_AMT' . $count]  = $this->session->data['shipping']['amount'] ;
+        // $data['L_PAYMENTREQUEST_0_QTY' . $count]  = $this->cart->countProducts();
+
+        $data = array_merge($data, $this->model_payment_pp_express->paymentRequestInfo());
+        $result = $this->model_payment_pp_express->call($data);
+
+        /**
+         * If a failed PayPal setup happens, handle it.
+         */
+        if(!isset($result['TOKEN'])) {
+            $this->session->data['error'] = $result['L_LONGMESSAGE0'];
+            /**
+             * Unable to add error message to user as the session errors/success are not
+             * used on the cart or checkout pages - need to be added?
+             * If PayPal debug log is off then still log error to normal error log.
+             */
+            if($this->config->get('pp_express_debug')) {
+                $this->log->write(serialize($result));
+            }
+
+            echo json_encode(array('success' => false, 'error' => serialize($result)));
+            // $this->redirect($this->url->link('checkout/checkout', '', 'SSL'));
+        } else {
+            $this->session->data['paypal']['token'] = $result['TOKEN'];
+
+            if (PAYPAL_ENVIRONMENT == 'sandbox') {
+                echo json_encode(array('success' => true, 'url' => 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $result['TOKEN']));
+            } else {
+                echo json_encode(array('success' => true, 'url' => 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $result['TOKEN']));
+            }
+        }
+
+        exit;
+    }
+
+    /**
+     * Payment done
+     */
+    public function paymentDone()
+    {
+        $this->load->model('payment/pp_express');
+        $data = array(
+            'METHOD' => 'GetExpressCheckoutDetails',
+            'TOKEN' => $this->session->data['paypal']['token'],
+        );
+
+        $result = $this->model_payment_pp_express->call($data);
+        $this->session->data['paypal']['payerid']   = $result['PAYERID'];
+        $this->session->data['paypal']['result']    = $result;
+
+        $this->session->data['comment'] = '';
+
+        if(isset($result['PAYMENTREQUEST_0_NOTETEXT'])) {
+            $this->session->data['comment'] = $result['PAYMENTREQUEST_0_NOTETEXT'];
+        }
+
+        $shippoService = ShippoService::getInstance();
+        $shippoService->requestShipping($this->session->data['shipping']['service_name']);
+
+        $orderId = $this->__addOrder();
+        $this->session->data['order_id'] = $orderId;
+        $this->session->data['shipping_cost'] = $this->session->data['shipping']['amount'] ;
+
+        $this->redirect($this->url->link('checkout/checkout/onSuccess', '', 'SSL'));
     }
 
     /**
@@ -139,7 +256,7 @@ class ControllerCheckoutCheckout extends Controller {
         $data['products'] = $product_data;
         $data['vouchers'] = array();
         $data['totals'] = array();
-        $data['comment'] = '';
+        $data['comment'] = isset($this->session->data['comment']) ? $this->session->data['comment'] : '';
         $data['totals'] = array();
         $data['total'] = 0;
        

@@ -157,18 +157,17 @@ class ModelPaymentPPExpress extends Model {
 
 	public function paymentRequestInfo() {
 
-		$data['PAYMENTREQUEST_0_SHIPPINGAMT'] = '';
+		$data['PAYMENTREQUEST_0_SHIPPINGAMT'] = '';//$_SESSION['shipping']['amount'];//'';
 		$data['PAYMENTREQUEST_0_CURRENCYCODE'] = $this->currency->getCode();
 		$data['PAYMENTREQUEST_0_PAYMENTACTION'] = $this->config->get('pp_express_method');
 
 		$i = 0;
 		$item_total = 0;
-
 		$products = $this->cart->getProducts();
 
 		foreach ($products as $item) {
 			$data['L_PAYMENTREQUEST_0_DESC' . $i] = '';
-			$data['L_PAYMENTREQUEST_0_DESC' . $i] = substr($data['L_PAYMENTREQUEST_0_DESC' . $i], 0, 126);
+			// $data['L_PAYMENTREQUEST_0_DESC' . $i] = substr($data['L_PAYMENTREQUEST_0_DESC' . $i], 0, 126);
 
 			$item_price = $this->tax->calculate($item['price'], $item['tax_class_id'], $this->config->get('config_tax'));
 
@@ -198,58 +197,17 @@ class ModelPaymentPPExpress extends Model {
 			$i++;
 		}
 
-		// Totals
-		$this->load->model('setting/extension');
-
-		$total_data = array();
-		$total = 0;
-		$taxes = $this->cart->getTaxes();
-
-		// Display prices
-		// if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-		// 	$sort_order = array();
-
-		// 	$results = $this->model_setting_extension->getExtensions('total');
-
-		// 	foreach ($results as $key => $value) {
-		// 		$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-		// 	}
-
-		// 	array_multisort($sort_order, SORT_ASC, $results);
-
-		// 	foreach ($results as $result) {
-		// 		if ($this->config->get($result['code'] . '_status')) {
-		// 			$this->load->model('total/' . $result['code']);
-
-		// 			$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-		// 		}
-
-		// 		$sort_order = array();
-
-		// 		foreach ($total_data as $key => $value) {
-		// 			$sort_order[$key] = $value['sort_order'];
-		// 		}
-
-		// 		array_multisort($sort_order, SORT_ASC, $total_data);
-		// 	}
-		// }
-
-		// foreach ($total_data as $total_row) {
-		// 	if (!in_array($total_row['code'], array('total', 'sub_total'))) {
-		// 		if ($total_row['value'] != 0) {
-		// 			$item_price = $this->currency->format($total_row['value'], false, false, false);
-		// 			$data['L_PAYMENTREQUEST_0_NUMBER' . $i] = $total_row['code'];
-		// 			$data['L_PAYMENTREQUEST_0_NAME' . $i] = $total_row['title'];
-		// 			$data['L_PAYMENTREQUEST_0_AMT' . $i] = $this->currency->format($total_row['value'], false, false, false);
-		// 			$data['L_PAYMENTREQUEST_0_QTY' . $i] = 1;
-		// 			$item_total = number_format($item_total + $item_price, 2);
-		// 			$i++;
-		// 		}
-		// 	}
-		// }
+		$data['L_PAYMENTREQUEST_0_DESC' . $i] = 'Shipping Cost';
+        $data['L_PAYMENTREQUEST_0_NAME' . $i] = $_SESSION['shipping']['service_name'];
+        $data['L_PAYMENTREQUEST_0_AMT' . $i]  = number_format($_SESSION['shipping']['amount'], 2, '.', '');
+        $data['L_PAYMENTREQUEST_0_QTY' . $i]  = 1;
+        
+        $item_total += $_SESSION['shipping']['amount'];
 
 		$data['PAYMENTREQUEST_0_ITEMAMT'] = number_format($item_total, 2, '.', '');
 		$data['PAYMENTREQUEST_0_AMT'] = number_format($item_total, 2, '.', '');
+
+		// var_dump($data);exit;
 
 		return $data;
 	}

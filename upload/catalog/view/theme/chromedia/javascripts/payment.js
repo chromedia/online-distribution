@@ -25,6 +25,7 @@ var stripeResponseHandler = function(status, response) {
     if (response.error) {
         form.css({'opacity' : 1});
         $('.btn-checkout').show();
+        $('.pay-via-paypal').show();
 
         showCreditCardError(response);
     } else {
@@ -47,6 +48,7 @@ var stripeResponseHandler = function(status, response) {
                 success: function(jsondata){
                     form.css({'opacity' : 1});
                     $('.btn-checkout').show();
+                    $('.pay-via-paypal').show();
 
                     if (jsondata.success) {
                         var token = jsondata.token;
@@ -64,6 +66,8 @@ var stripeResponseHandler = function(status, response) {
 $('.btn-checkout').on('click', function(e) {
     e.preventDefault();
     $(this).hide();
+    $('.pay-via-paypal').hide();
+
 
     var form = $('#payment-form');
     form.css({'opacity' : 0.5 });
@@ -76,5 +80,43 @@ $('.btn-checkout').on('click', function(e) {
     } else {
         form.css({'opacity' : 1});
         $(this).show();
+        $('.pay-via-paypal').show();
     }
+});
+
+// PAYPAL //
+$('.pay-via-paypal').off('click').on('click', function() {
+    var data = {
+        service_name : $('.shipping-option:checked').val()
+    }
+
+    $('.btn-checkout').hide();
+
+    var form = $('#payment-form');
+    form.css({'opacity' : 0.5 });
+    $('.pay-via-paypal').hide();
+
+    $.ajax({
+        type: "POST",
+        url: 'index.php?route=checkout/checkout/payViaPaypal',
+        data: data,
+        dataType: 'json',     
+        success: function(jsondata){
+            form.css({'opacity' : 1});
+            $('.btn-checkout').show();
+            $('.pay-via-paypal').show();
+
+            if (jsondata.success) {
+                var token = jsondata.token;
+
+                window.location = jsondata.url;
+            } else {
+                alert('An error occured while connecting to paypal.');
+            }
+        },
+        error: function() {
+            $('.btn-checkout').show();
+            $('.pay-via-paypal').show();
+        }
+    });
 });

@@ -82,8 +82,8 @@
 
 <script type="text/javascript">
     $('.add-to-cart-btn').addToCart({
-        'product_id' : $('input[name="product_id"]').val(),
-        'quantity'   : $('input[name="quantity"]').val(),
+        'product_id'     : $('input[name="product_id"]').val(),
+        'quantity_input' : $('input[name="quantity"]'),
         'on_success' : function(json) {
             $('#notification, .green').hide();
             if (json.error) {
