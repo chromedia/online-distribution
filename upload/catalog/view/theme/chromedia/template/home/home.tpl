@@ -91,7 +91,12 @@
 </section>
 <!-- END NEWS SECTION -->
 
-
+<script type="text/javascript">
+  $('.product-video-trigger').off('click').on('click', function() {
+    $('#videoModal').find('.flex-video').html($(this).attr('embed-video'));
+    $('#videoModal').foundation('reveal', 'open');
+  });
+</script>
 
 <?php echo $footer;?>
 
