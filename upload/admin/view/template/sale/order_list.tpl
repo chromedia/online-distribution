@@ -17,7 +17,10 @@
 
     <div class="content">
       <form action="" method="post" enctype="multipart/form-data" id="form">
+
         <table class="list">
+
+    		<!-- Title Row -->
           <thead>
             <tr>
               <td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
@@ -32,10 +35,10 @@
                 <a href="<?php echo $sort_customer; ?>"><?php echo $column_customer; ?></a>
                 <?php } ?></td>
 
-              <!-- Order Contents -->  
+              <!-- Order Contents Title -->  
               <td class="left">
                 <a href="<?php echo $sort_customer; ?>" class="<?php echo strtolower($order); ?>"><?php echo 'Contents'; ?></a>
-              </td>    
+              </td>     
 
               <td class="left"><?php if ($sort == 'status') { ?>
                 <a href="<?php echo $sort_status; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_status; ?></a>
@@ -60,6 +63,7 @@
               <td class="right"><?php echo $column_action; ?></td>
             </tr>
           </thead>
+
           <tbody>
             <tr class="filter">
               <td></td>
@@ -103,34 +107,49 @@
               <td class="left"><?php echo $order['customer']; ?></td>
 
               <!-- Display Order Contents -->
-              <td class="left">
+              <td class="left contents">
 
-                <?php 
-                foreach($order['packages'] as $package) {
+              	<div class="contents1">
+	              	<?php 
+	              	// Count Packages
+	              	$count = count($order['packages']);
+	              	?>
 
-                	// Display Label URL
-                	$label_url = $package['label_url'];
+	              	<!-- Display Number of Packages -->
+	              	<div><?php echo $count . ' Packages'; ?></div>
+              	</div>	
 
-                	?><div><a href="<?php echo $label_url; ?>">Shipping Label</a></div><?php
-
-                	// Display Contents
-                	$contents = $package['contents'];
-
-                	foreach($contents as $item) {
-                		
-                		$id = $item['product_id'];
-                		$name = $item['product_name'];
-                		$quantity = $item['quantity'];
-
-                		?><div><?php echo $id . '---' . $name . '---' . $quantity; ?></div><?php
-                	}
-
-            	} 
-                ?>
-
+              	<!-- Contents Details -->
+              	<div class='contents2'>
+	                <?php 
+	                // For each package
+	                foreach($order['packages'] as $package) {
+	                	// Get Label URL
+	                	$label_url = $package['label_url'];
+	                	// Get Contents
+	                	$contents = $package['contents'];
+	            	?>
+	            		<!-- Display Label URL for the package -->
+	                	<div><a href="<?php echo $label_url; ?>">Shipping Label</a></div>
+	            	<?php
+	                	// For each item
+	                	foreach($contents as $item) {          
+	                		// Get item data
+	                		$id = $item['product_id'];
+	                		$name = $item['product_name'];
+	                		$quantity = $item['quantity'];
+	        		?>
+		            		<!-- Display Item Data -->
+		            		<div><?php echo $id . '---' . $name . '---' . $quantity; ?></div>
+	        		<?php
+	                	}
+	            	} 
+	            	?>
+            	</div>
               </td>
 
               <td class="left"><?php echo $order['status']; ?></td>
+
               <td class="right"><?php echo $order['total']; ?></td>
               <td class="left"><?php echo $order['date_added']; ?></td>
               <td class="left"><?php echo $order['date_modified']; ?></td>
@@ -154,6 +173,17 @@
     </div>
   </div>
 </div>
+
+<!-- Show Order Contents -->
+<script type="text/javascript">
+$(".contents1").on("click", function(){
+	var target = $( event.target );
+	target.parent().children(".contents2").toggle();
+});
+$(".contents2").hide();
+</script>
+
+<!-- Filter -->
 <script type="text/javascript"><!--
 function filter() {
 	url = 'index.php?route=sale/order&token=<?php echo $token; ?>';

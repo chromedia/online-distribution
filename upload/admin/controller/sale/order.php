@@ -2,6 +2,31 @@
 class ControllerSaleOrder extends Controller {
 	private $error = array();
 
+/*
+	function list:
+	index
+	insert
+	update
+	delete
+	getList
+	getForm
+	validateForm
+	validateDelete
+	country
+	info
+	CreateInvoiceNo
+	addCredit
+	removeCredit
+	addReward
+	removeReward
+	addCommission
+	removeCommission
+	history
+	download
+	upload
+	invoice
+*/
+
 	public function index() {
 		$this->language->load('sale/order');
 
@@ -184,7 +209,7 @@ class ControllerSaleOrder extends Controller {
 
 	protected function getList() {
 
-		// Order Filters
+		// Filter Orders
 		if (isset($this->request->get['filter_order_id'])) {
 			$filter_order_id = $this->request->get['filter_order_id'];
 		} else {
@@ -221,7 +246,7 @@ class ControllerSaleOrder extends Controller {
 			$filter_date_modified = null;
 		}
 
-		// Sort Order
+		// Sort Orders
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
@@ -240,6 +265,7 @@ class ControllerSaleOrder extends Controller {
 			$page = 1;
 		}
 
+		// Create URL with filters and sort order
 		$url = '';
 
 		if (isset($this->request->get['filter_order_id'])) {
