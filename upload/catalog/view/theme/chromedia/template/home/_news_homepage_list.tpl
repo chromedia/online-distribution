@@ -1,4 +1,4 @@
-<span id="latest-news" style="margin:110px;"></span>
+<span id="latest-news" style="margin:50px;"></span>
 <div>
     <?php if(0): ?>
         <section class="row">

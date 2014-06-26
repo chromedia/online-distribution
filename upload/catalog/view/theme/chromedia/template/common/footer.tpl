@@ -54,8 +54,10 @@
                 var target = $($(this).attr('scroll-target'));
 
                 if (target.length > 0) {
-                    // $('body').stop().scrollTo(target, 1000);
-                    $('body').stop().scrollTo(target.position.top - 300, 1000);
+                    $('body').stop().scrollTo(target, 1000);
+                    // console.log(target);
+                    // console.log(target.offset);
+                    // $('body').stop().scrollTo((target.position.top - 300) +'px', 1000);
                 } else {
                     window.location = $(this).attr('href');
                 }
