@@ -128,6 +128,12 @@ class ControllerCommonHeader extends Controller {
 
         $this->data['logo'] = 'catalog/view/theme/chromedia/image/ICON-LOGO.png';
 
+        $this->data['sticky_header'] = true;
+
+        if ("information/learnmore" == $this->request->get['route']) {
+            $this->data['sticky_header'] = false;
+        }
+
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/header.tpl')) {
             $this->template = $this->config->get('config_template') . '/template/common/header.tpl';
         } else {
