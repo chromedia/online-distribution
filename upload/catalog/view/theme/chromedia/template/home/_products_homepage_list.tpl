@@ -1,6 +1,8 @@
 <?php if(!empty($products)): ?>
+   <!-- id="shop"  -->
+  <span id="shop" style="margin:110px;"></span>
   <section class="row mtb20">
-    <h1 style="margin: 1em auto 1em auto;" name="latest_news">Featured Products</h1>
+    <h1 style="margin: 1em auto 1em auto;" name="latest_news">Products</h1>
 
     <?php foreach ($products as $product): ?>
       <div class="large-4 columns">
@@ -24,8 +26,8 @@
                 </a>
               <?php endif;?>
             <?php endif; ?>
-            
           </div>
+
           <div class="card-body">
             <?php echo strip_tags($product['description']); ?>
           </div>

@@ -129,8 +129,9 @@ class ControllerCommonHeader extends Controller {
         $this->data['logo'] = 'catalog/view/theme/chromedia/image/ICON-LOGO.png';
 
         $this->data['sticky_header'] = true;
+        $currentRoute = isset($this->request->get['route']) ? $this->request->get['route'] : '';
 
-        if ("information/learnmore" == $this->request->get['route']) {
+        if ("information/learnmore" == $currentRoute) {
             $this->data['sticky_header'] = false;
         }
 

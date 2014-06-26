@@ -10,19 +10,20 @@
 
     <!-- Right Nav Section -->
     <ul class="right">
-      <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL'); ?>">Learn More</a></li>
-      <li>
-          <a class="news-link-scroll scroll" data-speed="500" data-easing="linear" href="#latest-news" style="display:none;">Latest News</a>
-          <a class="news-link" href="<?php echo $this->url->link('information/news', '', 'SSL'); ?>">Latest News</a>
-      </li>
-      <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL').'#contact-us'; ?>">Contact Us</a></li>
+        <!-- data-speed="500" data-easing="linear" href="#latest-news" -->
 
-      <li><a href="javascript:void(0);">Shop</a></li>
+        <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL'); ?>">Learn More</a></li>
 
-      <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">
+        <li><a class="scrollTo" scroll-target="#latest-news" href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#latest-news">Latest News</a></li>
+
+        <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL').'#contact-us'; ?>">Contact Us</a></li>
+
+        <li><a class="scrollTo"  scroll-target="#shop"  href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">Shop</a></li>
+
+        <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">
             <span class="items-in-cart" <?php if($totalItems == 0): ?> style="display:none;"<?php endif;?>><?php echo $totalItems; ?></span>
             Cart
-      </a></li>
+       </a></li>
     </ul>
   </section>
 </nav>

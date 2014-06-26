@@ -2,25 +2,24 @@
 
 <!-- BEG LANDING SECTION -->
 <div class="home-hero text-center">
-  <div class="small-12 columns">
-    <div class="row">
-      <div class="small-12 large-8 small-centered columns" >
-      <img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" alt="Open Tech Forever Logo" width="150px" style="margin: 2em auto 0 auto;" class="show-for-medium-up">
-      <img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" alt="Open Tech Forever Logo" width="80px" style="margin: 2em auto 0em auto;" class="show-for-small-only">
-        <h1>Open Tech Collaborative</h1>
-        <h3 class="show-for-medium-up subheader">Manufacture Locally, Collaborate Globally</h3>
-        <ul class="button-inline">
-      <li>
-        <a href="about.html" class="button-box" alt="learn more">LEARN MORE</a>
-      </li>
-      <!-- <li>
-        <a href="" class="button-box show-for-medium-up" data-tooltip class="has-tip tip-top" title="Coming January 31st - Stay Tuned!">COLLABORATE</a>
-      </li> -->
-    </ul>
+    <div class="small-12 columns">
+        <div class="row">
+            <div class="small-12 large-8 small-centered columns" >
+                 <img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" alt="Open Tech Forever Logo" width="150px" style="margin: 2em auto 0 auto;" class="show-for-medium-up">
+                <img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" alt="Open Tech Forever Logo" width="80px" style="margin: 2em auto 0em auto;" class="show-for-small-only">
+                <h1>Open Tech Collaborative</h1>
+                <h3 class="show-for-medium-up subheader">Manufacture Locally, Collaborate Globally</h3>
+                <ul class="button-inline">
+                    <li>
+                        <a href="about.html" class="button-box" alt="learn more">LEARN MORE</a>
+                    </li>
+                <!-- <li>
+                  <a href="" class="button-box show-for-medium-up" data-tooltip class="has-tip tip-top" title="Coming January 31st - Stay Tuned!">COLLABORATE</a>
+                </li> -->
+                </ul>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- END LANDING SECTION -->
 
@@ -109,15 +108,15 @@
       <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://opentechforever.com/news/osbh01.html&p[images][0]=http://opentechforever.com/img/OSBHBlogv2.0.jpg&p[title]=Open%20Source%20Beehives%20Project%20Update&p[summary]=" TARGET="_blank"><i class="fi-social-facebook"></i></a></li>
     </ul>
   </div>
-  <div class="small-12 medium-6 columns blog-box-right">
-    <a href="news/fhdc01.html"><img src="catalog/view/theme/chromedia/image/ForeverHome01.jpg" alt="slide image"></a>
-    <h3><a href="news/fhdc01.html">Forever Home Design Challenge</a></h3>
-    <p><a href="http://denver.architectureforhumanity.org/">Architecture for Humanity Denver (AfH)</a> and Open Tech Forever (OTF) are demonstrating that it is possible to build an open source, compressed earth block (CEB) house that meets the <a href="http://living-future.org/lbc">Living Building Challenge 2.1</a> standard... <a href="news/fhdc01.html">(read more)</a></p>
-    <ul class="inline-list blog-box-social">
-      <li><a href="http://twitter.com/home?status=Forever%20Home%20Design%20Challenge%20Update%20http://goo.gl/okyT1T" TARGET="_blank"><i class="fi-social-twitter"></i></a></li>
-      <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://opentechforever.com/news/fhdc01.html&p[images][0]=http://opentechforever.com/img/ForeverHome01.jpg&p[title]=Forever%20Home%20Design%20Challenge%20Update&p[summary]=" TARGET="_blank"><i class="fi-social-facebook"></i></a></li>
-    </ul>
-  </div>
+    <div class="small-12 medium-6 columns blog-box-right">
+        <a href="news/fhdc01.html"><img src="catalog/view/theme/chromedia/image/ForeverHome01.jpg" alt="slide image"></a>
+        <h3><a href="news/fhdc01.html">Forever Home Design Challenge</a></h3>
+        <p><a href="http://denver.architectureforhumanity.org/">Architecture for Humanity Denver (AfH)</a> and Open Tech Forever (OTF) are demonstrating that it is possible to build an open source, compressed earth block (CEB) house that meets the <a href="http://living-future.org/lbc">Living Building Challenge 2.1</a> standard... <a href="news/fhdc01.html">(read more)</a></p>
+        <ul class="inline-list blog-box-social">
+            <li><a href="http://twitter.com/home?status=Forever%20Home%20Design%20Challenge%20Update%20http://goo.gl/okyT1T" TARGET="_blank"><i class="fi-social-twitter"></i></a></li>
+            <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://opentechforever.com/news/fhdc01.html&p[images][0]=http://opentechforever.com/img/ForeverHome01.jpg&p[title]=Forever%20Home%20Design%20Challenge%20Update&p[summary]=" TARGET="_blank"><i class="fi-social-facebook"></i></a></li>
+        </ul>
+    </div>
 </section>
 
 <section class="row latest-news">

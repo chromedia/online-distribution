@@ -1,5 +1,26 @@
 /*@import "foundation/components/tabs";*/
 
+.news-section h1{
+  font-weight: 300;
+  margin-top: 50px;
+}
+.news-section .news-item {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.news-section .news-item:nth-last-child(2), .news-section .news-item:nth-last-child(1) {
+  margin-bottom: 130px;
+}
+.view-all-news{
+  float: right;
+  margin: 3.6em auto 3em;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: .7em 1.5em;
+  opacity: 0.8;
+  border: 1px solid #008cba;
+}
 .group:after {
   content: "";
   display: table;
@@ -397,6 +418,7 @@ label.use-cc-info{
   display: inline-block;
   border-radius: 50%;
 }
+
 @media only screen and (min-width: 40.063em) and (max-width: 64em) { 
   .product-sidebar{
     top: 0;

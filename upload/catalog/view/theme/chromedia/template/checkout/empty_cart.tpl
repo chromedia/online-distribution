@@ -1,9 +1,5 @@
 <?php echo $header; ?>
 
-
-<!-- CONTENT STARTS HERE -->
-<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
-
 <div class="mtb40"> 
     <div class="row">
         <div class="large-6 columns step-content">
