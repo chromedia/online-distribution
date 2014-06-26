@@ -1,5 +1,7 @@
 <?php
 
+require_once(DIR_SYSTEM . 'utilities/VideoUtilTypeFactory.php');
+
 class ControllerProductProduct extends Controller {
 	private $error = array();
 
@@ -41,14 +43,6 @@ class ControllerProductProduct extends Controller {
 				'separator' => $this->language->get('text_separator')
 			);
 
-			// $this->document->setTitle($product_info['name']);
-			// $this->document->setDescription($product_info['meta_description']);
-			// $this->document->setKeywords($product_info['meta_keyword']);
-			// $this->document->addLink($this->url->link('product/product', 'product_id=' . $this->request->get['product_id']), 'canonical');
-			// $this->document->addScript('catalog/view/javascript/jquery/tabs.js');
-			// $this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
-			// $this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
-
 			$this->data['heading_title'] = $product_info['name'];
 
 			if ($product_info['quantity'] <= 0) {
@@ -60,7 +54,6 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$this->load->model('tool/image');
-			// echo $product_info['image'];exit;
 
 			if ($product_info['image']) {
 				$this->data['header_img'] = $this->model_tool_image->resize($product_info['image'], 700, 200);
@@ -107,6 +100,15 @@ class ControllerProductProduct extends Controller {
 			$this->data['documentation'] = html_entity_decode($product_info['documentation'], ENT_QUOTES, 'UTF-8');
 			$this->data['text_payment_profile'] = $this->language->get('text_payment_profile');
 			$this->data['profiles'] = $this->model_catalog_product->getProfiles($product_info['product_id']);
+
+			$this->data['video_tag'] = '';
+
+            if (isset($product_info['video']['videoKey']) && $product_info['video']['videoKey']) {
+                $factory = VideoUtilTypeFactory::getInstance($product_info['video']['url']);
+                $videoUtil = $factory->getVideoUtility();
+
+                $this->data['video_tag'] = $videoUtil->getVideoEmbedTag($product_info['video']['videoKey']);
+            }
 
 			$this->model_catalog_product->updateViewed($this->request->get['product_id']);
 

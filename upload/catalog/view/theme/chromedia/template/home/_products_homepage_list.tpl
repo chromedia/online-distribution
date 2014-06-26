@@ -9,15 +9,21 @@
             <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>"><?php echo $product['name']; ?></a>  
           </div>
           <div class="card-thumb">
-            <?php if(isset($product['videoEmbedTag']) && $product['videoEmbedTag']): ?>
-              <a class="product-video-trigger" embed-video='<?php echo $product['videoEmbedTag'];?>'>
-                <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
-              </a>
-            <?php else:?>
-              <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
-                <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
-              </a>
-            <?php endif;?>
+            <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
+              <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>">
+            </a>
+            
+            <?php if(0): ?>
+              <?php if(isset($product['videoEmbedTag']) && $product['videoEmbedTag']): ?>
+                <a class="product-video-trigger" embed-video='<?php echo $product['videoEmbedTag'];?>'>
+                  <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>">
+                </a>
+              <?php else: ?>
+                <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
+                  <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>">
+                </a>
+              <?php endif;?>
+            <?php endif; ?>
             
           </div>
           <div class="card-body">

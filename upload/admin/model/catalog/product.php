@@ -67,6 +67,11 @@ class ModelCatalogProduct extends Model {
 		// Send Query to Database
 		$this->db->query($sql);
 
+		// Link
+		if (isset($data['product_store'])) {
+			var_dump($data['product_store']);exit;
+		}
+
 		// Image
 		if (isset($data['image'])) {
 			$this->db->query("UPDATE " . DB_PREFIX . "product SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "' WHERE product_id = '" . (int)$product_id . "'");
@@ -167,14 +172,21 @@ class ModelCatalogProduct extends Model {
 			}
 		}
 
+		// Product store
+		if (isset($data['product_store'])) {
+			foreach ($data['product_store'] as $store_id) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_store SET product_id = '" . (int)$product_id . "', store_id = '" . (int)$store_id . "'");
+			}
+		}
+
 		// Video
 		if (isset($data['video_link']) && !empty($data['video_link'])) {
 			$sql = "
 				INSERT INTO ".DB_PREFIX."product_video
-				SET product_id = ".(int)$product_id."
-				thumbnail_link = '".$this->db->escape($data['thumbnail_link'])."'
-				url_link = '".$this->db->escape($data['video_link'])."'
-				video_id = '".$this->db->escape($data['video_id'])."'
+				SET product_id = ".(int)$product_id.",
+				thumbnail_link = '".$this->db->escape($data['thumbnail_link'])."',
+				url_link = '".$this->db->escape($data['video_link'])."',
+				video_key = '".$this->db->escape($data['video_id'])."'
 			";
 
 			$this->db->query($sql);
@@ -234,6 +246,15 @@ class ModelCatalogProduct extends Model {
 		// Image
 		if (isset($data['image'])) {
 			$this->db->query("UPDATE " . DB_PREFIX . "product SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "' WHERE product_id = '" . (int)$product_id . "'");
+		}
+
+		// product Store
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_store WHERE product_id = '" . (int)$product_id . "'");
+
+		if (isset($data['product_store'])) {
+			foreach ($data['product_store'] as $store_id) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_store SET product_id = '" . (int)$product_id . "', store_id = '" . (int)$store_id . "'");
+			}
 		}
 
 		// Description

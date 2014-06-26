@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 require_once(DIR_SYSTEM . 'utilities/StringUtil.php');
 require_once(DIR_SYSTEM . 'utilities/VideoUtilTypeFactory.php');
@@ -59,22 +59,25 @@ class ProductService
             $stringUtil = StringUtil::getInstance();
 
             $videoEmbedTag = '';
+            $videoThumbnail = '';
 
             if (isset($product['video']['videoKey']) && $product['video']['videoKey']) {
                 $factory = VideoUtilTypeFactory::getInstance($product['video']['url']);
                 $videoUtil = $factory->getVideoUtility();
 
                 $videoEmbedTag = $videoUtil->getVideoEmbedTag($product['video']['videoKey']);
+                $videoThumbnail = $product['video']['videoThumbnail'];
             }
                 
             $data[] = array(
-                'product_id'    => $product['product_id'],
-                'description'   => $stringUtil->truncateString(strip_tags(html_entity_decode($product['description'])), 100),
-                'videoEmbedTag' => $videoEmbedTag,
-                'thumb'         => $image,
-                'name'          => $product['name'],
-                'price'         => $price,
-                'href'          => $this->url->link('product/product', 'product_id=' . $product['product_id'])
+                'product_id'      => $product['product_id'],
+                'description'     => $stringUtil->truncateString(strip_tags(html_entity_decode($product['description'])), 100),
+                'videoEmbedTag'   => $videoEmbedTag,
+                'videoThumbnail'  => $videoThumbnail,
+                'thumb'           => $image,
+                'name'            => $product['name'],
+                'price'           => $price,
+                'href'            => $this->url->link('product/product', 'product_id=' . $product['product_id'])
             );
         }
 

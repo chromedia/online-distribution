@@ -81,7 +81,7 @@ class ModelInstall extends Model {
 			}
 		}
 
-		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `is_featured` TINYINT NOT NULL DEFAULT '0'; ");
+		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `is_featured` TINYINT NOT NULL DEFAULT '1'; ");
 		// $db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `video_link` VARCHAR(500) NOT NULL DEFAULT ''; ");
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `details` TEXT NOT NULL DEFAULT ''; ");
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `documentation` TEXT NOT NULL DEFAULT ''; ");

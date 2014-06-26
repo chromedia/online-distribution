@@ -651,5 +651,10 @@ class ModelCatalogProduct extends Model {
 			return 0;	
 		}
 	}
+
+	public function getVideo()
+	{
+		
+	}
 }
 ?>

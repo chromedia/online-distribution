@@ -15,13 +15,19 @@
   3. Product.php (model) gets product info from database
   4. 
 -->
-
+<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?> 
 
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
 
-<div class="product-cover" style="background-image: url('<?php echo $header_img;?>')">
+<div 
+    <?php if(!empty($video_tag)): ?>
+        class="product-cover product-video-trigger" embed-video='<?php echo $video_tag;?>'
+    <?php else: ?>
+        class="product-cover"
+    <?php endif;?>  
+    style="background-image: url('<?php echo $header_img;?>')">
+
     <div class="notification green" style="display:none;"></div>
-    <!-- <div class="notification green"></div> -->
 
     <div class="product-title">
         <div class="row">
@@ -29,6 +35,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <ul class="product-tabs">
         <li><a href="javascript:void(0);" data-content="#product-overview" class="active">Product Overview</a></li>
@@ -100,6 +107,12 @@
     });
 
     $('.product-tabs li a').tab();
+
+
+  $('.product-video-trigger').off('click').on('click', function() {
+    $('#videoModal').find('.flex-video').html($(this).attr('embed-video'));
+    $('#videoModal').foundation('reveal', 'open');
+  });
 </script>
 
 <?php echo $footer;?>

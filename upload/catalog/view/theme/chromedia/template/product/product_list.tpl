@@ -1,9 +1,6 @@
 <?php echo $header;?>
 
 
-<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?> 
-
-
 <!-- Breadcrumbs -->
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
  
@@ -18,17 +15,11 @@
           <div class="card-title">
             <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>"><?php echo $product['name']; ?></a>  
           </div>
-          <div class="card-thumb">
-            <?php if(isset($product['videoEmbedTag']) && $product['videoEmbedTag']): ?>
-              <a class="product-video-trigger" embed-video='<?php echo $product['videoEmbedTag'];?>'>
-                <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
-              </a>
-            <?php else:?>
-              <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
-                <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
-              </a>
-            <?php endif;?>
-            
+          
+            <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
+              <img src="<?php echo $product['thumb'] ?>" alt="<?php echo $product['name']; ?>">
+            </a>
+          
           </div>
           <div class="card-body">
             <?php echo strip_tags($product['description']); ?>
@@ -48,13 +39,6 @@
     <em>No available products yet.</em>
 <?php endif;?>
 <!-- ALL PRODUCTS -->
-
-<script type="text/javascript">
-  $('.product-video-trigger').off('click').on('click', function() {
-    $('#videoModal').find('.flex-video').html($(this).attr('embed-video'));
-    $('#videoModal').foundation('reveal', 'open');
-  });
-</script>
 
 <?php echo $footer;?>
 

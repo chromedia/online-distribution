@@ -1297,17 +1297,21 @@ class ControllerCatalogProduct extends Controller {
 		// custom code, single video for now //
 
 		$this->data['tab_video'] = $this->language->get('tab_video');
-		$productVideo = $this->model_catalog_product->getProductVideo($this->request->get['product_id']);
 		$this->data['video_tag'] = '';
 
-		if (!empty($productVideo)) {
-			$video = $productVideo[0];
+		if (isset($this->request->get['product_id'])) {
+			$productVideo = $this->model_catalog_product->getProductVideo($this->request->get['product_id']);
 
-			$factory = VideoUtilTypeFactory::getInstance($video['url_link']);
-			$videoUtil = $factory->getVideoUtility();
+			if (!empty($productVideo)) {
+				$video = $productVideo[0];
 
-			$this->data['video_tag'] = $videoUtil->getVideoEmbedTag($video['video_key'], 700, 350);
+				$factory = VideoUtilTypeFactory::getInstance($video['url_link']);
+				$videoUtil = $factory->getVideoUtility();
+
+				$this->data['video_tag'] = $videoUtil->getVideoEmbedTag($video['video_key'], 700, 350);
+			}
 		}
+		
 
 		$this->template = 'catalog/product_form.tpl';
 		$this->children = array(

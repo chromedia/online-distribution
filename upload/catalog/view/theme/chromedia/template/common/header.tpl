@@ -52,6 +52,8 @@
             <span class="items-in-cart" <?php if($totalItems == 0): ?> style="display:none;"<?php endif;?>><?php echo $totalItems; ?></span>
             Cart
       </a></li>
+
+      <li><a href="javascript:void(0);">Shop</a></li>
     </ul>
   </section>
 </nav>

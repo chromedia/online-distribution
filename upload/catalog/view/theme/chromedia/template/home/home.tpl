@@ -1,6 +1,5 @@
 <?php echo $header;?>
 
-<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?> 
 
 <!-- BEG LANDING SECTION -->
 <div class="home-hero text-center">
@@ -90,13 +89,6 @@
   </div>
 </section>
 <!-- END NEWS SECTION -->
-
-<script type="text/javascript">
-  $('.product-video-trigger').off('click').on('click', function() {
-    $('#videoModal').find('.flex-video').html($(this).attr('embed-video'));
-    $('#videoModal').foundation('reveal', 'open');
-  });
-</script>
 
 <?php echo $footer;?>
 
