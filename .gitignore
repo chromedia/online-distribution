@@ -7,4 +7,5 @@ upload/system/cache/*
 upload/image/*
 upload/system/logs/*
 upload/news/wp-config.php
+upload/news/wp-content/uploads/*
 
