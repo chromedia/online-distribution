@@ -38,7 +38,7 @@
 
 <div class="row">
     <ul class="product-tabs">
-        <li><a href="javascript:void(0);" data-content="#product-overview" class="active">Product Overview</a></li>
+        <li><a href="javascript:void(0);" data-content="#product-overview" class="active">Overview</a></li>
         <li><a href="javascript:void(0);" data-content="#details">Details</a></li>
         <li><a href="javascript:void(0);" data-content="#documentation">Documentation</a></li>
     </ul>  
