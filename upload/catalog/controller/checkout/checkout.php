@@ -100,14 +100,6 @@ class ControllerCheckoutCheckout extends Controller {
 
         );
 
-        //$products = $this->cart->getProducts();
-        //$count = count($products);
-
-        // $data['L_PAYMENTREQUEST_0_DESC' . $count] = 'Shipping Cost';
-        // $data['L_PAYMENTREQUEST_0_NAME' . $count] = $this->session->data['shipping']['service_name'];
-        // $data['L_PAYMENTREQUEST_0_AMT' . $count]  = $this->session->data['shipping']['amount'] ;
-        // $data['L_PAYMENTREQUEST_0_QTY' . $count]  = $this->cart->countProducts();
-
         $data = array_merge($data, $this->model_payment_pp_express->paymentRequestInfo());
         $result = $this->model_payment_pp_express->call($data);
 
@@ -116,11 +108,7 @@ class ControllerCheckoutCheckout extends Controller {
          */
         if(!isset($result['TOKEN'])) {
             $this->session->data['error'] = $result['L_LONGMESSAGE0'];
-            /**
-             * Unable to add error message to user as the session errors/success are not
-             * used on the cart or checkout pages - need to be added?
-             * If PayPal debug log is off then still log error to normal error log.
-             */
+        
             if($this->config->get('pp_express_debug')) {
                 $this->log->write(serialize($result));
             }
@@ -151,6 +139,8 @@ class ControllerCheckoutCheckout extends Controller {
             'TOKEN' => $this->session->data['paypal']['token'],
         );
 
+        // TODO: Check name, etc of paypal owner
+
         $result = $this->model_payment_pp_express->call($data);
         $this->session->data['paypal']['payerid']   = $result['PAYERID'];
         $this->session->data['paypal']['result']    = $result;
@@ -169,7 +159,7 @@ class ControllerCheckoutCheckout extends Controller {
         $this->session->data['shipping_cost'] = $this->session->data['shipping']['amount'] ;
 
         $this->redirect($this->url->link('checkout/checkout/onSuccess', '', 'SSL'));
-    }
+    }   
 
     /**
      * Adds order
@@ -346,9 +336,7 @@ class ControllerCheckoutCheckout extends Controller {
             }
 
             $this->cart->clear();
-            unset($this->session->data['shipping_cost']);
-            unset($this->session->data['order_id']);
-            unset($this->session->data['packages']);
+            $this->__unsetSessionVariablesInCheckout();
 
             $this->children = array(
                 'common/footer',
@@ -366,8 +354,10 @@ class ControllerCheckoutCheckout extends Controller {
      */
     public function checkShippingInfo()
     {
-        /*** Confirming address **/
         try {
+            $cartService = CartService::getInstance();
+            $packages = $cartService->preparePackages($this->cart->getProducts());
+
             $toAddressData = array(
                 'name' => $this->request->post['name'],
                 'street1' => $this->request->post['address'],
@@ -380,6 +370,7 @@ class ControllerCheckoutCheckout extends Controller {
 
             $this->__addAsGuestUser($toAddressData);
 
+            // TODO: Please make it dynamic
             $fromAddressData = array(
                 'name'      => 'Laura Behrens Wu',
                 'street1'   => 'Clayton St.',
@@ -397,35 +388,17 @@ class ControllerCheckoutCheckout extends Controller {
             $toAddress = $shippoService->confirmAddress($toAddressData);
             $fromAddress = $shippoService->confirmAddress($fromAddressData);
 
-            $_SESSION['toAddress'] = $toAddress;
-            $_SESSION['fromAddress'] = $fromAddress;
-            
-            $cartService = CartService::getInstance();
-            $packages = $cartService->preparePackages($this->cart->getProducts());
-
             $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
-
             $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
-            $_SESSION['rates'] = $info;
+
+            $this->__addShippingInformation($toAddressData, $info);
 
             echo json_encode($rates);
-            exit;
-
         } catch(Exception $e) {
             echo json_encode(array('success' => false, 'errorMsg' => $e->getMessage()));
-            exit;
         }
-    }
 
-    /**
-     * Add as guest user
-     */
-    private function __addAsGuestUser($data)
-    {
-		$this->session->data['guest']['firstname'] = $data['name'];
-		$this->session->data['guest']['lastname'] = '';
-		$this->session->data['guest']['email'] = $data['email'];
-        $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
+        exit;
     }
 
     /**
@@ -479,5 +452,61 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         $this->render();
+    }
+
+    /**
+     * Add as guest user
+     */
+    private function __addAsGuestUser($data)
+    {
+        $this->session->data['guest']['firstname'] = $data['name'];
+        $this->session->data['guest']['lastname'] = '';
+        $this->session->data['guest']['email'] = $data['email'];
+        $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
+    }
+
+    /**
+     * Add shipping information
+     */
+    private function __addShippingInformation($data, $rates = array())
+    {
+        // $this->session->data['shipping'] = array(
+        //     'firstname' => $data['name'],
+        //     'lastname'  => '',
+        //     'address1'  => $data['street1'],
+        //     'city'      => $data['city'],
+        //     'country'   => $data['country'],
+        //     'state'     => $data['state']
+        // );
+
+        $this->session->data['rates'] = $rates;
+        // $_SESSION['rates'] = $info;
+        // $_SESSION['toAddress'] = $toAddress;
+    }
+
+    /**
+     * Add payment information
+     */
+    private function __addPaymentInformation()
+    {
+        $this->session->data['shipping'] = array(
+            'firstname' => $data['name'],
+            'lastname'  => '',
+            'address1'  => $data['street1'],
+            'city'      => $data['city'],
+            'country'   => $data['country'],
+            'state'     => $data['state']
+        );
+    }
+
+    /**
+     * Unsets all session involves in checkout
+     */
+    private function __unsetSessionVariablesInCheckout()
+    {
+        unset($this->session->data['shipping_cost']);
+        unset($this->session->data['order_id']);
+        unset($this->session->data['packages']);
+        unset($this->session->data['shipping']);
     }
 }

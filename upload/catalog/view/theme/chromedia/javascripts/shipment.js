@@ -23,7 +23,7 @@ var retrieveShipmentRates = function(form, event) {
                 if (jsondata.success && jsondata.rates) {
                     var rates = jsondata.rates;
 
-                    $('.shipping-selection').children().not('h3').remove();
+                    $('.shipping-selection').children().not('.items-header').remove();
 
                     if (jsondata.rates_count > 0) {
                         $.each(rates, function(index, rate) {
@@ -67,47 +67,59 @@ var retrieveShipmentRates = function(form, event) {
 
 var shipmentFormStatus = function(form, is_active) {
     if (is_active) {
-        form.children().css({'opacity' : '1'});
+        FormManager.enableFormFields(form);
+        form.children().not('input[type="submit"]').css({'opacity' : '1'});
+
         form.removeLoader();
+        form.find('input[type="submit"]').css({'opacity' : '0.9'});
         form.find('input[type="submit"]').show();
+
+        $('.remove').show();
+        $('.qty-in-cart').show();
+        $('.qty-in-cart').next('span').hide();
     } else {
+        FormManager.disableFormFields(form);
         form.children(':not(.loader)').css({'opacity' : '0.3'});
         form.showLoader({'size' : 'small'});
-        form.find('input[type="submit"]').show();
+        form.find('input[type="submit"]').hide();
+
+        $('.remove').hide();
+        $('.qty-in-cart').hide();
+        $('.qty-in-cart').next('span').show();
     }
 }
 
- var setShipmentData = function() {
-        var address = [
-            $('#shipping-street-address').val(),
-            $('#shipping-city').val(),
-            getState(),
-            $('#field-shipping-postcode').val()
-        ]
+var getState = function() {
+    var stateField = $('.state-container').find('select:visible');
 
-        var shipmentOption = $('input[name="shipping-option"]:checked');
-
-        shipmentData = {
-            name : $('#shipping-name').val(),
-            email : $('#shipping-email').val(),
-            address : address.join(', '),
-            shipment: shipmentOption.val()+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')'
-        }
+    if (stateField.length > 0) {
+        return stateField.find(':selected').text();
+    } else {
+        return $('.state-container').find('input:visible').val();
     }
+}
 
-    var getShipmentData = function() {
-        return shipmentData;
+var setShipmentData = function() {
+    var address = [
+        $('#shipping-street-address').val(),
+        $('#shipping-city').val(),
+        getState(),
+        $('#field-shipping-postcode').val()
+    ]
+
+    var shipmentOption = $('input[name="shipping-option"]:checked');
+
+    shipmentData = {
+        name : $('#shipping-name').val(),
+        email : $('#shipping-email').val(),
+        address : address.join(', '),
+        shipment: shipmentOption.val()+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')'
     }
+}
 
-    var getState = function() {
-        var stateField = $('label[for="state"]').children('select:visible');
-
-        if (stateField.length > 0) {
-            return stateField.find(':selected').text();
-        } else {
-            return $('label[for="state"]').children('input:visible');
-        }
-    }
+var getShipmentData = function() {
+    return shipmentData;
+}
 
 $('.shipping-selection').on('click', '.shipping-option', function() {
     var shippingAmount = parseFloat($(this).attr('amount'));
@@ -145,3 +157,6 @@ $('#shipping-country').on('change', function() {
         $('#shipping-province').attr('required', 'required');
     }
 });
+
+// init state field
+$('select[name="state"]').children('option:first-child').attr('selected', 'selected');

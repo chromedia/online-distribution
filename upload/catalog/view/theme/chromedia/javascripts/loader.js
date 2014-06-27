@@ -1,6 +1,6 @@
 (function($){
     var sizes = new Array();
-    sizes['small'] = '20px';
+    sizes['small'] = '30px';
     sizes['medium'] = '50px';
     sizes['large'] = '70px';
     
@@ -12,15 +12,14 @@
         
         var size = settings.size in sizes ? sizes[settings.size] : settings.size;
         var centerStyle = settings.center ? "style='display:block; margin-left:auto; margin-right:auto;'" : ''
-        
-        // "<img "+centerStyle+
-        //          "src='../image/loader_" + size + ".gif' "+ 
-        //          "width='"+size+"' "+
-        //          "height='"+size+"' "+
-        //      "/>"+
+   
 
         return this.append(
-            "<div class='loader' style='height:"+size+"'><em>Processing...</em></div>"
+            "<div class='loader' style='height:"+size+"'><img "+centerStyle+
+                 "src='image/loader_" + size + ".gif' "+ 
+                 "width='"+size+"' "+
+                 "height='"+size+"' "+
+             "/></div>"
         );  
     };
     

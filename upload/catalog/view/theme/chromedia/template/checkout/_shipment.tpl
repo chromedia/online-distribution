@@ -36,23 +36,25 @@
     <div class="large-6 columns">
       <label for="shipping-country">
         Country
-
-        <select name="country" id="shipping-country">
+      </label>
+      <select name="country" id="shipping-country">
           <?php foreach($countries as $country): ?>
             <option value="<?php echo $country['iso_code_2']; ?>" <?php if('US' == $country['iso_code_2']): ?>selected="selected"<?php endif?>><?php echo $country['name']; ?></option>
           <?php endforeach; ?>
         </select>
-
-      </label>
     </div>
   </div>
 
   <div class="row">
-    <div class="large-9 columns">
+    <div class="large-9 columns state-container">
       <label for="state">
         State / Province
+        <input type="text" id="shipping-province" name="state" style="display:none;" disabled/>
+       <!--  <input type="text" name="state" maxlength="2" required="required"/>
+        <input type="text" name="state" maxlength="2" required="required" style=""/> -->
+      </label>
 
-        <select name="state" id="shipping-us-states" required="required">
+      <select name="state" id="shipping-us-states" required="required">
           <?php foreach($us_states as $state): ?>
             <option value="<?php echo $state['iso_code_2'];?>"><?php echo $state['name'];?></option>
           <?php endforeach;?>
@@ -63,11 +65,6 @@
             <option value="<?php echo $region['iso_code_2'];?>"><?php echo $region['name'];?></option>
           <?php endforeach;?>
         </select>
-
-        <input type="text" id="shipping-province" name="state" style="display:none;" disabled/>
-       <!--  <input type="text" name="state" maxlength="2" required="required"/>
-        <input type="text" name="state" maxlength="2" required="required" style=""/> -->
-      </label>
     </div>
 
     <div class="large-3 columns">
@@ -79,14 +76,13 @@
     
   </div>
 
-  <input type="submit" value="Check Rates" id="shipment-check-rates"/>
+  <input type="submit" value="Check Rates" class="btn tiny radius" style="opacity:0.9; font-size:0.8rem;"/>
 </form>
 
-  <!-- <div id="display-on-rates-checked"> -->
   <div class="row display-on-rates-checked" style="display:none;">
       <div class="large-12 columns">
         <div class="shipping-selection">
-          <h3>Choose a shipping speed</h3>
+          <h3 class="items-header">Choose a shipping speed</h3>
         </div>
       </div>
   </div>

@@ -100,7 +100,6 @@ a.btn-view-small{
   border-radius: 3px;
 }
 a.btn-checkout{
-  width: 280px;
   padding: 10px;
   text-align: center;
   display: block;
@@ -138,7 +137,7 @@ a.btn-checkout{
 .shipping-summary{
   font-size: 14px;
 }
-.shipping-summary h3{
+.shipping-summary span{
   margin-bottom: 20px;
 }
 .product-title{
@@ -203,7 +202,7 @@ input.qty-input{
   width: 45px;
 }
 input.qty-input-3{
-  width: 60px;
+  width: 95px;
 }
 
 input.qty-input.inline{
@@ -273,7 +272,7 @@ dd.dd-price,.dd-price{
 .form label{
   font-weight: 600;
 }
-.form input[type=text], .form select{
+.form input[type=text]{
   margin-top: 5px;  
 }
 label.has-error{
@@ -296,14 +295,13 @@ input.has-error{
   margin-top: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-  
   border-bottom: 1px solid #e7e7e7;
 }
 .shipping-selection h3{
   font-size: 14px;
   font-weight: 600;
   color: #4d4d4d;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 .shipping-selection label{
   margin-bottom: 0px;

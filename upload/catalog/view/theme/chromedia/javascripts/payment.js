@@ -23,9 +23,7 @@ var stripeResponseHandler = function(status, response) {
     var form = $('#payment-form');
 
     if (response.error) {
-        form.css({'opacity' : 1});
-        $('.btn-checkout').show();
-        $('.pay-via-paypal').show();
+        payAjaxLoad(true);
 
         showCreditCardError(response);
     } else {
@@ -42,19 +40,14 @@ var stripeResponseHandler = function(status, response) {
         $(function() {
             $.ajax({
                 type: "POST",
-                url: 'index.php?route=checkout/checkout/processOrder',//"<?php echo $this->url->link('checkout/checkout/processOrder', '', 'SSL'); ?>",
+                url: 'index.php?route=checkout/checkout/processOrder',
                 data: data,
                 dataType: 'json',     
                 success: function(jsondata){
-                    form.css({'opacity' : 1});
-                    $('.btn-checkout').show();
-                    $('.pay-via-paypal').show();
-
                     if (jsondata.success) {
-                        var token = jsondata.token;
-
-                        window.location = 'index.php?route=checkout/checkout/onSuccess';//"<?php echo $this->url->link('checkout/checkout/onSuccess', '', 'SSL');?>"
+                        window.location = 'index.php?route=checkout/checkout/onSuccess';
                     } else {
+                        payAjaxLoad(true);
                         showCheckoutGeneralError(jsondata.errorMsg);
                     }
                 }
@@ -63,14 +56,34 @@ var stripeResponseHandler = function(status, response) {
     }
 }
 
+var payAjaxLoad = function(isDone) {
+    var form = $('#payment-form');
+
+    if (isDone) {
+        form.children('div.row:last-child').children('div:first-child').addClass('mt20');
+        FormManager.enableFormFields(form);
+        form.removeLoader();
+        form.children(':not(.loader)').css({'opacity' : '1'});
+        
+
+        $('.pay-via-paypal').show();
+        $('.btn-checkout').show();
+    } else {
+        form.children('div.row:last-child').children('.mt20').removeClass('mt20');
+        FormManager.disableFormFields(form);
+        form.showLoader({'size' : 'small'});
+        form.children(':not(.loader)').css({'opacity' : '0.3'});
+
+
+        $('.pay-via-paypal').hide();
+        $('.btn-checkout').hide();
+    }
+}
+
 $('.btn-checkout').on('click', function(e) {
     e.preventDefault();
-    $(this).hide();
-    $('.pay-via-paypal').hide();
-
-
+    payAjaxLoad(false);
     var form = $('#payment-form');
-    form.css({'opacity' : 0.5 });
 
     removeErrors(form);
     var hasError = showFormErrors(form);
@@ -78,9 +91,7 @@ $('.btn-checkout').on('click', function(e) {
     if (!hasError) {
         Stripe.card.createToken(form, stripeResponseHandler);
     } else {
-        form.css({'opacity' : 1});
-        $(this).show();
-        $('.pay-via-paypal').show();
+        payAjaxLoad(true);
     }
 });
 
@@ -90,11 +101,7 @@ $('.pay-via-paypal').off('click').on('click', function() {
         service_name : $('.shipping-option:checked').val()
     }
 
-    $('.btn-checkout').hide();
-
-    var form = $('#payment-form');
-    form.css({'opacity' : 0.5 });
-    $('.pay-via-paypal').hide();
+    payAjaxLoad(false);
 
     $.ajax({
         type: "POST",
@@ -102,21 +109,15 @@ $('.pay-via-paypal').off('click').on('click', function() {
         data: data,
         dataType: 'json',     
         success: function(jsondata){
-            form.css({'opacity' : 1});
-            $('.btn-checkout').show();
-            $('.pay-via-paypal').show();
-
             if (jsondata.success) {
-                var token = jsondata.token;
-
                 window.location = jsondata.url;
             } else {
-                alert('An error occured while connecting to paypal.');
+                payAjaxLoad(true);
+                showCheckoutGeneralError(jsondata.errorMsg);
             }
         },
         error: function() {
-            $('.btn-checkout').show();
-            $('.pay-via-paypal').show();
+            payAjaxLoad(true);
         }
     });
 });
