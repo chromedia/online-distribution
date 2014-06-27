@@ -97,6 +97,7 @@ $('.qty-in-cart').on('input', function() {
                 qtyInput.attr('readonly', true);
             },
             success: function(jsondata) {
+                qtyInput.next('span').html(quantity);
                 qtyInput.css({'opacity' : 1});
                 qtyInput.prop('readonly', false);
 

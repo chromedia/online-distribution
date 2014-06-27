@@ -140,7 +140,8 @@
 
     var activateStep1 = function() {
         $('.remove').show();
-        $('.qty-in-cart').prop('disabled', false);
+        $('.qty-in-cart').show();
+        $('.qty-in-cart').next('span').hide();
 
         $('#step-shipping').show();
         $('#step-payment').hide();
@@ -156,7 +157,9 @@
 
     var activateStep2 = function() {
         $('.remove').hide();
-        $('.qty-in-cart').prop('disabled', true);
+        // $('.qty-in-cart').prop('disabled', true);
+        $('.qty-in-cart').hide();
+        $('.qty-in-cart').next('span').show();
         
         removeErrors($('#step-payment').find('form'))
         $('#step-shipping').hide();
@@ -201,6 +204,8 @@
         activateStep2();
     });
 </script>
+
+<script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/shipment.js"></script>
 
 
 <!-- Stripe JS Library -->

@@ -11,7 +11,7 @@ var retrieveShipmentRates = function(form, event) {
         // Send POST data to server
         $.ajax({
             type: "POST",
-            url: "<?php echo $this->url->link('checkout/checkout/checkShippingInfo', '', 'SSL'); ?>",
+            url: "index.php?route=checkout/checkout/checkShippingInfo",
             data: data,
             dataType: 'json',
             success: function(jsondata) {

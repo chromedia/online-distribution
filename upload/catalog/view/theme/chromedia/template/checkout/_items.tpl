@@ -17,6 +17,7 @@
                             <div class="cart-dd">
                                 <em>Quantity </em>
                                 <input class="qty-input qty-in-cart" type="text" key="<?php echo $product['key'];?>" value="<?php echo $product['quantity']; ?>">
+                                <span class="qty-input-display-only" style="display:none;"><?php echo $product['quantity']; ?></span>
                             </div> 
                             <div class="cart-dd">
                                 <em>Price</em> <strong class="price"><?php echo $product['price']; ?></strong>    

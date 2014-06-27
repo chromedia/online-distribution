@@ -33,7 +33,7 @@ class ControllerCheckoutCheckout extends Controller {
             ));
 
             if ($charge['paid'] === true) {
-                // $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
+                $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
                 $this->session->data['guest']['payment']['code'] = $charge['id'];
 
                 $shippoService = ShippoService::getInstance();
