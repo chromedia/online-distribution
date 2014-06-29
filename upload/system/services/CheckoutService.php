@@ -1,5 +1,7 @@
 <?php
 
+
+
 /**
  * Provides services for checkou
  */
@@ -19,13 +21,13 @@ class CheckoutService
         return self::$instance;
     }
 
-    /**
-     * Process order
-     */
-    public function processOrder()
-    {
+    // /**
+    //  * Process order
+    //  */
+    // public function onSuccessfulCheckout()
+    // {
         
-    }
+    // }
 
     /**
      * Get Shippo Shipment data

@@ -45,7 +45,7 @@ var stripeResponseHandler = function(status, response) {
                 dataType: 'json',     
                 success: function(jsondata){
                     if (jsondata.success) {
-                        window.location = 'index.php?route=checkout/checkout/onSuccess';
+                        window.location = 'index.php?route=checkout/success';
                     } else {
                         payAjaxLoad(true);
                         showCheckoutGeneralError(jsondata.errorMsg);
@@ -62,18 +62,16 @@ var payAjaxLoad = function(isDone) {
     if (isDone) {
         form.children('div.row:last-child').children('div:first-child').addClass('mt20');
         FormManager.enableFormFields(form);
-        form.removeLoader();
-        form.children(':not(.loader)').css({'opacity' : '1'});
-        
+        form.find('.loader-container').removeLoader();
+        form.children(':not(.loader-container)').css({'opacity' : '1'});
 
         $('.pay-via-paypal').show();
         $('.btn-checkout').show();
     } else {
         form.children('div.row:last-child').children('.mt20').removeClass('mt20');
         FormManager.disableFormFields(form);
-        form.showLoader({'size' : 'small'});
-        form.children(':not(.loader)').css({'opacity' : '0.3'});
-
+        form.find('.loader-container').showLoader({'size' : 'small'});
+        form.children(':not(.loader-container)').css({'opacity' : '0.3'});
 
         $('.pay-via-paypal').hide();
         $('.btn-checkout').hide();

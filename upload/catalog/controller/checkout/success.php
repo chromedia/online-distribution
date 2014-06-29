@@ -1,81 +1,87 @@
 <?php
+
+require_once(DIR_SYSTEM . 'services/CheckoutService.php');
+require_once(DIR_SYSTEM . 'services/ProductService.php');
+require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
+require_once(DIR_SYSTEM . 'services/ShippoService.php');
+
+
+/**
+ * Handles checkout success
+ */
 class ControllerCheckoutSuccess extends Controller { 
 	public function index() { 	
 		if (isset($this->session->data['order_id'])) {
-			$this->cart->clear();
+            $this->data['breadcrumbs'][] = array(
+                'href'      => $this->url->link('common/home'),
+                'text'      => $this->language->get('text_home'),
+                'separator' => false
+            );
 
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
-			unset($this->session->data['payment_method']);
-			unset($this->session->data['payment_methods']);
-			unset($this->session->data['guest']);
-			unset($this->session->data['comment']);
-			unset($this->session->data['order_id']);	
-			unset($this->session->data['coupon']);
-			unset($this->session->data['reward']);
-			unset($this->session->data['voucher']);
-			unset($this->session->data['vouchers']);
-			unset($this->session->data['totals']);
-		}	
+            $this->data['breadcrumbs'][] = array(
+                'href'      => '',
+                'text'      => 'Checkout Success',
+                'separator' => $this->language->get('text_separator')
+            );
 
-		$this->language->load('checkout/success');
+            $products = $this->cart->getProducts();
 
-		$this->document->setTitle($this->language->get('heading_title'));
+            if ($products) {   
+                $this->data['heading_title'] = $this->language->get('heading_title');                
+                $this->load->model('tool/image');
 
-		$this->data['breadcrumbs'] = array(); 
+                $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
+                $this->data['products'] = $productService->getProductCheckoutInfo($products);
+            }
 
-		$this->data['breadcrumbs'][] = array(
-			'href'      => $this->url->link('common/home'),
-			'text'      => $this->language->get('text_home'),
-			'separator' => false
-		);
+            $cartTotalPrice = $this->cart->getTotal();
+            $this->data['products_in_cart_count'] = $this->cart->countProducts();
+            $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
+            $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping']['cost']);
+            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping']['cost']);
 
-		$this->data['breadcrumbs'][] = array(
-			'href'      => $this->url->link('checkout/cart'),
-			'text'      => $this->language->get('text_basket'),
-			'separator' => $this->language->get('text_separator')
-		);
+            $emailData = array(
+                'recipient' => $this->session->data['guest']['email'],
+                'total'     => $this->data['total'],
+                'subTotal'  => $this->data['subTotal'],
+                'shippingCost' => $this->data['shippingCost'],
+                'products'  => $this->data['products']
+            );
 
-		$this->data['breadcrumbs'][] = array(
-			'href'      => $this->url->link('checkout/checkout', '', 'SSL'),
-			'text'      => $this->language->get('text_checkout'),
-			'separator' => $this->language->get('text_separator')
-		);	
+            $checkoutService = CheckoutService::getInstance();
+            $checkoutService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
 
-		$this->data['breadcrumbs'][] = array(
-			'href'      => $this->url->link('checkout/success'),
-			'text'      => $this->language->get('text_success'),
-			'separator' => $this->language->get('text_separator')
-		);
+            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
+                $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
+            } else {
+                $this->template = '';
+            }
 
-		$this->data['heading_title'] = $this->language->get('heading_title');
+            $this->cart->clear();
+            $this->__unsetSessionVariablesInCheckout();
 
-		if ($this->customer->isLogged()) {
-			$this->data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', 'SSL'), $this->url->link('account/order', '', 'SSL'), $this->url->link('account/download', '', 'SSL'), $this->url->link('information/contact'));
-		} else {
-			$this->data['text_message'] = sprintf($this->language->get('text_guest'), $this->url->link('information/contact'));
-		}
+            $this->children = array(
+                'common/footer',
+                'common/header' 
+            );
 
-		$this->data['button_continue'] = $this->language->get('button_continue');
-
-		$this->data['continue'] = $this->url->link('common/home');
-
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/success.tpl')) {
-			$this->template = $this->config->get('config_template') . '/template/common/success.tpl';
-		} else {
-			$this->template = 'default/template/common/success.tpl';
-		}
-
-		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
-			'common/footer',
-			'common/header'			
-		);
-
-		$this->response->setOutput($this->render());
+            $this->response->setOutput($this->render());
+        } else {
+            $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+        }
 	}
+
+	/**
+     * Unsets all session involves in checkout
+     */
+    private function __unsetSessionVariablesInCheckout()
+    {
+        // unset($this->session->data['shipping_cost']);
+        unset($this->session->data['order_id']);
+        unset($this->session->data['packages']);
+        unset($this->session->data['shipping']);
+        unset($this->session->data['payment']);
+        unset($this->session->data['guest']);
+        unset($this->session->data['rates']);
+    }
 }
-?>

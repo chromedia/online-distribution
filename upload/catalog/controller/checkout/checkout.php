@@ -2,12 +2,14 @@
 
 require_once(DIR_SYSTEM . 'services/StripeService.php');
 require_once(DIR_SYSTEM . 'services/ShippoService.php');
-require_once(DIR_SYSTEM . 'services/CartService.php');
+require_once(DIR_SYSTEM . 'services/CheckoutService.php');
 require_once(DIR_SYSTEM . 'services/ProductService.php');
-require_once(DIR_SYSTEM . 'utilities/MailUtil.php');
+require_once(DIR_SYSTEM . 'services/OrderService.php');
 
-// TODO: Refactor classes
 
+/**
+ * Checkout controller class
+ */
 class ControllerCheckoutCheckout extends Controller { 
 
     /**
@@ -16,11 +18,13 @@ class ControllerCheckoutCheckout extends Controller {
     public function processOrder()
     {
         try {
-            $cartService = CartService::getInstance();
-            $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
+            $this->__prepareSelectedShipping($this->request->post['service_name']);
+
+            // $cartService = CartService::getInstance();
+            //$shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
             $cartTotal = $this->cart->getTotal();
 
-            $amount = $cartTotal + $shippingAmount;
+            $amount = $cartTotal + $this->session->data['shipping']['cost'];//$shippingAmount;
             $email = $this->request->post['customer_email'];
             $response = array();
 
@@ -33,16 +37,20 @@ class ControllerCheckoutCheckout extends Controller {
             ));
 
             if ($charge['paid'] === true) {
-                $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
-                $this->session->data['guest']['payment']['code'] = $charge['id'];
+                // $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
+                // $this->session->data['guest']['payment']['code'] = $charge['id'];
 
                 $shippoService = ShippoService::getInstance();
-                $shippoService->requestShipping($this->request->post['service_name']);
+                $shippoService->requestShipping($this->session->data['shipping']['method']);
+                // $orderId = $this->__addOrder();
 
-                $orderId = $this->__addOrder();
-                $this->session->data['order_id'] = $orderId;
-                $this->session->data['shipping_cost'] = $shippingAmount;
+                $paymentInfo = array(
+                    'firstname' => $this->request->post['customer_name'],
+                    'email'     => $email,
+                    'method'    => 'Stripe'
+                );
 
+                $this->__saveOrder($paymentInfo/*, $shippingInfo*/);
                 $response = array('success' => true);
             } else {
                 $response = array('success' => false, 'errorMsg' => 'Payment System Error!');
@@ -52,8 +60,10 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         echo json_encode($response);
-        exit;   
+        exit;
     }
+
+
 
     /**
      * Pay via paypal
@@ -64,16 +74,7 @@ class ControllerCheckoutCheckout extends Controller {
             $this->redirect($this->url->link('checkout/cart'));
         }
 
-        unset($this->session->data['shipping_method']);
-        unset($this->session->data['shipping_methods']);
-        unset($this->session->data['payment_method']);
-        unset($this->session->data['payment_methods']);
-
-        $this->session->data['shipping']['service_name'] = $this->request->post['service_name'];
-
-        $cartService = CartService::getInstance();
-        $shippingAmount = $cartService->getAmountOfShippingServiceRate($this->session->data['shipping']['service_name']);
-        $this->session->data['shipping']['amount'] = $shippingAmount;
+        $this->__prepareSelectedShipping($this->request->post['service_name']);
 
         $this->load->model('payment/pp_express');
         $this->load->model('tool/image');
@@ -119,9 +120,9 @@ class ControllerCheckoutCheckout extends Controller {
             $this->session->data['paypal']['token'] = $result['TOKEN'];
 
             if (PAYPAL_ENVIRONMENT == 'sandbox') {
-                echo json_encode(array('success' => true, 'url' => 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $result['TOKEN']));
+                echo json_encode(array('success' => true, 'url' => 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&useraction=commit&token=' . $result['TOKEN']));
             } else {
-                echo json_encode(array('success' => true, 'url' => 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $result['TOKEN']));
+                echo json_encode(array('success' => true, 'url' => 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&useraction=commit&token=' . $result['TOKEN']));
             }
         }
 
@@ -129,7 +130,7 @@ class ControllerCheckoutCheckout extends Controller {
     }
 
     /**
-     * Payment done
+     * Paypal payment done
      */
     public function paymentDone()
     {
@@ -154,200 +155,13 @@ class ControllerCheckoutCheckout extends Controller {
         $shippoService = ShippoService::getInstance();
         $shippoService->requestShipping($this->session->data['shipping']['service_name']);
 
-        $orderId = $this->__addOrder();
-        $this->session->data['order_id'] = $orderId;
-        $this->session->data['shipping_cost'] = $this->session->data['shipping']['amount'] ;
+        // $orderId = $this->__addOrder();
 
-        $this->redirect($this->url->link('checkout/checkout/onSuccess', '', 'SSL'));
+        // $this->session->data['order_id'] = $orderId;
+        //$this->session->data['shipping_cost'] = $this->session->data['shipping']['amount'] ;
+
+        $this->redirect($this->url->link('checkout/success', '', 'SSL'));
     }   
-
-    /**
-     * Adds order
-     * 
-     * This is temporary
-     */
-    private function __addOrder()
-    {
-    	$data = array();
-
-		$data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
-		$data['store_id'] = $this->config->get('config_store_id');
-		$data['store_name'] = $this->config->get('config_name');
-		$data['button_confirm'] = $this->config->get('button_confirm');
-
-		if ($data['store_id']) {
-			$data['store_url'] = $this->config->get('config_url');		
-		} else {
-			$data['store_url'] = HTTP_SERVER;	
-		}
-		
-		$data['customer_id'] = 0;
-		$data['customer_group_id'] = $this->session->data['guest']['customer_group_id'];
-		$data['firstname'] = $this->session->data['guest']['firstname'];
-		$data['lastname'] = $this->session->data['guest']['lastname'];
-		$data['email'] = $this->session->data['guest']['email'];
-		$data['telephone'] = '';
-		$data['fax'] = '';
-
-		$data['payment_firstname'] = $this->session->data['guest']['payment']['firstname'];
-		$data['payment_lastname'] = '';	
-		$data['payment_company'] = '';	
-		$data['payment_company_id'] = '';	
-		$data['payment_tax_id'] = '';	
-		$data['payment_address_1'] = '';
-		$data['payment_address_2'] = '';
-		$data['payment_city'] = '';
-		$data['payment_postcode'] = '';
-		$data['payment_zone'] = '';
-		$data['payment_zone_id'] = '';
-		$data['payment_country'] = '';
-		$data['payment_country_id'] = '';
-		$data['payment_address_format'] = '';
-
-		$data['payment_method'] = '';
-		$data['payment_code'] = $this->session->data['guest']['payment']['code'];
-
-		$data['shipping_firstname'] = '';
-		$data['shipping_lastname'] = '';	
-		$data['shipping_company'] = '';	
-		$data['shipping_address_1'] = '';
-		$data['shipping_address_2'] = '';
-		$data['shipping_city'] = '';
-		$data['shipping_postcode'] = '';
-		$data['shipping_zone'] = '';
-		$data['shipping_zone_id'] = '';
-		$data['shipping_country'] = '';
-		$data['shipping_country_id'] = '';
-		$data['shipping_address_format'] = '';
-		$data['shipping_method'] = '';
-		$data['shipping_code'] = '';
-
-        $product_data = array();
-        $products = $this->cart->getProducts();
-
-        foreach ($products as $product) {
-            $option_data = array();
-
-            $product_data[] = array(
-                'product_id' => $product['product_id'],
-                'name'       => $product['name'],
-                'model'      => '',//$product['model'],
-                'option'     => array(),
-                'download'   => array(),//$product['download'],
-                'quantity'   => $product['quantity'],
-                'subtract'   => '',//$product['subtract'],
-                'price'      => $product['price'],
-                'total'      => $product['total'],
-                'tax'        => $this->tax->getTax($product['price'], $product['tax_class_id']),
-                'reward'     => ''
-            ); 
-        }
-
-        $data['products'] = $product_data;
-        $data['vouchers'] = array();
-        $data['totals'] = array();
-        $data['comment'] = isset($this->session->data['comment']) ? $this->session->data['comment'] : '';
-        $data['totals'] = array();
-        $data['total'] = 0;
-       
-        $data['affiliate_id'] = 0;
-        $data['commission'] = 0;
-        
-        $data['language_id'] = $this->config->get('config_language_id');
-        $data['currency_id'] = $this->currency->getId();
-        $data['currency_code'] = $this->currency->getCode();
-        $data['currency_value'] = $this->currency->getValue($this->currency->getCode());
-        $data['ip'] = $this->request->server['REMOTE_ADDR'];
-
-        if (!empty($this->request->server['HTTP_X_FORWARDED_FOR'])) {
-            $data['forwarded_ip'] = $this->request->server['HTTP_X_FORWARDED_FOR']; 
-        } elseif(!empty($this->request->server['HTTP_CLIENT_IP'])) {
-            $data['forwarded_ip'] = $this->request->server['HTTP_CLIENT_IP'];   
-        } else {
-            $data['forwarded_ip'] = '';
-        }
-
-        if (isset($this->request->server['HTTP_USER_AGENT'])) {
-            $data['user_agent'] = $this->request->server['HTTP_USER_AGENT'];    
-        } else {
-            $data['user_agent'] = '';
-        }
-
-        if (isset($this->request->server['HTTP_ACCEPT_LANGUAGE'])) {
-            $data['accept_language'] = $this->request->server['HTTP_ACCEPT_LANGUAGE'];  
-        } else {
-            $data['accept_language'] = '';
-        }
-
-        $this->load->model('checkout/order');
-        return $this->model_checkout_order->addOrder($data);
-    }
-
-    /**
-     * Successful checkout
-     */
-    public function onSuccess()
-    {
-        if (isset($this->session->data['order_id'])) {
-            $this->data['breadcrumbs'][] = array(
-                'href'      => $this->url->link('common/home'),
-                'text'      => $this->language->get('text_home'),
-                'separator' => false
-            );
-
-            $this->data['breadcrumbs'][] = array(
-                'href'      => '',
-                'text'      => 'Checkout Success',
-                'separator' => $this->language->get('text_separator')
-            );
-
-            $products = $this->cart->getProducts();
-
-            if ($products) {   
-                $this->data['heading_title'] = $this->language->get('heading_title');                
-                $this->load->model('tool/image');
-
-                $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
-                $this->data['products'] = $productService->getProductCheckoutInfo($products);
-            }
-
-            $cartTotalPrice = $this->cart->getTotal();
-            $this->data['products_in_cart_count'] = $this->cart->countProducts();
-            $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
-            $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping_cost']);
-            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping_cost']);
-
-            $emailData = array(
-                'recipient' => $this->session->data['guest']['email'],
-                'total'     => $this->data['total'],
-                'subTotal'  => $this->data['subTotal'],
-                'shippingCost' => $this->data['shippingCost'],
-                'products'  => $this->data['products']
-            );
-
-            $cartService = CartService::getInstance();
-            $cartService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
-
-            // On retrieve order for thank you message
-            if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
-                $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
-            } else {
-                $this->template = '';
-            }
-
-            $this->cart->clear();
-            $this->__unsetSessionVariablesInCheckout();
-
-            $this->children = array(
-                'common/footer',
-                'common/header' 
-            );
-
-            $this->response->setOutput($this->render());
-        } else {
-            $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
-        }
-    }
 
     /**
      * Checks shipping info/rates
@@ -355,8 +169,8 @@ class ControllerCheckoutCheckout extends Controller {
     public function checkShippingInfo()
     {
         try {
-            $cartService = CartService::getInstance();
-            $packages = $cartService->preparePackages($this->cart->getProducts());
+            $checkoutService = CheckoutService::getInstance();
+            $packages = $checkoutService->preparePackages($this->cart->getProducts());
 
             $toAddressData = array(
                 'name' => $this->request->post['name'],
@@ -367,8 +181,6 @@ class ControllerCheckoutCheckout extends Controller {
                 'country' => $this->request->post['country'],
                 'email'   => $this->request->post['email']
             );
-
-            $this->__addAsGuestUser($toAddressData);
 
             // TODO: Please make it dynamic
             $fromAddressData = array(
@@ -455,14 +267,41 @@ class ControllerCheckoutCheckout extends Controller {
     }
 
     /**
-     * Add as guest user
+     * Prepares selected shipping and cost for successful payment
      */
-    private function __addAsGuestUser($data)
+    private function __prepareSelectedShipping($serviceName)
     {
-        $this->session->data['guest']['firstname'] = $data['name'];
-        $this->session->data['guest']['lastname'] = '';
-        $this->session->data['guest']['email'] = $data['email'];
-        $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
+        $this->session->data['shipping']['method'] = $serviceName;
+
+        $checkoutService = CheckoutService::getInstance();
+        $shippingAmount = $checkoutService->getAmountOfShippingServiceRate($this->session->data['shipping']['method']);
+
+        $this->session->data['shipping']['cost'] = $shippingAmount;
+    }
+
+    /**
+     * Saves order
+     */
+    private function __saveOrder($paymentInfo/*, $shippingInfo*/)
+    {
+        // $this->session->data['shipping']['cost'] = $shippingInfo['cost'];
+        // $this->session->data['shipping']['method'] = $shippingInfo['method'];
+
+        $this->load->model('checkout/order');
+        $orderService = OrderService::getInstance($this->model_checkout_order);
+
+
+        // since we don't have saving of visitor or customer, payment info will be the customer info
+        $orderId = $orderService->saveOrder($this->config, $this->request, array(
+            'products'    => $this->cart->getProducts(),
+            'payment'     => $paymentInfo,
+            'guest'       => $paymentInfo,
+            'currency'    => $this->currency,
+            'total'       => $this->cart->getTotal() + $this->session->data['shipping']['cost']
+        ));
+
+        $this->session->data['order_id'] = $orderId;
+        $this->session->data['guest']['email'] = $paymentInfo['email'];
     }
 
     /**
@@ -470,43 +309,39 @@ class ControllerCheckoutCheckout extends Controller {
      */
     private function __addShippingInformation($data, $rates = array())
     {
-        // $this->session->data['shipping'] = array(
-        //     'firstname' => $data['name'],
-        //     'lastname'  => '',
-        //     'address1'  => $data['street1'],
-        //     'city'      => $data['city'],
-        //     'country'   => $data['country'],
-        //     'state'     => $data['state']
-        // );
-
-        $this->session->data['rates'] = $rates;
-        // $_SESSION['rates'] = $info;
-        // $_SESSION['toAddress'] = $toAddress;
-    }
-
-    /**
-     * Add payment information
-     */
-    private function __addPaymentInformation()
-    {
         $this->session->data['shipping'] = array(
             'firstname' => $data['name'],
             'lastname'  => '',
             'address1'  => $data['street1'],
             'city'      => $data['city'],
             'country'   => $data['country'],
-            'state'     => $data['state']
+            'state'     => $data['state'],
+            'postcode'  => $data['zip']
         );
+
+        $this->session->data['rates'] = $rates;
     }
 
-    /**
-     * Unsets all session involves in checkout
-     */
-    private function __unsetSessionVariablesInCheckout()
-    {
-        unset($this->session->data['shipping_cost']);
-        unset($this->session->data['order_id']);
-        unset($this->session->data['packages']);
-        unset($this->session->data['shipping']);
-    }
+    // /**
+    //  * Add as guest user
+    //  */
+    // private function __addAsGuestUser($data)
+    // {
+    //     $this->session->data['guest']['firstname'] = $data['name'];
+    //     $this->session->data['guest']['lastname'] = '';
+    //     $this->session->data['guest']['email'] = $data['email'];
+    //     $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
+    // }
+
+    // /**
+    //  * Add payment information
+    //  */
+    // private function __addPaymentInformation($data)
+    // {
+    //     $this->session->data['payment'] = array(
+    //         'firstname' => $data['name'],
+    //         'email'     => $data['email'],
+    //         'payment_method' => $data['method']
+    //     );
+    // }
 }

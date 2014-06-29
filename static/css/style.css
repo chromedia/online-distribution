@@ -68,6 +68,10 @@ a.btn-view-small{
   top: -3px;
   display: inline-block;
 }
+.btn-small{
+  padding: 5px 10px;
+  font-size: 12px;
+}
 .btn, a.btn{
   background-image: -o-linear-gradient(-89deg, #F07B3E 0%, #D56D37 100%);
   background-image: -moz-linear-gradient(-89deg, #F07B3E 0%, #D56D37 100%);
@@ -79,10 +83,6 @@ a.btn-view-small{
   font-size: 14px;
   cursor: pointer;
   border-radius: 3px;
-}
-a.btn-small{
-  padding: 5px 10px;
-  font-size: 12px;
 }
 a.btn-checkout{
   width: 280px;

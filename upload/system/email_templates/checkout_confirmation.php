@@ -273,7 +273,7 @@
                             <p>You have successfully purchased the items listed below. If you have any questions just email us at shipping@opentechcollaborative.cc</p>
                             <!-- Callout Panel -->
                             
-                            <ul class="cart-list" style="border-bottom: 1px solid #e8e8e8; list-style: none; margin: 20px 0; padding: 0; border: 1px solid #e8e8e8;">
+                            <ul class="cart-list" style="list-style: none; margin: 20px 0; padding: 0; ">
                               %s
                             </ul>
                             <div class="sub-total">

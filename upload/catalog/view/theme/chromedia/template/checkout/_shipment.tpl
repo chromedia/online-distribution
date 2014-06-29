@@ -76,7 +76,8 @@
     
   </div>
 
-  <input type="submit" value="Check Rates" class="btn tiny radius" style="opacity:0.9; font-size:0.8rem;"/>
+  <!-- <a href="javascript:void(0);" class="btn btn-small">Check shipping rates</a> -->
+  <input type="submit" value="Check Shipping Rates" class="btn btn-small" />
 </form>
 
   <div class="row display-on-rates-checked" style="display:none;">

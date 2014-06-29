@@ -61,6 +61,7 @@
       </div>
     </div>
 
+    <span class="loader-container"></span>
     <div class="row">
         <div class="mt20">
             <div class="large-6 columns">
@@ -78,38 +79,38 @@
 
 <div class="row">
     <div class="mt20">
-      <div class="shipping-summary">
-        <h3>Shipping Information</h3>
-        <div class="row">
-            <div class="shipping-info-row group">
-                <div class="large-4 columns">Name</div>  
-                <div class="large-8 columns shipping-info-name"></div>
+        <div class="shipping-summary">
+            <h3>Shipping Information</h3>
+            <div class="row">
+                <div class="shipping-info-row group">
+                    <div class="large-4 columns">Name</div>  
+                    <div class="large-8 columns shipping-info-name"></div>
+                </div>
+              
             </div>
-          
+            <div class="row">
+              <div class="shipping-info-row group">
+                <div class="large-4 columns">Email</div>  
+                <div class="large-8 columns shipping-info-email"></div>  
+              </div>
+              
+            </div>
+            <div class="row">
+              <div class="shipping-info-row group">
+                <div class="large-4 columns">Address</div>  
+                <div class="large-8 columns shipping-info-address"></div>  
+              </div>
+              
+            </div>
+            <div class="row">
+              <div class="shipping-info-row group">
+                <div class="large-4 columns">Shipping Speed</div>  
+                <div class="large-8 columns shipping-info-speed"></div>  
+              </div>
+            </div>
+            <div class="shipping-info-row">
+              <a href="javascript:void(0);" class="edit-shipping">Edit shippping information</a>
+            </div>
         </div>
-        <div class="row">
-          <div class="shipping-info-row group">
-            <div class="large-4 columns">Email</div>  
-            <div class="large-8 columns shipping-info-email"></div>  
-          </div>
-          
-        </div>
-        <div class="row">
-          <div class="shipping-info-row group">
-            <div class="large-4 columns">Address</div>  
-            <div class="large-8 columns shipping-info-address"></div>  
-          </div>
-          
-        </div>
-        <div class="row">
-          <div class="shipping-info-row group">
-            <div class="large-4 columns">Shipping Speed</div>  
-            <div class="large-8 columns shipping-info-speed"></div>  
-          </div>
-        </div>
-        <div class="shipping-info-row">
-          <a href="javascript:void(0);" class="edit-shipping">Edit shippping information</a>
-        </div>
-    </div>
     </div>
 </div>

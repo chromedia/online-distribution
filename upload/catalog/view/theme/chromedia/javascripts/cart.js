@@ -117,8 +117,10 @@ $('.qty-in-cart').on('input', function() {
 });
 
 $('.remove').off('click').on('click', function() {
-    $(this).showConfirmationModal({
-        'contentMessage' : 'Are you sure you want to remove this product?',
-        'onConfirm'      : removeProduct
-    });
+    // $(this).showConfirmationModal({
+    //     'contentMessage' : 'Are you sure you want to remove this product?',
+    //     'onConfirm'      : removeProduct
+    // });
+
+    removeProduct();
 }); 

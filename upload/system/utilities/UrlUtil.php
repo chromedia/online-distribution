@@ -37,17 +37,22 @@ class UrlUtil
      */
     public function shortenUrl($longUrl)
     {
-        if (!empty($longUrl)) {
-            $url = self::GOOGLE_ENDPOINT;
+        try {
+            if (!empty($longUrl)) {
+                $url = self::GOOGLE_ENDPOINT;
 
-            $response = $this->curlUtil->call($url, 'POST', '', array('longUrl' => $longUrl, 'key' => self::API_KEY), 'application/json');
-            $response = json_decode($response, true);
-           
-            if (isset($response['id'])) {
-                return $response['id'];
+                $response = $this->curlUtil->call($url, 'POST', '', array('longUrl' => $longUrl, 'key' => self::API_KEY), 'application/json');
+                $response = json_decode($response, true);
+               
+                if (isset($response['id'])) {
+                    return $response['id'];
+                }
             }
+            
+            return $longUrl;
+        } catch(Exception $e) {
+            return $longUrl;
         }
         
-        return $longUrl;
     }
 }

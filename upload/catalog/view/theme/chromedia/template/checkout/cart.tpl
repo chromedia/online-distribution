@@ -26,10 +26,11 @@
             </span>
         </div>
 
-        <input type="hidden" class="subtotal-value" value="<?php echo $subTotal; ?>"/>
         <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/checkout/_items.tpl'); ?>
     </div>
 </div>
+
+<input type="hidden" class="subtotal-value" value="<?php echo $subTotal; ?>"/>
 
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/form.js"></script>
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/cart.js"></script>

@@ -99,6 +99,10 @@ a.btn-view-small{
   cursor: pointer;
   border-radius: 3px;
 }
+.btn-small{
+  padding: 5px 10px;
+  font-size: 12px;
+}
 a.btn-checkout{
   padding: 10px;
   text-align: center;
