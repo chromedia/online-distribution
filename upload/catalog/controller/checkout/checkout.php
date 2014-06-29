@@ -86,7 +86,7 @@ class ControllerCheckoutCheckout extends Controller {
         $data = array(
             'METHOD' => 'SetExpressCheckout',
             'MAXAMT' => $max_amount,
-            'RETURNURL' => $this->url->link('checkout/checkout/paymentDone', '', 'SSL'),
+            'RETURNURL' => $this->url->link('checkout/checkout/paypalPaymentDone', '', 'SSL'),
             'CANCELURL' => $this->url->link('checkout/cart'),
             'REQCONFIRMSHIPPING' => 0,
             'NOSHIPPING' => 1,//$shipping,
@@ -132,7 +132,7 @@ class ControllerCheckoutCheckout extends Controller {
     /**
      * Paypal payment done
      */
-    public function paymentDone()
+    public function paypalPaymentDone()
     {
         $this->load->model('payment/pp_express');
         $data = array(
@@ -153,7 +153,15 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         $shippoService = ShippoService::getInstance();
-        $shippoService->requestShipping($this->session->data['shipping']['service_name']);
+        $shippoService->requestShipping($this->session->data['shipping']['method']);
+
+        $paymentInfo = array(
+            'method'    => 'Paypal ('.$result['PAYERID'].')',
+            'firstname' => isset($result['FIRSTNAME']) ? $result['FIRSTNAME'] : '',
+            'lastname'  => isset($result['LASTNAME']) ? $result['LASTNAME'] : '',
+            'email'     => isset($result['EMAIL'])  ? $result['EMAIL'] : ''
+        );
+        $this->__saveOrder($paymentInfo);
 
         // $orderId = $this->__addOrder();
 

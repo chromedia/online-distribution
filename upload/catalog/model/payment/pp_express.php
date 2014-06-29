@@ -27,7 +27,8 @@ class ModelPaymentPPExpress extends Model {
 			'VERSION' => '65.2',
 			'BUTTONSOURCE' => 'OpenCart_Cart_EC',
 		);*/
-
+	
+		// todo: make dynamic
 		$settings = array(
 			'USER' => 'opentech_api1.gmail.com',
 			'PWD' => '1403599206',
@@ -198,11 +199,11 @@ class ModelPaymentPPExpress extends Model {
 		}
 
 		$data['L_PAYMENTREQUEST_0_DESC' . $i] = 'Shipping Cost';
-        $data['L_PAYMENTREQUEST_0_NAME' . $i] = $_SESSION['shipping']['service_name'];
-        $data['L_PAYMENTREQUEST_0_AMT' . $i]  = number_format($_SESSION['shipping']['amount'], 2, '.', '');
+        $data['L_PAYMENTREQUEST_0_NAME' . $i] = $_SESSION['shipping']['method'];
+        $data['L_PAYMENTREQUEST_0_AMT' . $i]  = number_format($_SESSION['shipping']['cost'], 2, '.', '');
         $data['L_PAYMENTREQUEST_0_QTY' . $i]  = 1;
         
-        $item_total += $_SESSION['shipping']['amount'];
+        $item_total += $_SESSION['shipping']['cost'];
 
 		$data['PAYMENTREQUEST_0_ITEMAMT'] = number_format($item_total, 2, '.', '');
 		$data['PAYMENTREQUEST_0_AMT'] = number_format($item_total, 2, '.', '');
