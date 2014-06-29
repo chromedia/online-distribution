@@ -16,7 +16,7 @@
 
         return this.append(
             "<div class='loader' style='height:"+size+"'><img "+centerStyle+
-                 "src='catalog/view/theme/chromedia/image/loader_" + size + ".gif' "+ 
+                 "src='catalog/view/theme/chromedia/image/loader_" + size + ".GIF' "+ 
                  "width='"+size+"' "+
                  "height='"+size+"' "+
              "/></div>"
