@@ -11,7 +11,8 @@
                 <h3 class="show-for-medium-up subheader">Manufacture Locally, Collaborate Globally</h3>
                 <ul class="button-inline">
                     <li>
-                        <a href="about.html" class="button-box" alt="learn more">LEARN MORE</a>
+                        <!-- Learn More Button -->
+                        <a href="<?php echo $data['learnmore']?>" class="button-box" alt="learn more">LEARN MORE</a>
                     </li>
                 <!-- <li>
                   <a href="" class="button-box show-for-medium-up" data-tooltip class="has-tip tip-top" title="Coming January 31st - Stay Tuned!">COLLABORATE</a>

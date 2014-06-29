@@ -23,6 +23,9 @@ class ControllerCommonHome extends Controller {
         $this->data['heading_title'] = $this->config->get('config_title');
 
         $this->template =  $this->config->get('config_template').'/template/home/home.tpl';
+
+        // Links
+        $this->data['learnmore'] = $this->url->link('information/learnmore', '', '');
         
         // setting of products data
         $this->setFeaturedProductsInfo();
