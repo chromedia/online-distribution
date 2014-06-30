@@ -413,3 +413,18 @@ label.use-cc-info{
     top: 0;
   }
 }
+
+/* Additional CSS */
+/* Created by: Emman */
+.product-video a img {
+  height: 100px;
+  width: 100px;
+  margin: 100px auto 0;
+  opacity: 0.8;
+}
+.product-video a:hover img {
+  height: 100px;
+  width: 100px;
+  margin: 100px auto 0;
+  opacity: 1;
+}
