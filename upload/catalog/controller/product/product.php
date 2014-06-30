@@ -17,7 +17,7 @@ class ControllerProductProduct extends Controller {
 
 		if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] == $this->url->link('product/display/all')) {
 			$this->data['breadcrumbs'][] = array(
-				'text'      => 'Product List',
+				'text'      => $this->language->get('text_product_list'),
 				'href'      => $this->url->link('product/display/all'),
 				'separator' => $this->language->get('text_separator')
 			);

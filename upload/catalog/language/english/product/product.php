@@ -27,6 +27,10 @@ $_['text_wait']         = 'Please Wait!';
 $_['text_tags']         = 'Tags:';
 $_['text_error']        = 'Product not found!';
 $_['text_payment_profile'] = 'Payment Profiles';
+$_['text_product_list'] = 'Product List';
+$_['text_product_in_development'] = 'Products In-development';
+
+
 
 $_['text_trial_description'] = '%s every %d %s(s) for %d payment(s) then';
 $_['text_payment_description'] = '%s every %d %s(s) for %d payment(s)';

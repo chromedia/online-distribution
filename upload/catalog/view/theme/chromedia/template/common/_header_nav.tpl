@@ -20,6 +20,8 @@
 
         <li><a class="scrollTo"  scroll-target="#shop"  href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">Shop</a></li>
 
+        <li><a href="<?php echo $this->url->link('collaborate/products', '', 'SSL'); ?>">Collaborate</a></li>
+
         <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">
             <span class="items-in-cart" <?php if($totalItems == 0): ?> style="display:none;"<?php endif;?>><?php echo $totalItems; ?></span>
             Cart
