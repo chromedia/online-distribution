@@ -1,6 +1,6 @@
 <?php
 
-// require_once(DIR_SYSTEM . 'services/CheckoutService.php');
+require_once(DIR_SYSTEM . 'services/CheckoutService.php');
 require_once(DIR_SYSTEM . 'services/ProductService.php');
 
 class ControllerCheckoutCart extends Controller {

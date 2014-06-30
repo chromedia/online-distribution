@@ -75,9 +75,7 @@ class ShippoService
             }
         }
 
-
         $_SESSION['packages'] = $newPackages;
-
         
         return $ratesInfo['carriers'];
     }
@@ -93,16 +91,17 @@ class ShippoService
      */
     public function makeParcelCall($package)
     {
+        sleep(1);
         // Parcel Data
         $data = array(
             'length'    => number_format($package['length'], 2, '.', ''),
             'width'     => number_format($package['width'], 2, '.', ''),
             'height'    => number_format($package['height'], 2, '.', ''),
-            'distance_unit' => 'mm',
+            'distance_unit' => $package['length_unit'],
             'weight'    => number_format($package['weight'], 2, '.', ''),
-            'mass_unit' => 'kg',
+            'mass_unit' => $package['weight_unit'],
             'metadata'  => $package['content']['product_id']                  
-        );        
+        );    
 
         // Call Data
         $url = self::END_POINT.'parcels/';
@@ -120,6 +119,7 @@ class ShippoService
      */
     public function makeShipmentCall($parcel, $addressFrom, $addressTo)
     {
+        sleep(1);
         // Shipment Data
         $data = array(
             "object_purpose" => "PURCHASE",

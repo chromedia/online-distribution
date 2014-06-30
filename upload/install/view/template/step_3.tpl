@@ -124,11 +124,11 @@
         </tr>
         <tr>
           <td>Paypal Client Id:</td>
-          <td><input type="text" name="paypal_client_id" value="<?php echo $paypal_client_id; ?>" /></td>
+          <td><input type="text" name="paypal_client_id" value="<?php //echo $paypal_client_id; ?>" /></td>
         </tr>
         <tr>
           <td>Paypal Client Secret:</td>
-          <td><input type="text" name="paypal_client_secret" value="<?php echo $paypal_client_secret; ?>" /></td>
+          <td><input type="text" name="paypal_client_secret" value="<?php //echo $paypal_client_secret; ?>" /></td>
         </tr>
       </table>
     </fieldset> -->

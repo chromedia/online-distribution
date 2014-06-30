@@ -97,7 +97,7 @@ var populateShipmentReviewInfoInPaymentStep = function() {
 
 
 $('#step2-trigger-btn').off('click').on('click', function() {
-    populateCCInfoBasedOnShipmentInfo();
+    //populateCCInfoBasedOnShipmentInfo();
     populateShipmentReviewInfoInPaymentStep();
 
     activateStep2();

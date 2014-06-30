@@ -19,12 +19,9 @@ class ControllerCheckoutCheckout extends Controller {
     {
         try {
             $this->__prepareSelectedShipping($this->request->post['service_name']);
-
-            // $cartService = CartService::getInstance();
-            //$shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
             $cartTotal = $this->cart->getTotal();
 
-            $amount = $cartTotal + $this->session->data['shipping']['cost'];//$shippingAmount;
+            $amount = $cartTotal + $this->session->data['shipping']['cost'];
             $email = $this->request->post['customer_email'];
             $response = array();
 
@@ -37,16 +34,12 @@ class ControllerCheckoutCheckout extends Controller {
             ));
 
             if ($charge['paid'] === true) {
-                // $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
-                // $this->session->data['guest']['payment']['code'] = $charge['id'];
-
                 $shippoService = ShippoService::getInstance();
                 $shippoService->requestShipping($this->session->data['shipping']['method']);
-                // $orderId = $this->__addOrder();
 
                 $paymentInfo = array(
-                    'firstname' => $this->request->post['customer_name'],
-                    'email'     => $email,
+                    'firstname' => '',//$this->request->post['customer_name'],
+                    'email'     => '',//$email,
                     'method'    => 'Stripe'
                 );
 
@@ -292,9 +285,6 @@ class ControllerCheckoutCheckout extends Controller {
      */
     private function __saveOrder($paymentInfo/*, $shippingInfo*/)
     {
-        // $this->session->data['shipping']['cost'] = $shippingInfo['cost'];
-        // $this->session->data['shipping']['method'] = $shippingInfo['method'];
-
         $this->load->model('checkout/order');
         $orderService = OrderService::getInstance($this->model_checkout_order);
 
@@ -309,7 +299,7 @@ class ControllerCheckoutCheckout extends Controller {
         ));
 
         $this->session->data['order_id'] = $orderId;
-        $this->session->data['guest']['email'] = $paymentInfo['email'];
+        //$this->session->data['guest']['email'] = $paymentInfo['email'];
     }
 
     /**
@@ -324,32 +314,10 @@ class ControllerCheckoutCheckout extends Controller {
             'city'      => $data['city'],
             'country'   => $data['country'],
             'state'     => $data['state'],
-            'postcode'  => $data['zip']
+            'postcode'  => $data['zip'],
+            'email'     => $data['email']
         );
 
         $this->session->data['rates'] = $rates;
     }
-
-    // /**
-    //  * Add as guest user
-    //  */
-    // private function __addAsGuestUser($data)
-    // {
-    //     $this->session->data['guest']['firstname'] = $data['name'];
-    //     $this->session->data['guest']['lastname'] = '';
-    //     $this->session->data['guest']['email'] = $data['email'];
-    //     $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
-    // }
-
-    // /**
-    //  * Add payment information
-    //  */
-    // private function __addPaymentInformation($data)
-    // {
-    //     $this->session->data['payment'] = array(
-    //         'firstname' => $data['name'],
-    //         'email'     => $data['email'],
-    //         'payment_method' => $data['method']
-    //     );
-    // }
 }

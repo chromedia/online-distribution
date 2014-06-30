@@ -58,19 +58,25 @@ class CheckoutService
         $packages = array();
 
         foreach ($products as $product) {
-            $packages[] = array(
-                'content' => array(
-                    'product_id'   => $product['product_id'],
-                    'product_name' => $product['name'],
-                    'quantity'     => 1,
-                ),
-                'length'          => $product['length'],
-                'width'           => $product['width'],
-                'height'          => $product['height'],
-                'weight'          => $product['weight'],
-            );
+            $quantity = $product['quantity'];
+
+            for($ctr = 0; $ctr < $quantity; $ctr++) {
+                $packages[] = array(
+                    'content' => array(
+                        'product_id'   => $product['product_id'],
+                        'product_name' => $product['name'],
+                        'quantity'     => 1,
+                    ),
+                    'length'          => $product['length'],
+                    'width'           => $product['width'],
+                    'height'          => $product['height'],
+                    'length_unit'     => isset($product['length_unit']) ? $product['length_unit'] : 'mm',
+                    'weight'          => $product['weight'],
+                    'weight_unit'     => isset($product['weight_unit']) ? $product['weight_unit'] : 'g',
+                );
+            }
         }
-        
+
         return $packages;
     }
 

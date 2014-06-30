@@ -88,7 +88,7 @@
       </div>
   </div>
 
-  <div class="row display-on-rates-checked" style="display:none;">
+<!--   <div class="row display-on-rates-checked" style="display:none;">
       <div class="mt20">
         <div class="large-12 columns">
           <label for="cc-info" class="use-cc-info">
@@ -96,7 +96,7 @@
           </label>  
         </div>  
       </div>
-  </div>
+  </div> -->
 
   <div class="row display-on-rates-checked" style="display:none;">
       <div class="mt20">

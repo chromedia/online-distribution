@@ -5,7 +5,8 @@
     </div>
     
     <div class="credit-cards"></div>
-    <div class="row">
+    
+    <!-- <div class="row">
       <div class="large-6 columns">
 
         <label for="payment-name">
@@ -20,7 +21,7 @@
           <input type="text" id="payment-email" name="payment-email" data-type="email" required="required">
         </label>
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="large-6 columns">
