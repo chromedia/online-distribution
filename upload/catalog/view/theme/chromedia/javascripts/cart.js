@@ -122,5 +122,5 @@ $('.remove').off('click').on('click', function() {
     //     'onConfirm'      : removeProduct
     // });
 
-    removeProduct();
+    removeProduct($(this));
 }); 
