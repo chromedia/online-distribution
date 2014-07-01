@@ -44,7 +44,7 @@ strong{
 .card-title,
 .card-body,
 .card-footer{
-  padding: 20px 15px;
+  padding: 15px;
 }
 .card-body{
   height: 100px;
@@ -68,6 +68,7 @@ strong{
   font-size: 14px;
 }
 .price{
+  line-height: 1.6em;
   font-weight: 600;
 }
 a.btn-view-small{
@@ -84,7 +85,6 @@ a.btn-view-small{
   font-weight: 300;
   vertical-align: top;
   position: relative;
-  top: -3px;
   display: inline-block;
 }
 .btn, a.btn{
