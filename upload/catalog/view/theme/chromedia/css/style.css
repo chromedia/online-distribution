@@ -1,5 +1,8 @@
 /*@import "foundation/components/tabs";*/
 
+html, body {
+  height: 100%;
+}
 .news-section h1{
   font-weight: 300;
   margin-top: 50px;
@@ -446,8 +449,41 @@ label.use-cc-info{
   margin: 100px auto 0;
   opacity: 1;
 }
+/* Sticky footer */
+.page-wrap {
+  min-height: 100%;
+  /* Equal to footer height */
+  margin-bottom: -295px;
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
 /* Specifically assigned a card list container class 
 since original intent of this class is unknown */
-.card-list [class*="column"]+[class*="column"]:last-child {
+.page-wrap [class*="column"]+[class*="column"]:last-child {
   float: left;
+}
+#home-footer, .page-wrap:after {
+  height: 295px;
+}
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { 
+  .page-wrap {
+    min-height: 100%;
+    /* Equal to footer height */
+    margin-bottom: -425px;
+  }
+  #home-footer, .page-wrap:after {
+    height: 425px;
+  }
+}
+@media only screen and (max-width: 40em) { 
+  .page-wrap {
+    min-height: 100%;
+    /* Equal to footer height */
+    margin-bottom: -425px;
+  }
+  #home-footer, .page-wrap:after {
+    height: 425px;
+  }
 }
