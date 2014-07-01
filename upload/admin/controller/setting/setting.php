@@ -3,6 +3,7 @@ class ControllerSettingSetting extends Controller {
 	private $error = array();
 
 	public function index() {
+
 		$this->language->load('setting/setting'); 
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -10,7 +11,9 @@ class ControllerSettingSetting extends Controller {
 		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('config', $this->request->post);
+			$data = $this->request->post;
+
+			$this->model_setting_setting->editSetting('config', $data);
 
 			if ($this->config->get('config_currency_auto')) {
 				$this->load->model('localisation/currency');
@@ -45,6 +48,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['text_payment'] = $this->language->get('text_payment');					
 		$this->data['text_mail'] = $this->language->get('text_mail');
 		$this->data['text_smtp'] = $this->language->get('text_smtp');
+		$this->data['text_from_address'] = $this->language->get('text_from_address');
 
 		$this->data['entry_name'] = $this->language->get('entry_name');
 		$this->data['entry_owner'] = $this->language->get('entry_owner');
@@ -153,6 +157,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['tab_mail'] = $this->language->get('tab_mail');
 		$this->data['tab_fraud'] = $this->language->get('tab_fraud');
 		$this->data['tab_server'] = $this->language->get('tab_server');
+		$this->data['tab_shipping'] = $this->language->get('tab_shipping');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -1045,6 +1050,50 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$this->data['config_google_analytics'] = $this->config->get('config_google_analytics');
 		}
+
+		// Added code for shipping tab
+		if (isset($this->request->post['shipping_state'])) {
+			$this->data['shipping_zone'] = $this->request->post['shipping_zone'];
+		} else {
+			$zone = $this->config->get('shipping_zone');
+			$this->data['shipping_zone'] = $zone ? $zone : $this->data['config_zone_id'];
+		}
+
+		if (isset($this->request->post['shipper_name'])) {
+			$this->data['shipper_name'] = $this->request->post['shipper_name'];
+		} else {
+			$shipper = $this->config->get('shipper_name');
+			$this->data['shipper_name'] = $shipper ? $shipper : $this->data['config_owner'];
+		}
+
+		if (isset($this->request->post['shipping_street'])) {
+			$this->data['shipping_street'] = $this->request->post['shipping_street'];
+		} else {
+			$this->data['shipping_street'] = $this->config->get('shipping_street');
+		}
+
+		if (isset($this->request->post['shipping_city'])) {
+			$this->data['shipping_city'] = $this->request->post['shipping_city'];
+		} else {
+			$this->data['shipping_city'] = $this->config->get('shipping_city');
+		}
+
+		if (isset($this->request->post['shipping_country'])) {
+			$this->data['shipping_country'] = $this->request->post['shipping_country'];
+		} else {
+			$country = $this->config->get('shipping_country');
+			$this->data['shipping_country'] = $country ? $country : $this->data['config_country_id'];
+		}
+
+		if (isset($this->request->post['shipping_zip'])) {
+			$this->data['shipping_zip'] = $this->request->post['shipping_zip'];
+		} else {
+			$this->data['shipping_zip'] = $this->config->get('shipping_zip');
+		}
+
+
+		// For shipping from address
+
 
 		$this->template = 'setting/setting.tpl';
 		$this->children = array(

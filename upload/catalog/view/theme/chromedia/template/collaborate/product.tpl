@@ -4,15 +4,12 @@
 
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
 
-<div 
+<div class="product-cover" style="background-image: url('<?php echo $header_img;?>')">
     <?php if(!empty($video_tag)): ?>
-        class="product-cover product-video-trigger" embed-video='<?php echo $video_tag;?>'
-    <?php else: ?>
-        class="product-cover"
+        <div class="product-video row product-video-trigger" embed-video='<?php echo $video_tag;?>'>
+            <a href="javascript:void(0);"><img src="catalog/view/theme/chromedia/image/icon-play.png" alt=""></a>
+        </div>
     <?php endif;?>  
-    style="background-image: url('<?php echo $header_img;?>')">
-
-    <div class="notification green" style="display:none;"></div>
 
     <div class="product-title">
         <div class="row">

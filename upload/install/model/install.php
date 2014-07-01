@@ -87,7 +87,7 @@ class ModelInstall extends Model {
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `documentation` TEXT NOT NULL DEFAULT ''; ");
 
 		$this->createVideoTable($db, $data['db_prefix']);
-
+		$this->addShippingDefaultInformation($db, $data['db_prefix']);
 	}
 
 	/**
@@ -106,5 +106,29 @@ class ModelInstall extends Model {
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 		";
 		$db->query($sql);
+	}
+
+	/**
+	 * Add shipping default information
+	 */
+	public function addShippingDefaultInformation($db, $prefix)
+	{
+		$group = 'config';
+		$data = array(
+			'shipper_name'     => 'Laura',
+			'shipping_zone'    => '3624',
+			'shipping_country' => '223',
+			'shipping_city'    => 'San Francisco',
+			'shipping_street'  => 'Clayton St.',
+			'shipping_zip'     => '94117'  
+		);
+
+		foreach ($data as $key => $value) {
+			if (!is_array($value)) {
+				$db->query("INSERT INTO " . $prefix . "setting SET  `group` = '". $db->escape($group)  ."', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape($value) . "'");
+			} else {
+				$db->query("INSERT INTO " . $prefix . "setting SET `group` = '" . $db->escape($group) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape(serialize($value)) . "', serialized = '1'");
+			}
+		}
 	}
 }

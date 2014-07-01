@@ -184,29 +184,33 @@ class ControllerCheckoutCheckout extends Controller {
             );
 
             // TODO: Please make it dynamic
-            $fromAddressData = array(
-                'name'      => 'Laura Behrens Wu',
-                'street1'   => 'Clayton St.',
-                'street_no' => '220',
-                'city'      => 'San Francisco',
-                'state'     => 'CA',
-                'zip'       => '94117',
-                'country'   => 'US',
-                'phone'     => '+1 555 341 9393',
-                'email'     => 'floricel.colibao@gmail.com'
-            );
+            // $fromAddressData = array(
+            //     'name'      => 'Laura Behrens Wu',
+            //     'street1'   => 'Clayton St.',
+            //     'city'      => 'San Francisco',
+            //     'state'     => 'CA',
+            //     'zip'       => '94117',
+            //     'country'   => 'US',
+            //     'phone'     => '+1 555 341 9393',
+            //     'email'     => 'floricel.colibao@gmail.com'
+            // );
 
+            $fromAddressData = $this->__getFromAddressOfShipment();
             $shippoService = ShippoService::getInstance();
 
             $toAddress = $shippoService->confirmAddress($toAddressData);
             $fromAddress = $shippoService->confirmAddress($fromAddressData);
 
-            $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
-            $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
+            if (isset($fromAddress['object_id']) && isset($toAddressData['object_id'])) {
+                $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
+                $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
 
-            $this->__addShippingInformation($toAddressData, $info);
+                $this->__addShippingInformation($toAddressData, $info);
 
-            echo json_encode($rates);
+                echo json_encode($rates);
+            } else {
+                throw new Exception('Shipping address has an error.');
+            }
         } catch(Exception $e) {
             echo json_encode(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
@@ -265,6 +269,57 @@ class ControllerCheckoutCheckout extends Controller {
         }
 
         $this->render();
+    }
+
+    public function country() {
+        $json = array();
+
+        $this->load->model('localisation/country');
+
+        $country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
+
+        if ($country_info) {
+            $this->load->model('localisation/zone');
+
+            $json = array(
+                'country_id'        => $country_info['country_id'],
+                'name'              => $country_info['name'],
+                'iso_code_2'        => $country_info['iso_code_2'],
+                'iso_code_3'        => $country_info['iso_code_3'],
+                'address_format'    => $country_info['address_format'],
+                'postcode_required' => $country_info['postcode_required'],
+                'zone'              => $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']),
+                'status'            => $country_info['status']      
+            );
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    /**
+     * Returns from address of shipment
+     */
+    private function __getFromAddressOfShipment()
+    {
+        $this->load->model('localisation/country');
+        $this->load->model('localisation/zone');
+
+        $countryId = $this->config->get('shipping_country');
+        $country = $this->model_localisation_country->getCountry($countryId);
+
+        $zoneId = $this->config->get('config_zone_id');
+        $zone = $this->model_localisation_zone->getZone($zoneId);
+
+        return array(
+            'name'    => $this->config->get('shipper_name'),
+            'street1' => $this->config->get('shipping_street'),
+            'city'    => $this->config->get('shipping_city'),
+            'country' => $country['iso_code_2'],
+            'state'   => $zone['code'],
+            'zip'     => $this->config->get('shipping_zip'),
+            'phone'   => $this->config->get('config_telephone'),
+            'email'   => $this->config->get('config_email')
+        );
     }
 
     /**

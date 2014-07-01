@@ -19,22 +19,13 @@ class ModelPaymentPPExpress extends Model {
 		} else {
 			$api_endpoint = 'https://api-3t.paypal.com/nvp';
 		}
-
-		/*$settings = array(
-			'USER' => $this->config->get('pp_express_username'),
-			'PWD' => $this->config->get('pp_express_password'),
-			'SIGNATURE' => $this->config->get('pp_express_signature'),
-			'VERSION' => '65.2',
-			'BUTTONSOURCE' => 'OpenCart_Cart_EC',
-		);*/
 	
 		// todo: make dynamic
 		$settings = array(
-			'USER' => 'opentech_api1.gmail.com',
-			'PWD' => '1403599206',
-			'SIGNATURE' => 'AErfVUrwyqdtjXcFeRKYILFoEEUIAHWESlLn6n0UdZ0l2AVUO9jAVt-z',
+			'USER' => PAYPAL_USER_NAME,
+			'PWD' => PAYPAL_PWD,
+			'SIGNATURE' => PAYPAL_SIGNATURE,
 			'VERSION' => '65.2',
-			//'BUTTONSOURCE' => 'OpenCart_Cart_EC',
 		);
 
 		//$settings = array();

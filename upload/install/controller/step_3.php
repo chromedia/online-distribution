@@ -39,8 +39,10 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
 			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
 
-			// $output .= 'define(\'PAYPAL_CLIENT_ID\', \'' . addslashes($this->request->post['paypal_client_id']) . '\');' . "\n";
-			// $output .= 'define(\'PAYPAL_CLIENT_SECRET\', \'' . addslashes($this->request->post['paypal_client_secret']) . '\');' . "\n\n";
+			$output .= 'define(\'PAYPAL_ENVIRONMENT\', \'' . addslashes($this->request->post['paypal_environment']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_USERNAME\', \'' . addslashes($this->request->post['paypal_username']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_PASSWORD\', \'' . addslashes($this->request->post['paypal_password']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_SIGNATURE\', \'' . addslashes($this->request->post['paypal_signature']) . '\');' . "\n\n";
 
 			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
 			$output .= '?>';				
@@ -85,9 +87,11 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
 			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
 
-			// $output .= 'define(\'PAYPAL_CLIENT_ID\', \'' . addslashes($this->request->post['paypal_client_id']) . '\');' . "\n";
-			// $output .= 'define(\'PAYPAL_CLIENT_SECRET\', \'' . addslashes($this->request->post['paypal_client_secret']) . '\');' . "\n\n";
-
+			$output .= 'define(\'PAYPAL_ENVIRONMENT\', \'' . addslashes($this->request->post['paypal_environment']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_USERNAME\', \'' . addslashes($this->request->post['paypal_username']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_PASSWORD\', \'' . addslashes($this->request->post['paypal_password']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_SIGNATURE\', \'' . addslashes($this->request->post['paypal_signature']) . '\');' . "\n\n";
+			
 			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
 			$output .= '?>';	
 
@@ -213,11 +217,13 @@ class ControllerStep3 extends Controller {
 		$this->data['stripe_private_key'] = isset($this->request->post['stripe_private_key']) ? $this->request->post['stripe_private_key'] : '';
 		$this->data['stripe_public_key'] = isset($this->request->post['stripe_public_key']) ? $this->request->post['stripe_public_key'] : '';
 
-		// $this->data['paypal_client_id'] = isset($this->request->post['paypal_client_id']) ? $this->request->post['paypal_client_id'] : '';
-		// $this->data['paypal_client_secret'] = isset($this->request->post['paypal_client_secret']) ? $this->request->post['paypal_client_secret'] : '';
+		$this->data['paypal_environment'] = isset($this->request->post['paypal_environment']) ? $this->request->post['paypal_environment'] : '';
+		$this->data['paypal_username'] = isset($this->request->post['paypal_username']) ? $this->request->post['paypal_username'] : '';
+		$this->data['paypal_password'] = isset($this->request->post['paypal_password']) ? $this->request->post['paypal_password'] : '';
+		$this->data['paypal_signature'] = isset($this->request->post['paypal_signature']) ? $this->request->post['paypal_signature'] : '';
+		
 
 		$this->data['shippo_authorization'] = isset($this->request->post['shippo_authorization']) ? $this->request->post['shippo_authorization'] : '';
-
 		$this->data['back'] = $this->url->link('step_2');
 
 		$this->template = 'step_3.tpl';
