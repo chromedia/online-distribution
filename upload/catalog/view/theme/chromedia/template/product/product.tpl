@@ -19,6 +19,7 @@
 
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
 
+
 <div class="product-cover" style="background-image: url('<?php echo $header_img;?>')">
 
     <div class="notification green" style="display:none;"></div>

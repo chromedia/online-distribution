@@ -28,19 +28,21 @@
     
     <body style="height:100%;">
 
-        <div class="wrapper" style="position:relative; min-height:100%;">
+        <!-- <div class="wrapper" style="position:relative; min-height:100%;"> -->
 
-            <div class="main-content" style="padding-bottom: 295px;">
+            <!-- <div class="main-content" style="padding-bottom: 295px;"> -->
                 <!-- BEG TOP BAR -->
-                <?php if(isset($sticky_header) && $sticky_header): ?>
-                    <div class="fixed" id="top">
-                        <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?> 
-                    </div>
-                <?php else: ?>
+            <?php if(isset($sticky_header) && $sticky_header): ?>
+                <div class="fixed" id="top">
                     <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?> 
-                <?php endif;?>
-                <!-- END TOP BAR -->
+                </div>
+            <?php else: ?>
+                <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?> 
+            <?php endif;?>
+            <!-- END TOP BAR -->
 
-                <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/common_modal.tpl'); ?> 
+            <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/common_modal.tpl'); ?> 
+
+            <div class="page-wrap">
 
             

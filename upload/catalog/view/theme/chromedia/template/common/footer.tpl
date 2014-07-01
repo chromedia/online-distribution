@@ -1,10 +1,10 @@
-            </div> <!--End .main-content-->
+            </div>
 
             <!-- BEG FOOTER SECTION -->
 
             <!-- background-color:#413d3d;color:#ffffff; -->
 
-            <footer class="small-12 columns" id="home-footer" style="width:100%;height:295px;position:absolute;bottom:0;left:0;">
+            <footer class="small-12 columns" id="home-footer" >
                 <div class="row" style="margin: 2em auto;">
                     <div class="large-8 small-12 columns">
                         <h4 style="font-weight: 800;">Open Tech Collaborative</h4>
@@ -38,7 +38,7 @@
                 </div>
             </footer>
 
-        </div> <!--End of .content-wrapper-->
+        <!-- </div> End of .content-wrapper -->
 
         <!-- END FOOTER SECTION -->
         <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/foundation.min.js"></script>

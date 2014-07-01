@@ -156,11 +156,6 @@ class ControllerCheckoutCheckout extends Controller {
         );
         $this->__saveOrder($paymentInfo);
 
-        // $orderId = $this->__addOrder();
-
-        // $this->session->data['order_id'] = $orderId;
-        //$this->session->data['shipping_cost'] = $this->session->data['shipping']['amount'] ;
-
         $this->redirect($this->url->link('checkout/success', '', 'SSL'));
     }   
 
@@ -182,18 +177,6 @@ class ControllerCheckoutCheckout extends Controller {
                 'country' => $this->request->post['country'],
                 'email'   => $this->request->post['email']
             );
-
-            // TODO: Please make it dynamic
-            // $fromAddressData = array(
-            //     'name'      => 'Laura Behrens Wu',
-            //     'street1'   => 'Clayton St.',
-            //     'city'      => 'San Francisco',
-            //     'state'     => 'CA',
-            //     'zip'       => '94117',
-            //     'country'   => 'US',
-            //     'phone'     => '+1 555 341 9393',
-            //     'email'     => 'floricel.colibao@gmail.com'
-            // );
 
             $fromAddressData = $this->__getFromAddressOfShipment();
             $shippoService = ShippoService::getInstance();

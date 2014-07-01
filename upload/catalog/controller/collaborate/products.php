@@ -88,8 +88,7 @@ class ControllerCollaborateProducts extends Controller {
 
             $this->template = $this->config->get('config_template') . '/template/collaborate/product.tpl';
         } else {
-            // redirect to 404
-            echo '404'; exit;
+            return $this->redirect($this->url->link('error/not_found', '', 'SSL'));
         }
     }
 
