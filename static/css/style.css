@@ -428,8 +428,10 @@ label.use-cc-info{
   margin: 100px auto 0;
   opacity: 1;
 }
-.card-footer {
-
+/* Specifically assigned a card list container class 
+since original intent of this class is unknown */
+.card-list [class*="column"]+[class*="column"]:last-child {
+  float: left;
 }
 
 footer {
