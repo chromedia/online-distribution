@@ -24,8 +24,8 @@
     <div class="notification green" style="display:none;"></div>
 
     <?php if(!empty($video_tag)): ?>
-        <div class="product-video row product-video-trigger">
-            <a href="#"><img src="catalog/view/theme/chromedia/image/icon-play.png" alt="" embed-video='<?php echo $video_tag;?>'></a>
+        <div class="product-video row product-video-trigger" embed-video='<?php echo $video_tag;?>'>
+            <a href="javascript:void(0);"><img src="catalog/view/theme/chromedia/image/icon-play.png" alt=""></a>
         </div>
     <?php endif;?>  
 
