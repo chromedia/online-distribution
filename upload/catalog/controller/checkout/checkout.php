@@ -184,7 +184,7 @@ class ControllerCheckoutCheckout extends Controller {
             $toAddress = $shippoService->confirmAddress($toAddressData);
             $fromAddress = $shippoService->confirmAddress($fromAddressData);
 
-            if (isset($fromAddress['object_id']) && isset($toAddressData['object_id'])) {
+            if (isset($fromAddress['object_id']) && isset($toAddress['object_id'])) {
                 $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
                 $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
 
