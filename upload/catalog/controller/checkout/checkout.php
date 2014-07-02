@@ -290,7 +290,7 @@ class ControllerCheckoutCheckout extends Controller {
         $countryId = $this->config->get('shipping_country');
         $country = $this->model_localisation_country->getCountry($countryId);
 
-        $zoneId = $this->config->get('config_zone_id');
+        $zoneId = $this->config->get('shipping_zone');
         $zone = $this->model_localisation_zone->getZone($zoneId);
 
         return array(
