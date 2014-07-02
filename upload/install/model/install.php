@@ -47,6 +47,9 @@ class ModelInstall extends Model {
 			$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_encryption'");
 			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_encryption', value = '" . $db->escape(md5(mt_rand())) . "'");
 			
+			$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_template'");
+			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_template', value = '" . $db->escape('chromedia') . "'");
+			
 			$db->query("UPDATE `" . $data['db_prefix'] . "product` SET `viewed` = '0'");
 
 			$this->customDatabase($db, $data);

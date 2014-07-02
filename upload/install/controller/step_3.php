@@ -33,13 +33,15 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'DB_USERNAME\', \'' . addslashes($this->request->post['db_user']) . '\');' . "\n";
 			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
 			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
+			$output .= 'define(\'DB_BLOG_DATABASE\', \'' . addslashes('') . '\');' . "\n";
 			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n\n";
 
 			$output .= '// Third Party API Credentials'. "\n";
 			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
 			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
 
-			$output .= 'define(\'PAYPAL_ENVIRONMENT\', \'' . addslashes($this->request->post['paypal_environment']) . '\');' . "\n";
+			$paypalEnvironment = isset($this->request->post['paypal_environment']) ? $this->request->post['paypal_environment'] : 'sandbox';
+			$output .= 'define(\'PAYPAL_ENVIRONMENT\', \'' . addslashes($paypalEnvironment) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_USERNAME\', \'' . addslashes($this->request->post['paypal_username']) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_PASSWORD\', \'' . addslashes($this->request->post['paypal_password']) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_SIGNATURE\', \'' . addslashes($this->request->post['paypal_signature']) . '\');' . "\n\n";
@@ -81,13 +83,14 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'DB_USERNAME\', \'' . addslashes($this->request->post['db_user']) . '\');' . "\n";
 			$output .= 'define(\'DB_PASSWORD\', \'' . addslashes($this->request->post['db_password']) . '\');' . "\n";
 			$output .= 'define(\'DB_DATABASE\', \'' . addslashes($this->request->post['db_name']) . '\');' . "\n";
+			$output .= 'define(\'DB_BLOG_DATABASE\', \'' . addslashes('') . '\');' . "\n";
 			$output .= 'define(\'DB_PREFIX\', \'' . addslashes($this->request->post['db_prefix']) . '\');' . "\n\n";
 
 			$output .= '// Third Party API Credentials'. "\n";
 			$output .= 'define(\'STRIPE_PRIVATE_KEY\', \'' . addslashes($this->request->post['stripe_private_key']) . '\');' . "\n";
 			$output .= 'define(\'STRIPE_PUBLIC_KEY\', \'' . addslashes($this->request->post['stripe_public_key']) . '\');' . "\n\n";
 
-			$output .= 'define(\'PAYPAL_ENVIRONMENT\', \'' . addslashes($this->request->post['paypal_environment']) . '\');' . "\n";
+			$output .= 'define(\'PAYPAL_ENVIRONMENT\', \'' . addslashes($paypalEnvironment) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_USERNAME\', \'' . addslashes($this->request->post['paypal_username']) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_PASSWORD\', \'' . addslashes($this->request->post['paypal_password']) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_SIGNATURE\', \'' . addslashes($this->request->post['paypal_signature']) . '\');' . "\n\n";

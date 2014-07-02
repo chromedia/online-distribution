@@ -9,7 +9,7 @@ class ModelNewsNews extends Model
         parent::__construct($registry);
 
         try {
-            $this->conn = new PDO('mysql:host='.DB_HOSTNAME.';dbname=opentech_blog', DB_USERNAME, DB_PASSWORD);
+            $this->conn = new PDO('mysql:host='.DB_HOSTNAME.';dbname='.DB_BLOG_DATABASE, DB_USERNAME, DB_PASSWORD);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $this->conn->prepare('SELECT option_value FROM wp_options WHERE option_name LIKE :optionName');
