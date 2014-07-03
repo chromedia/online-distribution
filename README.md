@@ -61,6 +61,7 @@ Code style:
 /download - empty storage
 /image
 /install
+/news
 /system
 .htaccess
 config.php
@@ -97,6 +98,12 @@ install/view/image/
 
 - Image folders store raw image files
 
+
+```
+news/
+- Contains wordpress source which handles opentech's news and updates.
+
+
 ```
 system/cache/ - empty storage
 system/config/ - empty storage
@@ -119,19 +126,32 @@ system/logs/ - empty storage
 
 - Stripe is used for payment processing
 - Shippo is used for shipment label purchasing with major carriers
-- Their API libraries are in the system library folder
+- Paypal is used as an alternative payment processor
 
 ```
-system/library/stripe/
-```
+Make sure the following must be defined somewhere like the config.php
 
-- Public and private keys must be defined somewhere like the config.php
-
-```
 // Stripe
 define('STRIPE_PRIVATE_KEY', 'KEY_HERE');
 define('STRIPE_PUBLIC_KEY', 'KEY_HERE');
+
+// Shippo
+define('SHIPPO_AUTHORIZATION', 'VALUE');
+
+// Paypal
+define('PAYPAL_ENVIRONMENT', 'SANDBOX_OR_PRODUCTION');  
+define('PAYPAL_USERNAME', 'VALUE');
+define('PAYPAL_PASSWORD', 'VALUE');
+define('PAYPAL_SIGNATURE', 'VALUE');
+
+
 ```
+## For the News and Updates section in the website. ##
+ 1. Visit /news/wp-admin. You will be notified that a configuration file must be created.
+     This is for the blog database. Follow instruction.
+ 2. After setting up database for blog, define it in the upload/config.php with constant name DB_BLOG_DATABASE.
+    define('DB_BLOG_DATABASE', 'BLOG_DATABASE_NAME');
+
 
 ##Credits
 
