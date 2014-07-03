@@ -252,7 +252,7 @@ dd.dd-price,.dd-price{
   height: 21px;
   display: inline-block;
   background-image: url('../image/icon-green-check.png');
-  vertical-align: middle
+  vertical-align: middle;
 }
 .icon-lock-sm{
   width: 16px;
