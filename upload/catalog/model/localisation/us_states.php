@@ -5,7 +5,7 @@ class ModelLocalisationUsStates extends Model {
         $states_data = $this->cache->get('us_states');
         
         if (!$states_data) {
-            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "us_states WHERE 1 ORDER BY name ASC");
+            $query = $this->db->query("SELECT * FROM us_states WHERE 1 ORDER BY name ASC");
     
             $states_data = $query->rows;
         
