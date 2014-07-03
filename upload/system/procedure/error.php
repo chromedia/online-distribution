@@ -27,7 +27,10 @@ function error_handler($errno, $errstr, $errfile, $errline) {
         
     echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b>';
     
-    $log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+    if ($log) {
+        $log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+    }
+    
 
     return true;
 
