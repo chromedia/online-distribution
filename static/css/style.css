@@ -4,6 +4,9 @@ html, body {
 body{
   -webkit-font-smoothing: antialiased;
 }
+.news {
+  height: 9em;
+}
 .news-section h1{
   font-weight: 300;
   margin-top: 50px;
@@ -252,7 +255,7 @@ dd.dd-price,.dd-price{
   height: 21px;
   display: inline-block;
   background-image: url('../image/icon-green-check.png');
-  vertical-align: middle
+  vertical-align: middle;
 }
 .icon-lock-sm{
   width: 16px;
