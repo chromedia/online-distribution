@@ -32,16 +32,13 @@ class ControllerInformationNews extends Controller {
         $this->data['url_util'] = UrlUtil::getInstance(CurlUtil::getInstance());
 
         $this->document->setTitle('OpenTech-Collaborative | News List');
-
-        $this->template =  $this->config->get('config_template').'/template/information/news_list.tpl';
-        
-                                        
-        $this->response->setOutput($this->render());
-        
+                                                
         $this->children = array(
             'common/footer',
             'common/header'
         );
+
+        $this->template =  $this->config->get('config_template').'/template/information/news_list.tpl';
                                         
         $this->response->setOutput($this->render());
     }

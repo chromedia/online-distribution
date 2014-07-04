@@ -19,6 +19,7 @@ class ModelNewsNews extends Model
             $this->permalink = $data['option_value'];
         } catch(PDOException $e) {
             $this->conn = null;
+            $registry->get('log')->write($e->getMessage());
         }
     }
 
