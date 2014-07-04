@@ -32,8 +32,9 @@
 
             <!-- <div class="main-content" style="padding-bottom: 295px;"> -->
                 <!-- BEG TOP BAR -->
+            <span id="top"></span>
             <?php if(isset($sticky_header) && $sticky_header): ?>
-                <div class="fixed" id="top">
+                <div class="fixed">
                     <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?> 
                 </div>
             <?php else: ?>

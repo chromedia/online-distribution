@@ -6,8 +6,8 @@
     <div class="small-12 columns">
         <div class="row">
             <div class="small-12 large-8 small-centered columns" >
-                 <img src="catalog/view/theme/chromedia/image/ICON-LOGO.png" alt="Open Tech Forever Logo" width="150px" style="margin: 2em auto 0 auto;" class="show-for-medium-up">
-                <img src="catalog/view/theme/chromedia/image/ICON_LOGO.png" alt="Open Tech Forever Logo" width="80px" style="margin: 2em auto 0em auto;" class="show-for-small-only">
+                 <img src="catalog/view/theme/chromedia/image/ICON_LOGO.png" alt="Open Tech Forever Logo" width="150px" style="margin: 2em auto 0 auto;" class="show-for-medium-up">
+                <!-- <img src="catalog/view/theme/chromedia/image/ICON_LOGO.png" alt="Open Tech Forever Logo" width="80px" style="margin: 2em auto 0em auto;" class="show-for-small-only"> -->
                 <h1>Open Tech Collaborative</h1>
                 <h3 class="show-for-medium-up subheader">Manufacture Locally, Collaborate Globally</h3>
                 <ul class="button-inline">
