@@ -76,6 +76,10 @@ class ModelInstall extends Model {
 					$sql .= $line;
 
 					if (preg_match('/;\s*$/', $line)) {
+						// $sql = str_replace("DROP TABLE IF EXISTS `", "DROP TABLE IF EXISTS `" . $data['db_prefix'], $sql);
+						// $sql = str_replace("CREATE TABLE `", "CREATE TABLE `" . $data['db_prefix'], $sql);
+						// $sql = str_replace("INSERT INTO `", "INSERT INTO `" . $data['db_prefix'], $sql);
+
 						$db->query($sql);
 
 						$sql = '';

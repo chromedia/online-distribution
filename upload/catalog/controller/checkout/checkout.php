@@ -211,8 +211,13 @@ class ControllerCheckoutCheckout extends Controller {
         $this->load->model('localisation/canada_regions');
 
         $this->data['countries'] = $this->model_localisation_country->getCountries();
+
         $this->data['us_states'] = $this->model_localisation_us_states->getUsStates();
         $this->data['canada_regions'] = $this->model_localisation_canada_regions->getCanadaRegions();
+        $this->data['shipping'] = isset($this->session->data['shipping']) ? $this->session->data['shipping'] : array();
+        $this->data['rates'] = isset($this->session->data['rates']) ? $this->session->data['rates'] : array();
+
+        // var_dump($this->data['rates']);exit;
 
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/_shipment.tpl')) {
             $this->template = $this->config->get('config_template') . '/template/checkout/_shipment.tpl';
@@ -348,7 +353,7 @@ class ControllerCheckoutCheckout extends Controller {
         $this->session->data['shipping'] = array(
             'firstname' => $data['name'],
             'lastname'  => '',
-            'address1'  => $data['street1'],
+            'address'   => $data['street1'],
             'city'      => $data['city'],
             'country'   => $data['country'],
             'state'     => $data['state'],
@@ -357,5 +362,19 @@ class ControllerCheckoutCheckout extends Controller {
         );
 
         $this->session->data['rates'] = $rates;
+    }
+
+    /**
+     * Store shipping information in session
+     */
+    public function storeShippingInformation()
+    {
+        $data = isset($this->request->post['data']) ? $this->request->post['data'] : array();
+
+        foreach ($data as $key => $value) {
+            $this->session->data['shipping'][$key] = $value;
+        }
+
+        exit;
     }
 }
