@@ -5,7 +5,7 @@
 
 <?php if(!empty($products) && $products): ?>
 
-    <section class="row mtb20">
+    <section class="row mtb20" style="margin-bottom: 100px;">
         <h2 style="margin: 1em auto 1em auto;"><?php echo $heading_title;?></h2>
 
         <?php foreach ($products as $product): ?>
