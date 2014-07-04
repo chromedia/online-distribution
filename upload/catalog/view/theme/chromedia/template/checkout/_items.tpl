@@ -1,5 +1,5 @@
 <?php if ($products_in_cart_count): ?>
-    <div class="large-5 columns">
+    <div class="large-5 columns" style="margin-left: 80px;">
         <span class="items-header">You have <strong class="products-count"><?php echo $products_in_cart_count; ?></strong> <?php echo $products_in_cart_count > 1 ? 'items' : 'item';?> in your shopping cart</span>
 
         <ul class="cart-list">
