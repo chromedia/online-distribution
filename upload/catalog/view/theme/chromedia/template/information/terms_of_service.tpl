@@ -1,7 +1,7 @@
 <?php echo $header;?>
 
 <!-- CONTENT STARTS HERE -->
-    <div class="mtb40">
+    <div class="mtb40" style="margin-top: 20px;">
         <div class="row">
             <div class="large-8 large-offset-2 columns">
                 <div class="mt20">

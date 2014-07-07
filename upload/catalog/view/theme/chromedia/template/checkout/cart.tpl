@@ -42,7 +42,7 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
     var publishableKey = "<?php echo STRIPE_PUBLIC_KEY; ?>";
-    // Stripe.setPublishableKey(publishableKey);
+    Stripe.setPublishableKey(publishableKey);
 </script>
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/payment.js"></script>
 

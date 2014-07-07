@@ -26,7 +26,7 @@
 
     </head>
     
-    <body style="height:100%;">
+    <body>
 
         <!-- <div class="wrapper" style="position:relative; min-height:100%;"> -->
 
