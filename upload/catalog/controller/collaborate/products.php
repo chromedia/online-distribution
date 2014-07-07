@@ -98,12 +98,12 @@ class ControllerCollaborateProducts extends Controller {
     protected function inDevelopmentProductList()
     {
         $this->data['breadcrumbs'][] = array(
-            'text'      => $this->language->get('text_product_in_development'),
+            'text'      => $this->language->get('text_active_projects'),
             'href'      => '',
             'separator' => $this->language->get('text_separator')
         );
 
-        $this->data['heading_title'] = 'Check Our In-development Products';
+        $this->data['heading_title'] = 'Active Projects';
 
         $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
         $products = $this->model_catalog_product->getInDevelopmentProducts();

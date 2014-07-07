@@ -28,7 +28,9 @@ $_['text_tags']         = 'Tags:';
 $_['text_error']        = 'Product not found!';
 $_['text_payment_profile'] = 'Payment Profiles';
 $_['text_product_list'] = 'Product List';
-$_['text_product_in_development'] = 'Products In-development';
+
+// Collaborate
+$_['text_active_projects'] = 'Active Projects';
 
 
 
