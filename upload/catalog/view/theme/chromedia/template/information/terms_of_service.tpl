@@ -4,7 +4,7 @@
     <div class="mtb40">
         <div class="row">
             <div class="large-8 large-offset-2 columns">
-                <div class="mt80">
+                <div class="mt20">
                     <h2 align="middle">Terms of Service</h2> 
                     <p>By using this website you agree to these terms. If you do not agree, please do not use this site. If you have any questions or concerns, feel free to contact us.</p>
                     <h3 align="middle">Returns</h3>
