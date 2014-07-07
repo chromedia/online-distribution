@@ -1,7 +1,8 @@
-/*@import "foundation/components/tabs";*/
-
 html, body {
   height: 100%;
+}
+body{
+  -webkit-font-smoothing: antialiased;
 }
 .news {
   height: 9em;
