@@ -46,7 +46,7 @@ class ControllerCollaborateProducts extends Controller {
     {
         if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] == $this->url->link('collaborate/products')) {
             $this->data['breadcrumbs'][] = array(
-                'text'      => $this->language->get('text_product_in_development'),
+                'text'      => $this->language->get('text_active_projects'),
                 'href'      => $this->url->link('collaborate/products'),
                 'separator' => $this->language->get('text_separator')
             );
