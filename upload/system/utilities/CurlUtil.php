@@ -44,6 +44,7 @@ class CurlUtil
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
             curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
             if (!empty($credentials)) {
@@ -68,9 +69,10 @@ class CurlUtil
             
             // getting response from server 
             $httpResponse = curl_exec($ch);
-            // @curl_close($ch);
+            curl_close($ch);
             
             if (!$httpResponse) {
+                var_dump(curl_error($ch));
                 throw new Exception('API call failed: '.curl_error($ch));
             } 
 

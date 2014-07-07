@@ -121,7 +121,7 @@
                 <?php endif;?>
 
                   <?php echo $rate['service'];?>
-                  <em><?php echo '(average of '.$rate['days'].' - '.$rate['total'].')';?></em>
+                  <em><?php echo '(average of '.$rate['days'].' days - '.$rate['total'].')';?></em>
               </label>
             <?php endforeach; ?>
           <?php endif;?>
