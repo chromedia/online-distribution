@@ -37,6 +37,8 @@
 	
 	<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/normalize.css" type="text/css" />
 	<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/foundation.min.css" type="text/css" />
+		<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/app.css" type="text/css" />
+	<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/global.css" type="text/css" />
 
 	<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" />
 

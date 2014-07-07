@@ -1,0 +1,105 @@
+//
+// Load core variables and mixins
+// --------------------------------------------------
+// @import url("http://fonts.googleapis.com/css?family=Roboto:400,400italic,700");
+// @import url("http://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700");
+//@import url("http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic");
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,400italic,700,300italic");
+@import "variables.less";
+@import "mixins.less";
+
+//
+// Base
+// --------------------------------------------------
+
+html, body {
+	height:100%;
+}
+
+body {
+	margin:0;
+	padding:0;
+	text-rendering: optimizeLegibility;
+	::-webkit-input-placeholder {
+	   color: @text-color;
+	   font-size: @font-size-base;
+	   font-weight: 400;
+	}
+
+	:-moz-placeholder { /* Firefox 18- */
+	   color: @text-color;
+	   font-size: @font-size-base;
+	   font-weight: 400;
+	}
+
+	::-moz-placeholder {  /* Firefox 19+ */
+	   color: @text-color;
+	   font-size: @font-size-base;
+	   font-weight: 400;
+	}
+
+	:-ms-input-placeholder {  
+	   color: @text-color;
+	   font-size: @font-size-base;
+	   font-weight: 400;
+	}
+}
+
+body, input, textarea, select {
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: @text-color;
+	font-family: 'Source Sans Pro', "Helvetica Nueue", Helvetica, Arial, sans-serif;
+	font-weight: 600;
+	line-height: 1.5em;
+	margin-top: 0;
+}
+
+p, span {
+	font-weight: 400;
+}
+.single-post {
+  padding: 20px;
+  .sidebar {
+    margin-top: 15px;
+    padding-left: 35px;
+  }
+  p {
+    margin-top: 20px;
+  }
+  .post-entry {
+    border: none !important; 
+  }
+  .author {
+    padding: 20px;
+    img {
+      margin-top: 10px;
+      width: 60% !important;
+      padding: 2px;
+      background-color: @gray-lighter;
+    }
+    span {
+      text-transform: uppercase;
+      border-bottom: 1px solid @gray-lighter;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+  }
+}
+a.alert-links {
+    background-color: @brand-primary;
+    color: @white;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    display: inline-block;
+    text-transform: uppercase;
+}
+.post-date {
+  text-transform: uppercase;
+  margin-left: 10px;
+color: @gray-light;
+}

@@ -1,0 +1,149 @@
+//
+// Basic print styles
+// --------------------------------------------------
+// Source: https://github.com/h5bp/html5-boilerplate/blob/master/css/main.css
+
+@media print {
+    * {
+        text-shadow: none !important;
+        color: #000 !important; // Black prints faster: h5bp.com/s
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    .col-lg-12 {
+        padding: 0;
+    }
+    h4.title {
+        float: right;
+        margin-top: -40px;
+        display: block;
+        position: absolute;
+        right: 20px;
+    }
+    #panel-tabs {
+        display: none;
+    }
+    #content {
+        padding:0;
+        margin: 0;
+        border: 0px solid @white;
+        hr {
+            display: none;
+        }
+        .col-lg-12, .col-md-12, .col-sm-12, .col-xs-12 {
+            padding: 0;
+            margin: 0;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1;
+        }
+        .panel 
+            &.panel-primary {
+                border-color: #FFFFFF;
+                .panel-heading {
+                    display: none;
+                    h3 {
+                        display: none;
+                    }
+                }
+            }
+        }
+        .form-member {
+            .panel {
+                &.panel-primary {
+                    margin: 0;
+                    padding: 0;
+                    .panel-body {
+                        margin: 0;
+                        padding: 0;
+                    }
+                }
+            }
+            .col-lg-8 {
+                width: 48%;
+                float: left;
+                display: inline-block;
+            }
+            h3 {
+                margin-bottom: 0;
+                font-size: 14px;
+            }
+            .well {
+                padding: 0;
+            }
+        }
+        a, a:visited {
+            text-decoration: underline;
+        }
+        a[href]:after {
+            content: " (" attr(href) ")";
+        }
+        abbr[title]:after {
+            content: " (" attr(title) ")";
+        }
+        // Don't show links for images, or javascript/internal links
+        .ir a:after,
+        a[href^="javascript:"]:after,
+        a[href^="#"]:after {
+            content: "";
+        }
+        pre,
+        blockquote {
+            border: 1px solid #999;
+            page-break-inside: avoid;
+        }
+        thead {
+            display: table-header-group; // h5bp.com/t
+        }
+        tr,
+        img {
+            page-break-inside: avoid;
+        }
+        img {
+            max-width: 100% !important;
+        }
+        @page {
+            margin: 2cm .5cm;
+        }
+        p,
+        h2,
+        h3 {
+            orphans: 3;
+            widows: 3;
+        }
+        h2,
+        h3 {
+            page-break-after: avoid;
+        }
+        h1, h2, h3, h4, h5, h6, p {
+            font-size: 12px;
+        }
+        // Bootstrap components
+        .navbar {
+            display: none;
+        }
+        .table {
+            td,
+            th {
+                background-color: #fff !important;
+                font-size: 12px;
+            }
+        }
+        .btn, .dropup > .btn {
+            > .caret {
+                border-top-color: #000 !important;
+            }
+        }
+        .label {
+            border: 1px solid #000;
+        }
+        .table {
+            border-collapse: collapse !important;
+        }
+        .table-bordered {
+            th,
+            td {
+                border: 1px solid #ddd !important;
+            }
+        }
+    }

@@ -1,0 +1,127 @@
+//
+// Wells
+// --------------------------------------------------
+
+
+// Base class
+.well {
+    background: @well-bg;
+    //box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+    border: @gray-lighter solid 1px;
+
+    &.text-quote {
+        font-style: italic;
+    }
+
+    h2, h3, h4 {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px rgba(255, 255, 255, 0.1);
+    }
+    >p, >span {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    @media (max-width: @screen-xs-max) {
+        padding: 10px;
+    }
+
+    &.db-block {
+        background: transparent;
+        box-shadow: none;
+        border-left: none;
+        border-right: none;
+        border-top: 4px solid rgba(0, 0, 0, 0.15);
+        border-radius: 0;
+        padding: 0;
+        margin-bottom: 20px;
+        .lead {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 5px 0;
+            padding: 5px 0;
+            color: @gray;
+            /*border-top: 1px solid rgba(0, 0, 0, 0.15);*/
+        }
+        .digit {
+            font-family: 'Open Sans Condensed', Helvetica, Arial, 'DejaVu Sans', 'Liberation Sans', Freesans, sans-serif;
+            font-size: 48px;
+            text-align: center;
+            background-color: @brand-primary;
+            color: @white;
+            padding: 25px 0;
+            height:130px;
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.3);
+            @media (max-width: @screen-xs-max) {
+                font-size: 30px;
+            }
+            .label {
+                font-family: 'Source Sans Pro','Helvetica Nueue', Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                margin-right: 3px;
+                vertical-align: 3px;
+                font-weight: 300;
+                @media (max-width: @screen-xs-max) {
+                    margin-right: 0px;
+                    font-size: 18px;
+                }
+            }
+        }
+        .options {
+            width: 100%;
+            margin-top:-40px;
+            & > * {
+                display: block;
+                vertical-align: middle;
+                //font-size: 12px;
+                /*border-right: 1px solid rgba(0, 0, 0, 0.15);*/
+            }
+            ul {
+                li {
+                    list-style-type:none;
+                    display:inline-block;
+                    width:49%;
+                    text-align:center;
+                    padding:11px 0;
+                    @media (max-width: @screen-xs-max) {
+                        font-size: 11px;
+                    }
+                    &:first-child {
+                        border-right: 1px solid rgba(0, 0, 0, 0.15);
+                    }
+                }
+            }
+        }
+    }
+    &.error-alert {
+        background: lighten(@brand-primary, 60%);
+        border: @brand-primary solid 2px;
+        box-shadow: 0 1px 3px 0 rgba(178, 21, 27, 0.33);
+        > * {
+            color: @brand-primary;
+        }
+        h2, h3, h4 {
+            border-bottom: 1px solid rgba(178, 21, 27, 0.1);
+            box-shadow: 0 1px @white;
+        }
+    }
+    &.success-alert {
+        background: lighten(@brand-warning, 60%);
+        border: @brand-warning solid 2px;
+        box-shadow: 0 1px 3px 0 rgba(178, 21, 27, 0.33);
+        > * {
+            color: @brand-warning;
+        }
+        h2, h3, h4 {
+            border-bottom: 1px solid rgba(178, 21, 27, 0.1);
+            box-shadow: 0 1px @white;
+        }
+    }
+    &.info {
+        background-color: #FFFFFF !important;
+        border: none;
+        box-shadow: none;
+    }
+}
