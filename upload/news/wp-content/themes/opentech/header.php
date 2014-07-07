@@ -86,25 +86,7 @@
 
 <!-- END TOP BAR -->
 
-<script type="text/javascript">
-	$(function() {
-        $.ajax({
-            url: '<?php echo DIR_HOME;?>/index.php?route=api/cart/countProducts',
-            type: 'post',
-            dataType: 'json',
-            success: function(json) {
-            	var count = json.productsCount;
-            	
-            	if (count) {
-            		if ($('.items-in-cart').length == 0) {
-            			$('.cart-link').prepend('<span class="items-in-cart">'+count+'</span>');
-            		}
-            	}
-            },
-            error: function(error) {
-             	console.log(error);
-            }
-        });
-    });
-</script>
+<div class="page-wrap">
+
+
 
