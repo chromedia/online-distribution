@@ -112,26 +112,30 @@
       </table>
     </fieldset>
 
-    <!-- <p>4. Paypal credentials for alternative payment method.</p>
+    <p>4. Paypal API credentials (for alternative payment method).</p>
     <fieldset>
       <table class="form">
         <tr>
           <td>Paypal Environment:</td>
           <td>
-            <input type="radio" name="paypal_environment" value="sandbox" checked /> Sandbox
-            <input type="radio" name="paypal_environment" value="production" /> Production
+            <input type="radio" name="paypal_environment" value="sandbox" <?php if('sandbox' == $paypal_environment): ?>checked <?php endif;?>/> Sandbox
+            <input type="radio" name="paypal_environment" value="production" <?php if('production' == $paypal_environment): ?>checked <?php endif;?>/> Production
           </td>
         </tr>
         <tr>
-          <td>Paypal Client Id:</td>
-          <td><input type="text" name="paypal_client_id" value="<?php echo $paypal_client_id; ?>" /></td>
+          <td>Paypal Username:</td>
+          <td><input type="text" name="paypal_username" value="<?php echo $paypal_username; ?>" /></td>
         </tr>
         <tr>
-          <td>Paypal Client Secret:</td>
-          <td><input type="text" name="paypal_client_secret" value="<?php echo $paypal_client_secret; ?>" /></td>
+          <td>Paypal Password:</td>
+          <td><input type="text" name="paypal_password" value="<?php echo $paypal_password; ?>" /></td>
+        </tr>
+        <tr>
+          <td>Paypal Signature:</td>
+          <td><input type="text" name="paypal_signature" value="<?php echo $paypal_signature; ?>" /></td>
         </tr>
       </table>
-    </fieldset> -->
+    </fieldset>
     <div class="buttons">
       <div class="left"><a href="<?php echo $back; ?>" class="button">Back</a></div>
       <div class="right">

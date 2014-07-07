@@ -2,11 +2,14 @@
 
 <div class="mtb40"> 
     <div class="row">
-        <div class="large-6 columns step-content">
-            <p>Your shopping cart is empty. </p>
-            <p><a href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">Shop Now!</a></p>
+        <div class="large-6 large-centered columns">
+            <div class="text-center">
+                <img class="mtb40" src="catalog/view/theme/chromedia/image/ICON_LOGO.png" alt="">
+                <h3 class="text-center">Your cart is empty.</h3>
+                <p class="text-center">Click <a href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">here</a> to shop.</p>
+            </div>
         </div>
     </div>
-</div>
+</div>  
 
 <?php echo $footer;?>

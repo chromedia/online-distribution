@@ -3,7 +3,7 @@
 require_once(DIR_SYSTEM . 'utilities/VideoUtilTypeFactory.php');
 
 class ControllerCatalogProduct extends Controller {
-	private $error = array(); 
+	private $error = array();
 
 	/*
 
@@ -251,6 +251,9 @@ class ControllerCatalogProduct extends Controller {
 	}
 
 	protected function getList() {
+		$product_status = $this->model_catalog_product->getProductStatusOfLanguage($this->language);
+		$this->data['product_status'] = $product_status;
+
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = $this->request->get['filter_name'];
 		} else {
@@ -407,7 +410,7 @@ class ControllerCatalogProduct extends Controller {
 				'special'    => $special,
 				'image'      => $image,
 				'quantity'   => $result['quantity'],
-				'status'     => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+				'status'     => isset($product_status[$result['status']]) ? $product_status[$result['status']] : $this->language->get('text_disabled'),//($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 				'selected'   => isset($this->request->post['selected']) && in_array($result['product_id'], $this->request->post['selected']),
 				'action'     => $action
 			);
@@ -548,8 +551,13 @@ class ControllerCatalogProduct extends Controller {
 	protected function getForm() {
 		$this->data['heading_title'] = $this->language->get('heading_title');
 
-		$this->data['text_enabled'] = $this->language->get('text_enabled');
+		// $this->data['text_enabled'] = $this->language->get('text_enabled');
+		$this->data['product_status'] = $this->model_catalog_product->getProductStatusOfLanguage($this->language);
+
+		$this->data['text_in_development'] = $this->language->get('text_in_development');
+		$this->data['text_in_store'] = $this->language->get('text_in_store');
 		$this->data['text_disabled'] = $this->language->get('text_disabled');
+
 		$this->data['text_none'] = $this->language->get('text_none');
 		$this->data['text_yes'] = $this->language->get('text_yes');
 		$this->data['text_no'] = $this->language->get('text_no');
@@ -687,17 +695,17 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['error_description'] = array();
 		}	
 
-		if (isset($this->error['model'])) {
-			$this->data['error_model'] = $this->error['model'];
-		} else {
-			$this->data['error_model'] = '';
-		}		
+		// if (isset($this->error['model'])) {
+		// 	$this->data['error_model'] = $this->error['model'];
+		// } else {
+		// 	$this->data['error_model'] = '';
+		// }		
 
-		if (isset($this->error['date_available'])) {
-			$this->data['error_date_available'] = $this->error['date_available'];
-		} else {
-			$this->data['error_date_available'] = '';
-		}	
+		// if (isset($this->error['date_available'])) {
+		// 	$this->data['error_date_available'] = $this->error['date_available'];
+		// } else {
+		// 	$this->data['error_date_available'] = '';
+		// }	
 
 		$url = '';
 
@@ -1337,10 +1345,10 @@ class ControllerCatalogProduct extends Controller {
 			}
 		}
 
-		// Check Model Name
-		if ((utf8_strlen($this->request->post['model']) < 1) || (utf8_strlen($this->request->post['model']) > 64)) {
-			$this->error['model'] = $this->language->get('error_model');
-		}
+		// // Check Model Name
+		// if ((utf8_strlen($this->request->post['model']) < 1) || (utf8_strlen($this->request->post['model']) > 64)) {
+		// 	$this->error['model'] = $this->language->get('error_model');
+		// }
 
 		// General Error Warning if Errors Exist
 		if ($this->error && !isset($this->error['warning'])) {

@@ -17,7 +17,9 @@
       <div class="buttons"><a onclick="$('#form').submit();" class="button"><?php echo $button_save; ?></a><a href="<?php echo $cancel; ?>" class="button"><?php echo $button_cancel; ?></a></div>
     </div>
     <div class="content">
-      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-store"><?php echo $tab_store; ?></a><a href="#tab-local"><?php echo $tab_local; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-ftp"><?php echo $tab_ftp; ?></a><a href="#tab-mail"><?php echo $tab_mail; ?></a><a href="#tab-fraud"><?php echo $tab_fraud; ?></a><a href="#tab-server"><?php echo $tab_server; ?></a></div>
+      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-store"><?php echo $tab_store; ?></a><a href="#tab-local"><?php echo $tab_local; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-ftp"><?php echo $tab_ftp; ?></a><a href="#tab-mail"><?php echo $tab_mail; ?></a><a href="#tab-fraud"><?php echo $tab_fraud; ?></a><a href="#tab-server"><?php echo $tab_server; ?></a>
+        <a href="#tab-shipping"><?php echo $tab_shipping; ?></a>
+      </div>
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
           <table class="form">
@@ -1000,6 +1002,56 @@
             </tr>
           </table>
         </div>
+
+         <div id="tab-shipping">
+          <h2><?php echo $text_from_address; ?> <em style="font-size:10px;"> (Address where shipping came from)</em></h2> 
+          <table class="form">
+            <tr>
+              <td><span class="required">*</span> Shipper Name</td>
+              <td>
+                <input type="text" size="40" value="<?php echo $shipper_name; ?>" name="shipper_name"/>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="required">*</span> Street</td>
+              <td>
+                 <input type="text" size="40" name="shipping_street" value="<?php echo $shipping_street; ?>"/>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="required">*</span> City</td>
+              <td>
+                <input type="text" size="40" name="shipping_city" value="<?php echo $shipping_city; ?>"/>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="required">*</span> Country</td>
+              <td>
+                <select name="shipping_country">
+                  <?php foreach ($countries as $country): ?>
+                    <?php if ($country['country_id'] == $shipping_country): ?>
+                      <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
+                    <?php else: ?>
+                      <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="required">*</span> Region/State</td>
+              <td>
+                <select name="shipping_zone">
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="required">*</span> Zip</td>
+              <td>
+                <input size="40" type="text" name="shipping_zip" value="<?php echo $shipping_zip; ?>"/>
+              </td>
+            </tr>
+          </table>
       </form>
     </div>
   </div>
@@ -1008,48 +1060,57 @@
 $('#template').load('index.php?route=setting/setting/template&token=<?php echo $token; ?>&template=' + encodeURIComponent($('select[name=\'config_template\']').attr('value')));
 //--></script> 
 <script type="text/javascript"><!--
+
+  var updateZone = function(countrySelect, zoneSelect, currentZoneId) {
+    $.ajax({
+      url: 'index.php?route=setting/setting/country&token=<?php echo $token; ?>&country_id=' + countrySelect.val(),
+      dataType: 'json',
+      beforeSend: function() {
+        countrySelect.after('<span class="wait">&nbsp;<img src="view/image/loading.gif" alt="" /></span>');
+      },    
+      complete: function() {
+        $('.wait').remove();
+      },      
+      success: function(json) {
+        if (json['postcode_required'] == '1') {
+          $('#postcode-required').show();
+        } else {
+          $('#postcode-required').hide();
+        }
+        
+        html = '<option value=""><?php echo $text_select; ?></option>';
+        
+        if (json['zone'] != '') {
+          for (i = 0; i < json['zone'].length; i++) {
+                html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+              
+            if (json['zone'][i]['zone_id'] == currentZoneId) {
+                  html += ' selected="selected"';
+              }
+    
+              html += '>' + json['zone'][i]['name'] + '</option>';
+          }
+        } else {
+          html += '<option value="0" selected="selected"><?php echo $text_none; ?></option>';
+        }
+        
+        zoneSelect.html(html);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+      }
+    });
+  }
+
 $('select[name=\'config_country_id\']').bind('change', function() {
-	$.ajax({
-		url: 'index.php?route=setting/setting/country&token=<?php echo $token; ?>&country_id=' + this.value,
-		dataType: 'json',
-		beforeSend: function() {
-			$('select[name=\'country_id\']').after('<span class="wait">&nbsp;<img src="view/image/loading.gif" alt="" /></span>');
-		},		
-		complete: function() {
-			$('.wait').remove();
-		},			
-		success: function(json) {
-			if (json['postcode_required'] == '1') {
-				$('#postcode-required').show();
-			} else {
-				$('#postcode-required').hide();
-			}
-			
-			html = '<option value=""><?php echo $text_select; ?></option>';
-			
-			if (json['zone'] != '') {
-				for (i = 0; i < json['zone'].length; i++) {
-        			html += '<option value="' + json['zone'][i]['zone_id'] + '"';
-	    			
-					if (json['zone'][i]['zone_id'] == '<?php echo $config_zone_id; ?>') {
-	      				html += ' selected="selected"';
-	    			}
-	
-	    			html += '>' + json['zone'][i]['name'] + '</option>';
-				}
-			} else {
-				html += '<option value="0" selected="selected"><?php echo $text_none; ?></option>';
-			}
-			
-			$('select[name=\'config_zone_id\']').html(html);
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
-	});
+	updateZone($(this), $('select[name=\'config_zone_id\']'), '<?php echo $config_zone_id; ?>');
 });
 
-$('select[name=\'config_country_id\']').trigger('change');
+$('select[name=\'shipping_country\']').bind('change', function() {
+  updateZone($(this), $('select[name=\'shipping_zone\']'), '<?php echo $shipping_zone; ?>');
+});
+
+$('select[name=\'config_country_id\'], select[name="shipping_country"]').trigger('change');
 //--></script> 
 <script type="text/javascript"><!--
 function image_upload(field, thumb) {

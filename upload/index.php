@@ -36,8 +36,3 @@ $front->dispatch($action, new Action('error/not_found'));
 
 // Output
 $response->output();
-
-
-/*****/
-// include(dirname( __FILE__ ) .'/news/index.php');
-// WORDPRESS END //

@@ -47,6 +47,9 @@ class ModelInstall extends Model {
 			$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_encryption'");
 			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_encryption', value = '" . $db->escape(md5(mt_rand())) . "'");
 			
+			$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_template'");
+			$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_template', value = '" . $db->escape('chromedia') . "'");
+			
 			$db->query("UPDATE `" . $data['db_prefix'] . "product` SET `viewed` = '0'");
 
 			$this->customDatabase($db, $data);
@@ -73,6 +76,10 @@ class ModelInstall extends Model {
 					$sql .= $line;
 
 					if (preg_match('/;\s*$/', $line)) {
+						// $sql = str_replace("DROP TABLE IF EXISTS `", "DROP TABLE IF EXISTS `" . $data['db_prefix'], $sql);
+						// $sql = str_replace("CREATE TABLE `", "CREATE TABLE `" . $data['db_prefix'], $sql);
+						// $sql = str_replace("INSERT INTO `", "INSERT INTO `" . $data['db_prefix'], $sql);
+
 						$db->query($sql);
 
 						$sql = '';
@@ -87,7 +94,7 @@ class ModelInstall extends Model {
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `documentation` TEXT NOT NULL DEFAULT ''; ");
 
 		$this->createVideoTable($db, $data['db_prefix']);
-
+		$this->addShippingDefaultInformation($db, $data['db_prefix']);
 	}
 
 	/**
@@ -106,5 +113,29 @@ class ModelInstall extends Model {
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 		";
 		$db->query($sql);
+	}
+
+	/**
+	 * Add shipping default information
+	 */
+	public function addShippingDefaultInformation($db, $prefix)
+	{
+		$group = 'config';
+		$data = array(
+			'shipper_name'     => 'Laura',
+			'shipping_zone'    => '3624',
+			'shipping_country' => '223',
+			'shipping_city'    => 'San Francisco',
+			'shipping_street'  => 'Clayton St.',
+			'shipping_zip'     => '94117'  
+		);
+
+		foreach ($data as $key => $value) {
+			if (!is_array($value)) {
+				$db->query("INSERT INTO " . $prefix . "setting SET  `group` = '". $db->escape($group)  ."', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape($value) . "'");
+			} else {
+				$db->query("INSERT INTO " . $prefix . "setting SET `group` = '" . $db->escape($group) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape(serialize($value)) . "', serialized = '1'");
+			}
+		}
 	}
 }

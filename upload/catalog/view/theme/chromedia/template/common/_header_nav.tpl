@@ -18,6 +18,10 @@
 
         <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL').'#contact-us'; ?>">Contact Us</a></li>
 
+        <?php if(!$no_collaborate_link): ?>
+          <li><a href="<?php echo $this->url->link('collaborate/products', '', 'SSL'); ?>">Collaborate</a></li>
+        <?php endif;?>
+
         <li><a class="scrollTo"  scroll-target="#shop"  href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">Shop</a></li>
 
         <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">

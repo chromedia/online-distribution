@@ -17,7 +17,7 @@ class ControllerProductProduct extends Controller {
 
 		if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] == $this->url->link('product/display/all')) {
 			$this->data['breadcrumbs'][] = array(
-				'text'      => 'Product List',
+				'text'      => $this->language->get('text_product_list'),
 				'href'      => $this->url->link('product/display/all'),
 				'separator' => $this->language->get('text_separator')
 			);
@@ -125,86 +125,7 @@ class ControllerProductProduct extends Controller {
 
 			$this->response->setOutput($this->render());
 		} else {
-			$url = '';
-
-			if (isset($this->request->get['path'])) {
-				$url .= '&path=' . $this->request->get['path'];
-			}
-
-			if (isset($this->request->get['filter'])) {
-				$url .= '&filter=' . $this->request->get['filter'];
-			}
-
-			if (isset($this->request->get['manufacturer_id'])) {
-				$url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
-			}
-
-			if (isset($this->request->get['search'])) {
-				$url .= '&search=' . $this->request->get['search'];
-			}
-
-			if (isset($this->request->get['tag'])) {
-				$url .= '&tag=' . $this->request->get['tag'];
-			}
-
-			if (isset($this->request->get['description'])) {
-				$url .= '&description=' . $this->request->get['description'];
-			}
-
-			if (isset($this->request->get['category_id'])) {
-				$url .= '&category_id=' . $this->request->get['category_id'];
-			}
-
-			if (isset($this->request->get['sub_category'])) {
-				$url .= '&sub_category=' . $this->request->get['sub_category'];
-			}
-
-			if (isset($this->request->get['sort'])) {
-				$url .= '&sort=' . $this->request->get['sort'];
-			}
-
-			if (isset($this->request->get['order'])) {
-				$url .= '&order=' . $this->request->get['order'];
-			}
-
-			if (isset($this->request->get['page'])) {
-				$url .= '&page=' . $this->request->get['page'];
-			}
-
-			if (isset($this->request->get['limit'])) {
-				$url .= '&limit=' . $this->request->get['limit'];
-			}
-
-			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_error'),
-				'href'      => $this->url->link('product/product', $url . '&product_id=' . $product_id),
-				'separator' => $this->language->get('text_separator')
-			);
-
-			$this->document->setTitle($this->language->get('text_error'));
-
-			$this->data['heading_title'] = $this->language->get('text_error');
-
-			$this->data['text_error'] = $this->language->get('text_error');
-
-			$this->data['button_continue'] = $this->language->get('button_continue');
-
-			$this->data['continue'] = $this->url->link('common/home');
-
-			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
-
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/error/not_found.tpl')) {
-				$this->template = $this->config->get('config_template') . '/template/error/not_found.tpl';
-			} else {
-				$this->template = 'default/template/error/not_found.tpl';
-			}
-
-			$this->children = array(
-				'common/footer',
-				'common/header'
-			);
-
-			$this->response->setOutput($this->render());
+			return $this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 	}
 

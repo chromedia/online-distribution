@@ -61,6 +61,7 @@ Code style:
 /download - empty storage
 /image
 /install
+/news
 /system
 .htaccess
 config.php
@@ -97,6 +98,12 @@ install/view/image/
 
 - Image folders store raw image files
 
+
+```
+news/
+- Contains wordpress source which handles opentech's news and updates.
+
+
 ```
 system/cache/ - empty storage
 system/config/ - empty storage
@@ -119,19 +126,63 @@ system/logs/ - empty storage
 
 - Stripe is used for payment processing
 - Shippo is used for shipment label purchasing with major carriers
-- Their API libraries are in the system library folder
+- Paypal is used as an alternative payment processor
 
+## How to Install
+
+### Main Site Install
+
+- Visit /install and follow the steps. Instead of changing folder/file permissions to 777, for better security change the folder group ownership (the need is so that the Apache server can write to your source folders). In linux command line:
 ```
-system/library/stripe/
+# Rename the config.php file in the main folder and the /admin folder with
+mv config-empty.php config.php
+
+# Check what the apache server is using as a user and group with
+ps axo user,group,comm | grep apache
+
+# Then cd to the files and folders that need to be made writable and use chown (in example case, user is admin and group is www-data)
+chown -R admin.www-data
 ```
-
-- Public and private keys must be defined somewhere like the config.php
-
+- Now the proper files and folders should be writable by the server. Next step.
+- Fill out all the fields, database access, back-end access, stripe, shippo, paypal.
+- If all is well the installation is now complete. The config.php file in the main folder has been modified by the server and the lower part should look like:    
 ```
 // Stripe
 define('STRIPE_PRIVATE_KEY', 'KEY_HERE');
 define('STRIPE_PUBLIC_KEY', 'KEY_HERE');
+
+// Shippo
+define('SHIPPO_AUTHORIZATION', 'VALUE');
+
+// Paypal
+define('PAYPAL_ENVIRONMENT', 'SANDBOX_OR_PRODUCTION');  
+define('PAYPAL_USERNAME', 'VALUE');
+define('PAYPAL_PASSWORD', 'VALUE');
+define('PAYPAL_SIGNATURE', 'VALUE');
 ```
+
+### News and Updates
+ 1. Visit /news/wp-admin. You will be notified that a configuration file must be created. This is for the blog database. Follow instructions.
+ 2. Set up a database for the blog with the same user for the main site database.
+ 3. Define the blog database name as a constant in the upload/config.php file:
+ 	// Blog
+    define('DB_BLOG_DATABASE', 'BLOG_DATABASE_NAME'); 
+
+### Mail Settings
+- Go to /admin and log in. System > Settings > Edit (Your Store) > Mail Tab
+- Fill out these fields:
+```
+# Example Filled Out (using gmail's smtp port 465)
+Mail Protocol: SMTP
+SMTP Host: smtp.gmail.com
+SMTP Username: someuser@gmail.com
+SMTP Password: somepassword
+SMTP Port: 465
+```
+
+### Shipping Settings
+- Go to /admin and log in. System > Settings > Edit (Your Store) > Shipping Details Tab
+- Fill out these fields:
 
 ##Credits
 

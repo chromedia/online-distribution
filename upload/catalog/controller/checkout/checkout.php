@@ -19,12 +19,9 @@ class ControllerCheckoutCheckout extends Controller {
     {
         try {
             $this->__prepareSelectedShipping($this->request->post['service_name']);
-
-            // $cartService = CartService::getInstance();
-            //$shippingAmount = $cartService->getAmountOfShippingServiceRate($this->request->post['service_name']);
             $cartTotal = $this->cart->getTotal();
 
-            $amount = $cartTotal + $this->session->data['shipping']['cost'];//$shippingAmount;
+            $amount = $cartTotal + $this->session->data['shipping']['cost'];
             $email = $this->request->post['customer_email'];
             $response = array();
 
@@ -37,16 +34,12 @@ class ControllerCheckoutCheckout extends Controller {
             ));
 
             if ($charge['paid'] === true) {
-                // $this->session->data['guest']['payment']['firstname'] = $this->request->post['customer_name'];
-                // $this->session->data['guest']['payment']['code'] = $charge['id'];
-
                 $shippoService = ShippoService::getInstance();
                 $shippoService->requestShipping($this->session->data['shipping']['method']);
-                // $orderId = $this->__addOrder();
 
                 $paymentInfo = array(
-                    'firstname' => $this->request->post['customer_name'],
-                    'email'     => $email,
+                    'firstname' => '',//$this->request->post['customer_name'],
+                    'email'     => '',//$email,
                     'method'    => 'Stripe'
                 );
 
@@ -163,11 +156,6 @@ class ControllerCheckoutCheckout extends Controller {
         );
         $this->__saveOrder($paymentInfo);
 
-        // $orderId = $this->__addOrder();
-
-        // $this->session->data['order_id'] = $orderId;
-        //$this->session->data['shipping_cost'] = $this->session->data['shipping']['amount'] ;
-
         $this->redirect($this->url->link('checkout/success', '', 'SSL'));
     }   
 
@@ -190,30 +178,22 @@ class ControllerCheckoutCheckout extends Controller {
                 'email'   => $this->request->post['email']
             );
 
-            // TODO: Please make it dynamic
-            $fromAddressData = array(
-                'name'      => 'Laura Behrens Wu',
-                'street1'   => 'Clayton St.',
-                'street_no' => '220',
-                'city'      => 'San Francisco',
-                'state'     => 'CA',
-                'zip'       => '94117',
-                'country'   => 'US',
-                'phone'     => '+1 555 341 9393',
-                'email'     => 'floricel.colibao@gmail.com'
-            );
-
+            $fromAddressData = $this->__getFromAddressOfShipment();
             $shippoService = ShippoService::getInstance();
 
             $toAddress = $shippoService->confirmAddress($toAddressData);
             $fromAddress = $shippoService->confirmAddress($fromAddressData);
 
-            $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
-            $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
+            if (isset($fromAddress['object_id']) && isset($toAddress['object_id'])) {
+                $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
+                $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
 
-            $this->__addShippingInformation($toAddressData, $info);
+                $this->__addShippingInformation($toAddressData, $info);
 
-            echo json_encode($rates);
+                echo json_encode($rates);
+            } else {
+                throw new Exception('Shipping address has an error.');
+            }
         } catch(Exception $e) {
             echo json_encode(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
@@ -231,8 +211,13 @@ class ControllerCheckoutCheckout extends Controller {
         $this->load->model('localisation/canada_regions');
 
         $this->data['countries'] = $this->model_localisation_country->getCountries();
+
         $this->data['us_states'] = $this->model_localisation_us_states->getUsStates();
         $this->data['canada_regions'] = $this->model_localisation_canada_regions->getCanadaRegions();
+        $this->data['shipping'] = isset($this->session->data['shipping']) ? $this->session->data['shipping'] : array();
+        $this->data['rates'] = isset($this->session->data['rates']) ? $this->session->data['rates'] : array();
+
+        // var_dump($this->data['rates']);exit;
 
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/_shipment.tpl')) {
             $this->template = $this->config->get('config_template') . '/template/checkout/_shipment.tpl';
@@ -274,6 +259,57 @@ class ControllerCheckoutCheckout extends Controller {
         $this->render();
     }
 
+    public function country() {
+        $json = array();
+
+        $this->load->model('localisation/country');
+
+        $country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
+
+        if ($country_info) {
+            $this->load->model('localisation/zone');
+
+            $json = array(
+                'country_id'        => $country_info['country_id'],
+                'name'              => $country_info['name'],
+                'iso_code_2'        => $country_info['iso_code_2'],
+                'iso_code_3'        => $country_info['iso_code_3'],
+                'address_format'    => $country_info['address_format'],
+                'postcode_required' => $country_info['postcode_required'],
+                'zone'              => $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']),
+                'status'            => $country_info['status']      
+            );
+        }
+
+        $this->response->setOutput(json_encode($json));
+    }
+
+    /**
+     * Returns from address of shipment
+     */
+    private function __getFromAddressOfShipment()
+    {
+        $this->load->model('localisation/country');
+        $this->load->model('localisation/zone');
+
+        $countryId = $this->config->get('shipping_country');
+        $country = $this->model_localisation_country->getCountry($countryId);
+
+        $zoneId = $this->config->get('shipping_zone');
+        $zone = $this->model_localisation_zone->getZone($zoneId);
+
+        return array(
+            'name'    => $this->config->get('shipper_name'),
+            'street1' => $this->config->get('shipping_street'),
+            'city'    => $this->config->get('shipping_city'),
+            'country' => $country['iso_code_2'],
+            'state'   => $zone['code'],
+            'zip'     => $this->config->get('shipping_zip'),
+            'phone'   => $this->config->get('config_telephone'),
+            'email'   => $this->config->get('config_email')
+        );
+    }
+
     /**
      * Prepares selected shipping and cost for successful payment
      */
@@ -292,9 +328,6 @@ class ControllerCheckoutCheckout extends Controller {
      */
     private function __saveOrder($paymentInfo/*, $shippingInfo*/)
     {
-        // $this->session->data['shipping']['cost'] = $shippingInfo['cost'];
-        // $this->session->data['shipping']['method'] = $shippingInfo['method'];
-
         $this->load->model('checkout/order');
         $orderService = OrderService::getInstance($this->model_checkout_order);
 
@@ -309,7 +342,7 @@ class ControllerCheckoutCheckout extends Controller {
         ));
 
         $this->session->data['order_id'] = $orderId;
-        $this->session->data['guest']['email'] = $paymentInfo['email'];
+        //$this->session->data['guest']['email'] = $paymentInfo['email'];
     }
 
     /**
@@ -320,36 +353,28 @@ class ControllerCheckoutCheckout extends Controller {
         $this->session->data['shipping'] = array(
             'firstname' => $data['name'],
             'lastname'  => '',
-            'address1'  => $data['street1'],
+            'address'   => $data['street1'],
             'city'      => $data['city'],
             'country'   => $data['country'],
             'state'     => $data['state'],
-            'postcode'  => $data['zip']
+            'postcode'  => $data['zip'],
+            'email'     => $data['email']
         );
 
         $this->session->data['rates'] = $rates;
     }
 
-    // /**
-    //  * Add as guest user
-    //  */
-    // private function __addAsGuestUser($data)
-    // {
-    //     $this->session->data['guest']['firstname'] = $data['name'];
-    //     $this->session->data['guest']['lastname'] = '';
-    //     $this->session->data['guest']['email'] = $data['email'];
-    //     $this->session->data['guest']['customer_group_id'] = $this->config->get('config_customer_group_id');
-    // }
+    /**
+     * Store shipping information in session
+     */
+    public function storeShippingInformation()
+    {
+        $data = isset($this->request->post['data']) ? $this->request->post['data'] : array();
 
-    // /**
-    //  * Add payment information
-    //  */
-    // private function __addPaymentInformation($data)
-    // {
-    //     $this->session->data['payment'] = array(
-    //         'firstname' => $data['name'],
-    //         'email'     => $data['email'],
-    //         'payment_method' => $data['method']
-    //     );
-    // }
+        foreach ($data as $key => $value) {
+            $this->session->data['shipping'][$key] = $value;
+        }
+
+        exit;
+    }
 }

@@ -34,7 +34,6 @@ class ControllerProductDisplay extends Controller {
         $this->data['heading_title'] = 'All Products';
 
         $this->template =  $this->config->get('config_template').'/template/product/product_list.tpl';
-        $this->data['button_cart'] = $this->language->get('button_cart');
         
         $this->children = array(
             'common/footer',

@@ -14,6 +14,8 @@ $_['text_option']            = 'Option';
 $_['text_option_value']      = 'Option Value';
 $_['text_percent']           = 'Percentage';
 $_['text_amount']            = 'Fixed Amount';
+$_['text_in_store']          = 'In Store';
+$_['text_in_development']    = 'In Development';
 
 // Column
 $_['column_name']            = 'Product Name';

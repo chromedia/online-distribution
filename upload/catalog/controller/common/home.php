@@ -45,7 +45,7 @@ class ControllerCommonHome extends Controller {
     private function setFeaturedProductsInfo()
     {
         $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
-        $products = $this->model_catalog_product->getFeaturedProducts(6);
+        $products = $this->model_catalog_product->getFeaturedProducts(20);
 
         $this->data['products'] = $productService->getProductsThumbnailInfo($products, $this->customer);
     }

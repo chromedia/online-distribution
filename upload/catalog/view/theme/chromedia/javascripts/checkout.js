@@ -84,10 +84,7 @@ var populateCCInfoBasedOnShipmentInfo = function() {
 
 var populateShipmentReviewInfoInPaymentStep = function() {
     var summaryContainer = $('.shipping-summary');
-    
     var shipment = getShipmentData();
-
-    console
 
     summaryContainer.find('.shipping-info-name').text(shipment.name);
     summaryContainer.find('.shipping-info-email').text(shipment.email);
@@ -97,7 +94,7 @@ var populateShipmentReviewInfoInPaymentStep = function() {
 
 
 $('#step2-trigger-btn').off('click').on('click', function() {
-    populateCCInfoBasedOnShipmentInfo();
+    //populateCCInfoBasedOnShipmentInfo();
     populateShipmentReviewInfoInPaymentStep();
 
     activateStep2();

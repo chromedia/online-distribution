@@ -1,6 +1,6 @@
 <?php   
 class ControllerErrorNotFound extends Controller {
-	public function index() {		
+	public function index() {	
 		$this->language->load('error/not_found');
 
 		$this->document->settitle($this->language->get('heading_title'));

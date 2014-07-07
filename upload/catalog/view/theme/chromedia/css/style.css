@@ -1,5 +1,12 @@
-/*@import "foundation/components/tabs";*/
-
+html, body {
+  height: 100%;
+}
+body{
+  -webkit-font-smoothing: antialiased;
+}
+.news {
+  height: 9em;
+}
 .news-section h1{
   font-weight: 300;
   margin-top: 50px;
@@ -36,6 +43,12 @@ strong{
 .mt20{
   margin-top: 20px;
 }
+.mt40{
+  margin-top: 40px;
+}
+.mt80{
+  margin-top: 80px;
+}
 .card-bordered{
   border: 1px solid #CFDDE5;
   border-radius: 5px;
@@ -44,7 +57,7 @@ strong{
 .card-title,
 .card-body,
 .card-footer{
-  padding: 20px 15px;
+  padding: 15px;
 }
 .card-body{
   height: 100px;
@@ -68,6 +81,7 @@ strong{
   font-size: 14px;
 }
 .price{
+  line-height: 1.6em;
   font-weight: 600;
 }
 a.btn-view-small{
@@ -84,7 +98,6 @@ a.btn-view-small{
   font-weight: 300;
   vertical-align: top;
   position: relative;
-  top: -3px;
   display: inline-block;
 }
 .btn, a.btn{
@@ -429,5 +442,58 @@ label.use-cc-info{
 @media only screen and (max-width: 40em) { 
   .product-sidebar{
     top: 0;
+  }
+}
+
+/* Additional CSS */
+/* Created by: Emman */
+.product-video a img {
+  height: 100px;
+  width: 100px;
+  margin: 100px auto 0;
+  opacity: 0.8;
+}
+.product-video a:hover img {
+  height: 100px;
+  width: 100px;
+  margin: 100px auto 0;
+  opacity: 1;
+}
+/* Sticky footer */
+.page-wrap {
+  min-height: 100%;
+  /* Equal to footer height */
+  margin-bottom: -295px;
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+/* Specifically assigned a card list container class 
+since original intent of this class is unknown */
+.page-wrap [class*="column"]+[class*="column"]:last-child {
+  float: left;
+}
+#home-footer, .page-wrap:after {
+  height: 295px;
+}
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { 
+  .page-wrap {
+    min-height: 100%;
+    /* Equal to footer height */
+    margin-bottom: -425px;
+  }
+  #home-footer, .page-wrap:after {
+    height: 425px;
+  }
+}
+@media only screen and (max-width: 40em) { 
+  .page-wrap {
+    min-height: 100%;
+    /* Equal to footer height */
+    margin-bottom: -425px;
+  }
+  #home-footer, .page-wrap:after {
+    height: 425px;
   }
 }

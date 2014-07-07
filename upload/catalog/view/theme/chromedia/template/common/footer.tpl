@@ -1,10 +1,10 @@
-            </div> <!--End .main-content-->
+            </div>
 
             <!-- BEG FOOTER SECTION -->
 
             <!-- background-color:#413d3d;color:#ffffff; -->
 
-            <footer class="small-12 columns" id="home-footer" style="width:100%;height:295px;position:absolute;bottom:0;left:0;">
+            <footer class="small-12 columns" id="home-footer" >
                 <div class="row" style="margin: 2em auto;">
                     <div class="large-8 small-12 columns">
                         <h4 style="font-weight: 800;">Open Tech Collaborative</h4>
@@ -32,15 +32,22 @@
                         </div>
                     </div>
 
-                    <div class="small-12 columns">
-                      <a class="scrollTo" scroll-target="#top"><i class="fi-arrow-up right" style="margin-top: 1em; color: #fff;"> Back to Top</i></a>
+                    <div class="mt20 small-12 columns">
+                        <div class="row">
+                            <div class="large-6 columns">
+                                <a style="color: #FFF;" href="<?php echo $this->url->link('information/terms_of_service', '', 'SSL'); ?>">Terms Of Service</a>
+                            </div>
+                            <div class="large-6 columns">
+                                <a class="scrollTo" scroll-target="#top"><i class="fi-arrow-up right" style="color: #fff;"> Back to Top</i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </footer>
 
-        </div> <!--End of .content-wrapper-->
+        <!-- </div> End of .content-wrapper -->
 
-<!-- END FOOTER SECTION -->
+        <!-- END FOOTER SECTION -->
         <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/foundation/foundation.min.js"></script>
         <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/app.js"></script>
         <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/loader.js"></script>

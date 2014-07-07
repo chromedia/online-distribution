@@ -41,7 +41,7 @@ class ControllerCheckoutSuccess extends Controller {
             $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping']['cost']);
 
             $emailData = array(
-                'recipient' => $this->session->data['guest']['email'],
+                'recipient' => $this->session->data['shipping']['email'],//$this->session->data['guest']['email'],
                 'total'     => $this->data['total'],
                 'subTotal'  => $this->data['subTotal'],
                 'shippingCost' => $this->data['shippingCost'],

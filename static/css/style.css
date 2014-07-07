@@ -1,5 +1,32 @@
+html, body {
+  height: 100%;
+}
 body{
   -webkit-font-smoothing: antialiased;
+}
+.news {
+  height: 9em;
+}
+.news-section h1{
+  font-weight: 300;
+  margin-top: 50px;
+}
+.news-section .news-item {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.news-section .news-item:nth-last-child(2), .news-section .news-item:nth-last-child(1) {
+  margin-bottom: 130px;
+}
+.view-all-news{
+  float: right;
+  margin: 3.6em auto 3em;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: .7em 1.5em;
+  opacity: 0.8;
+  border: 1px solid #008cba;
 }
 .group:after {
   content: "";
@@ -16,6 +43,12 @@ strong{
 .mt20{
   margin-top: 20px;
 }
+.mt40{
+  margin-top: 40px;
+}
+.mt80{
+  margin-top: 80px;
+}
 .card-bordered{
   border: 1px solid #CFDDE5;
   border-radius: 5px;
@@ -24,11 +57,10 @@ strong{
 .card-title,
 .card-body,
 .card-footer{
-  padding: 20px 15px;
+  padding: 15px;
 }
 .card-body{
   height: 100px;
-  line-height: 1.4;
 }
 .card-title a{
   
@@ -49,6 +81,7 @@ strong{
   font-size: 14px;
 }
 .price{
+  line-height: 1.6em;
   font-weight: 600;
 }
 a.btn-view-small{
@@ -62,15 +95,10 @@ a.btn-view-small{
   color: #fff;
   font-size: 13px;
   padding: 5px 12px;
-  font-weight: 700;
+  font-weight: 300;
   vertical-align: top;
   position: relative;
-  top: -3px;
   display: inline-block;
-}
-.btn-small{
-  padding: 5px 10px;
-  font-size: 12px;
 }
 .btn, a.btn{
   background-image: -o-linear-gradient(-89deg, #F07B3E 0%, #D56D37 100%);
@@ -84,8 +112,11 @@ a.btn-view-small{
   cursor: pointer;
   border-radius: 3px;
 }
+.btn-small{
+  padding: 5px 10px;
+  font-size: 12px;
+}
 a.btn-checkout{
-  width: 280px;
   padding: 10px;
   text-align: center;
   display: block;
@@ -123,7 +154,7 @@ a.btn-checkout{
 .shipping-summary{
   font-size: 14px;
 }
-.shipping-summary h3{
+.shipping-summary span{
   margin-bottom: 20px;
 }
 .product-title{
@@ -188,7 +219,7 @@ input.qty-input{
   width: 45px;
 }
 input.qty-input-3{
-  width: 60px;
+  width: 95px;
 }
 
 input.qty-input.inline{
@@ -230,7 +261,7 @@ dd.dd-price,.dd-price{
   height: 21px;
   display: inline-block;
   background-image: url('../image/icon-green-check.png');
-  vertical-align: middle
+  vertical-align: middle;
 }
 .icon-lock-sm{
   width: 16px;
@@ -252,7 +283,7 @@ dd.dd-price,.dd-price{
 .credit-cards{
   height: 32px;
   width: 225px;
-  background-image: url('../img/credit-cards.png');
+  background-image: url('../image/credit-cards.png');
   margin-bottom: 30px;
 }
 .form label{
@@ -281,14 +312,13 @@ input.has-error{
   margin-top: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-  
   border-bottom: 1px solid #e7e7e7;
 }
 .shipping-selection h3{
   font-size: 14px;
   font-weight: 600;
   color: #4d4d4d;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 .shipping-selection label{
   margin-bottom: 0px;
@@ -403,6 +433,7 @@ label.use-cc-info{
   display: inline-block;
   border-radius: 50%;
 }
+
 @media only screen and (min-width: 40.063em) and (max-width: 64em) { 
   .product-sidebar{
     top: 0;
@@ -411,5 +442,58 @@ label.use-cc-info{
 @media only screen and (max-width: 40em) { 
   .product-sidebar{
     top: 0;
+  }
+}
+
+/* Additional CSS */
+/* Created by: Emman */
+.product-video a img {
+  height: 100px;
+  width: 100px;
+  margin: 100px auto 0;
+  opacity: 0.8;
+}
+.product-video a:hover img {
+  height: 100px;
+  width: 100px;
+  margin: 100px auto 0;
+  opacity: 1;
+}
+/* Sticky footer */
+.page-wrap {
+  min-height: 100%;
+  /* Equal to footer height */
+  margin-bottom: -295px;
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+/* Specifically assigned a card list container class 
+since original intent of this class is unknown */
+.page-wrap [class*="column"]+[class*="column"]:last-child {
+  float: left;
+}
+#home-footer, .page-wrap:after {
+  height: 295px;
+}
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { 
+  .page-wrap {
+    min-height: 100%;
+    /* Equal to footer height */
+    margin-bottom: -425px;
+  }
+  #home-footer, .page-wrap:after {
+    height: 425px;
+  }
+}
+@media only screen and (max-width: 40em) { 
+  .page-wrap {
+    min-height: 100%;
+    /* Equal to footer height */
+    margin-bottom: -425px;
+  }
+  #home-footer, .page-wrap:after {
+    height: 425px;
   }
 }

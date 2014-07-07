@@ -70,11 +70,20 @@
         <div id="tab-data">
           <table class="form">
             <tr>
-              <td><span class="required">*</span> <?php echo $entry_model; ?></td>
-              <td><input type="text" name="model" value="<?php echo $model; ?>" />
-                <?php if ($error_model) { ?>
-                <span class="error"><?php echo $error_model; ?></span>
-                <?php } ?></td>
+              <td><span class="required">*</span><?php echo $entry_status; ?></td>
+              <td><select name="status">
+                  <?php foreach($product_status as $status_int => $text_option): ?>
+                    <?php if(!is_null($status) && $status == $status_int): ?>
+                        <option value="<?php echo $status_int; ?>" selected="selected"><?php echo $text_option; ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo $status_int; ?>"><?php echo $text_option; ?></option>
+                    <?php endif;?>
+                  <?php endforeach;?>
+                </select></td>
+            </tr>
+            <tr>
+              <td><?php echo $entry_model; ?></td>
+              <td><input type="text" name="model" value="<?php echo $model; ?>" /></td>
             </tr>
             <tr>
               <td><?php echo $entry_sku; ?></td>
@@ -212,18 +221,6 @@
                   <?php } else { ?>
                   <option value="<?php echo $weight_class['weight_class_id']; ?>"><?php echo $weight_class['title']; ?></option>
                   <?php } ?>
-                  <?php } ?>
-                </select></td>
-            </tr>
-            <tr>
-              <td><?php echo $entry_status; ?></td>
-              <td><select name="status">
-                  <?php if ($status) { ?>
-                  <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
-                  <option value="0"><?php echo $text_disabled; ?></option>
-                  <?php } else { ?>
-                  <option value="1"><?php echo $text_enabled; ?></option>
-                  <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
                   <?php } ?>
                 </select></td>
             </tr>

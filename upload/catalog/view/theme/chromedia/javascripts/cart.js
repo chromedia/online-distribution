@@ -79,7 +79,7 @@ $('.qty-in-cart').on('input', function() {
     var qtyInput = $(this);
     var quantity = qtyInput.val();
 
-    quantity = quantity.length > 0 ? quantity : 1;
+    //quantity = quantity.length > 0 ? quantity : 1;
 
     if (quantity) {
         var data = {
@@ -113,6 +113,12 @@ $('.qty-in-cart').on('input', function() {
                 alert(error);
             }
         });
+    } else {
+        if ($('.display-on-rates-checked').is(':visible')) {
+            $('.display-on-rates-checked').hide();
+
+            updateShipment(0);
+        }
     }
 });
 

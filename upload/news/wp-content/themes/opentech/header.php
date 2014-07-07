@@ -65,10 +65,17 @@
 	  <section class="top-bar-section">
 	    <!-- Right Nav Section -->
 	    <ul class="right">
-	      <li><a href="about.html">Learn More</a></li>
-	      <li><a class="scroll" data-speed="500" data-easing="linear" href="#latest-news">Latest News</a></li>
-	      <li><a href="about.html#contact-us">Contact Us</a></li>
-	      <li><a class="cart-link" href="/index.php?route=checkout/cart">
+	      
+            <li><a href="/index.php?route=information/learnmore">Learn More</a></li>
+
+            <li><a class="scrollTo" href="/index.php?route=common/home#latest-news">Latest News</a></li>
+
+            <li><a href="/index.php?route=information/learnmore#contact-us">Contact Us</a></li>
+
+            <li><a href="/index.php?route=collaborate/products">Collaborate</a></li>
+
+            <li><a class="scrollTo"  href="/index.php?route=common/home#shop">Shop</a></li>
+	        <li><a class="cart-link" href="/index.php?route=checkout/cart">
 	            Cart
 	      </a></li>
 	    </ul>

@@ -1,5 +1,8 @@
 <?php
 class ModelCatalogProduct extends Model {
+	// public static $_STATUS = array(
+	// 	0 => ''
+	// );
 
 	/* 
 
@@ -29,7 +32,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= "product SET model = '" . (int)$product_id;
 
 			// Product ID
-			$sql .= "', product_id = '" . (int)$product_id;
+			//$sql .= "', product_id = '" . (int)$product_id;
 
 			// Product Codes
 			$sql .= "', sku = '" . $this->db->escape($data['sku']);
@@ -66,11 +69,7 @@ class ModelCatalogProduct extends Model {
 
 		// Send Query to Database
 		$this->db->query($sql);
-
-		// Link
-		if (isset($data['product_store'])) {
-			var_dump($data['product_store']);exit;
-		}
+		$product_id = $this->db->getLastId();
 
 		// Image
 		if (isset($data['image'])) {
@@ -368,7 +367,14 @@ class ModelCatalogProduct extends Model {
 		}
 
 		// Profiles
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_profile` WHERE product_id = " . (int)$product_id);		if (isset($data['product_profiles'])) {			foreach ($data['product_profiles'] as $profile) {				$this->db->query("INSERT INTO `" . DB_PREFIX . "product_profile` SET `product_id` = " . (int)$product_id . ", customer_group_id = " . (int)$profile['customer_group_id'] . ", `profile_id` = " . (int)$profile['profile_id']);			}		}		$this->cache->delete('product');
+		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_profile` WHERE product_id = " . (int)$product_id);		
+		if (isset($data['product_profiles'])) {			
+			foreach ($data['product_profiles'] as $profile) {				
+				$this->db->query("INSERT INTO `" . DB_PREFIX . "product_profile` SET `product_id` = " . (int)$product_id . ", customer_group_id = " . (int)$profile['customer_group_id'] . ", `profile_id` = " . (int)$profile['profile_id']);			
+			}		
+		}
+
+		$this->cache->delete('product');
 		
 		// Video
 		if ($data['video_link']) {
@@ -810,5 +816,17 @@ class ModelCatalogProduct extends Model {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_video WHERE product_id = '" . (int)$product_id . "'");
 
 		return $query->rows;
+	}
+
+	/**
+	 * Custom code
+	 *
+	 * Returns status of product given langauge
+	 */
+	public function getProductStatusOfLanguage($language)
+	{
+		$product_status = array($language->get('text_disabled'), $language->get('text_in_store'), $language->get('text_in_development'));
+		
+		return $product_status;
 	}
 }

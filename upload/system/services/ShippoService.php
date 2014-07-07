@@ -75,9 +75,7 @@ class ShippoService
             }
         }
 
-
         $_SESSION['packages'] = $newPackages;
-
         
         return $ratesInfo['carriers'];
     }
@@ -93,16 +91,17 @@ class ShippoService
      */
     public function makeParcelCall($package)
     {
+        sleep(1);
         // Parcel Data
         $data = array(
             'length'    => number_format($package['length'], 2, '.', ''),
             'width'     => number_format($package['width'], 2, '.', ''),
             'height'    => number_format($package['height'], 2, '.', ''),
-            'distance_unit' => 'mm',
+            'distance_unit' => $package['length_unit'],
             'weight'    => number_format($package['weight'], 2, '.', ''),
-            'mass_unit' => 'kg',
+            'mass_unit' => $package['weight_unit'],
             'metadata'  => $package['content']['product_id']                  
-        );        
+        );    
 
         // Call Data
         $url = self::END_POINT.'parcels/';
@@ -120,6 +119,7 @@ class ShippoService
      */
     public function makeShipmentCall($parcel, $addressFrom, $addressTo)
     {
+        sleep(1);
         // Shipment Data
         $data = array(
             "object_purpose" => "PURCHASE",
@@ -226,8 +226,9 @@ class ShippoService
                     // Run call (label purchase request)
                     $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
                     $object = json_decode($response, true);
-
-                    $package['shipping_transaction'] = $response;
+    
+                    // Verify transaction request and save
+                    $package['shipping_transaction'] = $thi->__verifyTransaction($object['object_id']);
                     $newPackages[$key] = $package;
                 }
             }
@@ -253,8 +254,35 @@ class ShippoService
     }
 
     /**
-     * Request shipping 
+     * Verify shipping transaction status
      */
+    private function __verifyTransaction($transactionId)
+    {
+        $wait = true;
+
+        while ($wait) {
+            $url = 'https://api.goshippo.com/v1/transactions/' . $transactionId;
+
+            // Run call and decode json response into php object
+            $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION, false);
+            $object = json_decode($response, true);
+
+            // Get status
+            $status = $object['object_status'];
+
+            if ($status == "WAITING" || $status == "QUEUED") {
+                sleep(1);
+                $wait = true;
+            } else if ($status == "ERROR") {
+                $wait = false;
+            } else if ($status == "SUCCESS") {
+                break;
+                $wait = false;
+            }
+        }
+
+        return $response;
+    }
 
     /**
      * Get rate id of selected speed

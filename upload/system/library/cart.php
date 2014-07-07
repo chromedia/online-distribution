@@ -12,6 +12,7 @@ class Cart {
 		$this->db = $registry->get('db');
 		$this->tax = $registry->get('tax');
 		$this->weight = $registry->get('weight');
+		$this->length = $registry->get('length');
 
 		if (!isset($this->session->data['cart']) || !is_array($this->session->data['cart'])) {
 			$this->session->data['cart'] = array();
@@ -40,7 +41,14 @@ class Cart {
 					$profile_id = 0;
 				}
 
-				$product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.date_available <= NOW() AND p.status = '1'");
+				$language_id = $this->config->get('config_language_id');
+				$sql = " 
+					SELECT *
+					FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)
+					WHERE p.product_id = '" . (int)$product_id . "' AND pd.language_id = '" . (int)$language_id . "' AND p.date_available <= NOW() AND p.status = '1'
+				";
+
+				$product_query = $this->db->query($sql);
 
 				if ($product_query->num_rows) {
 					$option_price = 0;
@@ -275,9 +283,11 @@ class Cart {
 						//'reward'                    => $reward * $quantity,
 						//'points'                    => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
 						'tax_class_id'              => $product_query->row['tax_class_id'],
-						'weight'                    => ($product_query->row['weight'] + $option_weight) * $quantity,
+						'weight'                    => ($product_query->row['weight'] + $option_weight),
 						'weight_class_id'           => $product_query->row['weight_class_id'],
+						'weight_unit'               => $this->weight->getUnit($product_query->row['weight_class_id']),
 						'length'                    => $product_query->row['length'],
+						'length_unit'               => $this->length->getUnit($product_query->row['length_class_id']),
 						'width'                     => $product_query->row['width'],
 						'height'                    => $product_query->row['height'],
 						'length_class_id'           => $product_query->row['length_class_id'],

@@ -1,6 +1,6 @@
 <?php
-class ModelNewsNews extends Model {
-
+class ModelNewsNews extends Model 
+{
     private $conn;
     private $permalink;
 
@@ -9,7 +9,7 @@ class ModelNewsNews extends Model {
         parent::__construct($registry);
 
         try {
-            $this->conn = new PDO('mysql:host='.DB_HOSTNAME.';dbname=opentech_blog', DB_USERNAME, DB_PASSWORD);
+            $this->conn = new PDO('mysql:host='.DB_HOSTNAME.';dbname='.DB_BLOG_DATABASE, DB_USERNAME, DB_PASSWORD);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $this->conn->prepare('SELECT option_value FROM wp_options WHERE option_name LIKE :optionName');
@@ -18,7 +18,8 @@ class ModelNewsNews extends Model {
 
             $this->permalink = $data['option_value'];
         } catch(PDOException $e) {
-            throw $e;
+            $this->conn = null;
+            $registry->get('log')->write($e->getMessage());
         }
     }
 
@@ -26,35 +27,39 @@ class ModelNewsNews extends Model {
      * Retrieves published posts in wordpress
      */
     public function getPublishedPosts($offset = 0, $limit = 0) {
-        try {
-            $sql = "SELECT * FROM wp_posts WHERE post_type LIKE :postType AND post_status LIKE :postStatus ORDER BY post_date DESC";
+        if (!is_null($this->conn)) {
+            try {
+                $sql = "SELECT * FROM wp_posts WHERE post_type LIKE :postType AND post_status LIKE :postStatus ORDER BY post_date DESC";
 
-            if ($limit > 0) {
-                $sql .= " LIMIT $offset, $limit";
+                if ($limit > 0) {
+                    $sql .= " LIMIT $offset, $limit";
+                }
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->execute(array(
+                    'postType'      => 'post',
+                    'postStatus'    => 'publish'
+                ));
+             
+                $blogs = array();
+
+                foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                    $featuredImage = $this->getFetauredImageOfPost($row['ID']);
+                    $blogs[] = array(
+                        'id'    => $row['ID'],
+                        'title' => $row['post_title'],
+                        'url'   => $this->getPostUrl($row['guid'], $row['ID'], $row['post_name'], $row['post_date']),
+                        'featured_image' => $featuredImage,
+                        'content' => $row['post_content']
+                    );
+                }
+
+                return $blogs;
+            } catch(PDOException $e) {
+                throw $e;
             }
-
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute(array(
-                'postType'      => 'post',
-                'postStatus'    => 'publish'
-            ));
-         
-            $blogs = array();
-
-            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-                $featuredImage = $this->getFetauredImageOfPost($row['ID']);
-                $blogs[] = array(
-                    'id'    => $row['ID'],
-                    'title' => $row['post_title'],
-                    'url'   => $this->getPostUrl($row['guid'], $row['ID'], $row['post_name'], $row['post_date']),
-                    'featured_image' => $featuredImage,
-                    'content' => $row['post_content']
-                );
-            }
-
-            return $blogs;
-        } catch(PDOException $e) {
-            throw $e;
+        } else {
+            return array();
         }
     }
 

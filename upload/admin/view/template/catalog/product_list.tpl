@@ -71,19 +71,33 @@
               <td><input type="text" name="filter_model" value="<?php echo $filter_model; ?>" /></td>
               <td align="left"><input type="text" name="filter_price" value="<?php echo $filter_price; ?>" size="8"/></td>
               <td align="right"><input type="text" name="filter_quantity" value="<?php echo $filter_quantity; ?>" style="text-align: right;" /></td>
-              <td><select name="filter_status">
+              <td>
+                <select name="filter_status">
                   <option value="*"></option>
-                  <?php if ($filter_status) { ?>
-                  <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
-                  <?php } else { ?>
-                  <option value="1"><?php echo $text_enabled; ?></option>
-                  <?php } ?>
-                  <?php if (!is_null($filter_status) && !$filter_status) { ?>
-                  <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
-                  <?php } else { ?>
-                  <option value="0"><?php echo $text_disabled; ?></option>
-                  <?php } ?>
-                </select></td>
+
+                  <?php foreach($product_status as $status_int => $text_option): ?>
+                    <?php if(!is_null($filter_status) && $filter_status == $status_int): ?>
+                        <option value="<?php echo $status_int; ?>" selected="selected"><?php echo $text_option; ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo $status_int; ?>"><?php echo $text_option; ?></option>
+                    <?php endif;?>
+                  <?php endforeach;?>
+
+                  <?php if(0): ?>
+                      <?php if ($filter_status) { ?>
+                      <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                      <?php } else { ?>
+                      <option value="1"><?php echo $text_enabled; ?></option>
+                      <?php } ?>
+                      <?php if (!is_null($filter_status) && !$filter_status) { ?>
+                      <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                      <?php } else { ?>
+                      <option value="0"><?php echo $text_disabled; ?></option>
+                      <?php } ?>
+                  <?php endif;?>
+
+                </select>
+              </td>
               <td align="right"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
             </tr>
 

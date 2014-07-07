@@ -121,10 +121,34 @@ var getShipmentData = function() {
     return shipmentData;
 }
 
+var shipment_storing_xhr;
+
+var storeShipmentDataInSession = function(key_values) {
+
+    // if(shipment_storing_xhr && shipment_storing_xhr.readyState != 4 && shipment_storing_xhr.readyState != 0){
+    //     shipment_storing_xhr.abort();
+    // }
+
+    shipment_storing_xhr = $.ajax({
+        type: "POST",
+        url: "index.php?route=checkout/checkout/storeShippingInformation",
+        data: { data : key_values },
+        dataType: 'json',
+
+    }); 
+}
+
 $('.shipping-selection').on('click', '.shipping-option', function() {
     var shippingAmount = parseFloat($(this).attr('amount'));
     
     updateShipment(shippingAmount);
+
+    var data = {
+        cost : shippingAmount,
+        method : $(this).val()
+    }
+
+    storeShipmentDataInSession(data);
 });
 
 $('#shipment-form').off('submit').on('submit', function(e) {
@@ -133,30 +157,67 @@ $('#shipment-form').off('submit').on('submit', function(e) {
     retrieveShipmentRates($(this));
 });
 
+
+$('#shipment-form').find('input').on('change', function(e) {
+    e.preventDefault(); 
+
+    var data = {};
+    data[$(this).attr('name')] = $(this).val();
+
+    storeShipmentDataInSession(data);
+});
+
+$('select:not("#shipping-country")').on('change', function() {
+    var data = {};
+    data[$(this).attr('name')] = $(this).val();
+    
+    storeShipmentDataInSession(data);
+});
+
 $('.edit-shipping').off('click').on('click', function() {
     activateStep1();
 });
 
 $('#shipping-country').on('change', function() {
     var value = $(this).val();
+
     $('#shipping-province, select[name="state"]').hide();
     $('#shipping-province, select[name="state"]').attr('disabled', 'disabled');
     $('#shipping-province, select[name="state"]').removeAttr('required');
+
+    var data = {};
+    data[$(this).attr('name')] = value;
 
     if (value == 'US') {
         $('#shipping-us-states').show();
         $('#shipping-us-states').removeAttr('disabled');
         $('#shipping-us-states').attr('required', 'required');
+
+        data['state'] = $('#shipping-us-states').val();
     } else  if (value == "CA") {
         $('#shipping-canada-regions').show();
         $('#shipping-canada-regions').removeAttr('disabled');
         $('#shipping-canada-regions').attr('required', 'required');
+
+        data['state'] = $('#shipping-canada-regions').val();
     } else {
         $('#shipping-province').show();
         $('#shipping-province').removeAttr('disabled');
         $('#shipping-province').attr('required', 'required');
     }
+
+    storeShipmentDataInSession(data);
 });
 
 // init state field
-$('select[name="state"]').children('option:first-child').attr('selected', 'selected');
+if($('select[name="state"] > option:selected').length == 0){
+    $('select[name="state"]').children('option:first-child').attr('selected', 'selected');
+}
+
+var currentShipmentCost = parseFloat($('#shipment-cost').val());
+
+if (currentShipmentCost > 0) {
+    updateShipment(currentShipmentCost);
+}
+
+setShipmentData();

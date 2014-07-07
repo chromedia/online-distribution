@@ -1,5 +1,9 @@
 <?php
 class ModelCatalogProduct extends Model {
+	const IN_DEVELOPMENT = 2;
+	const IN_STORE = 1;
+	const DISABLED = 0;
+
 
 	// Added methods
 	public function getFeaturedProducts($limit)
@@ -15,7 +19,7 @@ class ModelCatalogProduct extends Model {
 		if (!$product_data) { 
 			$product_data = array();
 			
-			$query = $this->db->query("SELECT p.product_id FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '1' AND p.is_featured = 1 AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY p.date_added DESC LIMIT " . (int)$limit);
+			$query = $this->db->query("SELECT p.product_id FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '".self::IN_STORE."' AND p.is_featured = 1 AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY p.date_added DESC LIMIT " . (int)$limit);
 
 			foreach ($query->rows as $result) {
 				$product_data[$result['product_id']] = $this->getProduct($result['product_id']);
@@ -27,6 +31,72 @@ class ModelCatalogProduct extends Model {
 		return $product_data;
 
 	}
+
+	/**
+	 * Returns in development products
+	 */ 
+	public function getInDevelopmentProducts()
+	{
+		if ($this->customer->isLogged()) {
+			$customer_group_id = $this->customer->getCustomerGroupId();
+		} else {
+			$customer_group_id = $this->config->get('config_customer_group_id');
+		}	
+
+		$product_data = $this->cache->get('product.in_development.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $customer_group_id );
+
+		if (!$product_data) { 
+			$product_data = array();
+			
+			$query = $this->db->query("SELECT p.product_id FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '".self::IN_DEVELOPMENT."' AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY p.date_added DESC");
+			foreach ($query->rows as $result) {
+				$product_data[$result['product_id']] = $this->getInDevelopmentProductInfo($result['product_id']);
+			}
+
+			$this->cache->set('product.in_development.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . $customer_group_id . '.', $product_data);
+		}
+
+		return $product_data;
+
+	}
+
+	/**
+	 * Returns in development product info
+	 */
+	public function getInDevelopmentProductInfo($product_id)
+	{
+		$query = $this->db->query("SELECT DISTINCT *, pd.name AS name, p.image, m.name AS manufacturer, p.sort_order FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN ".DB_PREFIX."product_video pv ON (p.product_id = pv.product_id)  LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) LEFT JOIN " . DB_PREFIX . "manufacturer m ON (p.manufacturer_id = m.manufacturer_id) WHERE p.product_id = '" . (int)$product_id . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
+			
+		if ($query->num_rows) {
+			return array(
+				'product_id'       => $query->row['product_id'],
+				'video'            => array(
+					'videoThumbnail'   => $query->row['thumbnail_link'],
+					'videoKey'         => $query->row['video_key'],
+					'url'              => $query->row['url_link']
+				),
+				'name'             => $query->row['name'],
+				'description'      => $query->row['description'],
+				'details'          => $query->row['details'],
+				'documentation'    => $query->row['documentation'],
+				'meta_description' => $query->row['meta_description'],
+				'meta_keyword'     => $query->row['meta_keyword'],
+				'tag'              => $query->row['tag'],
+				'image'            => $query->row['image'],
+				'manufacturer_id'  => $query->row['manufacturer_id'],
+				'manufacturer'     => $query->row['manufacturer'],
+				'date_available'   => $query->row['date_available'],
+				'sort_order'       => $query->row['sort_order'],
+				'status'           => $query->row['status'],
+				'date_added'       => $query->row['date_added'],
+				'viewed'           => $query->row['viewed']
+			);
+		} else {
+			return false;
+		}
+	} 
+
+
 	// End of added methods
 
 	public function updateViewed($product_id) {
@@ -93,7 +163,6 @@ class ModelCatalogProduct extends Model {
 				'viewed'           => $query->row['viewed']
 			);
 		} else {
-			echo 'false';
 			return false;
 		}
 	}

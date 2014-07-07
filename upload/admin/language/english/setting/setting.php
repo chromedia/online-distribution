@@ -20,6 +20,7 @@ $_['text_shipping']                = 'Shipping Address';
 $_['text_payment']                 = 'Payment Address';
 $_['text_mail']                    = 'Mail';
 $_['text_smtp']                    = 'SMTP';
+$_['text_from_address']            = 'Shipping From Address';
 
 // Entry
 $_['entry_name']                   = 'Store Name:';
