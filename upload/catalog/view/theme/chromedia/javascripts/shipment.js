@@ -219,3 +219,5 @@ var currentShipmentCost = parseFloat($('#shipment-cost').val());
 if (currentShipmentCost > 0) {
     updateShipment(currentShipmentCost);
 }
+
+setShipmentData();
