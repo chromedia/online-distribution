@@ -49,7 +49,13 @@ class ControllerCheckoutSuccess extends Controller {
             );
 
             $checkoutService = CheckoutService::getInstance();
-            $checkoutService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
+
+            try {
+                $checkoutService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
+            } catch(\Exception $e) {
+                $this->log->write($e->getMessage());
+            }
+            
 
             if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/success.tpl')) {
                 $this->template = $this->config->get('config_template') . '/template/checkout/success.tpl';
