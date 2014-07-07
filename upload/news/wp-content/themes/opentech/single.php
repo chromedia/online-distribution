@@ -42,7 +42,7 @@
 						<div class="col-lg-3 author">
 							<?php echo get_avatar( get_the_author_meta( 'ID' ), 32 ); ?>
 							<span class="author"><?php the_author(); ?></span>
-							<p><?php the_tags( $before, $sep, $after ); ?> </p>
+							<p><?php the_tags(); ?></p>
 						</div>
 					</div>
 				</div>
@@ -50,6 +50,19 @@
 				</div>
 			</div>
 			<div class="col-lg-4 col-md-4 sidebar">
+				<h3>Latest Products</h3>
+			<?php
+				$attachments = get_posts( array(
+				    'post_type' => 'attachment',
+				    'posts_per_page' => 1,
+				    'post_status' => null,
+				    'post_mime_type' => 'image'
+				) );
+
+				if(isset($attachments[0]->ID)) {
+				 echo wp_get_attachment_image( $attachments[0]->ID, 'full' );
+				}
+				?>
 				<?php get_sidebar(); ?>
 			</div>
 		</div>
