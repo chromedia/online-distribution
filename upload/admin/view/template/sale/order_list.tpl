@@ -113,6 +113,8 @@
 	              	<?php 
 	              	// Count Packages
 	              	$count = count($order['packages']);
+
+                  //var_dump($order);
 	              	?>
 
 	              	<!-- Display Number of Packages -->
@@ -180,7 +182,7 @@ $(".contents1").on("click", function(){
 	var target = $( event.target );
 	target.parent().children(".contents2").toggle();
 });
-$(".contents2").hide();
+//$(".contents2").hide();
 </script>
 
 <!-- Filter -->
