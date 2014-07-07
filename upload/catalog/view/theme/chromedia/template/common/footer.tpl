@@ -32,8 +32,15 @@
                         </div>
                     </div>
 
-                    <div class="small-12 columns">
-                      <a class="scrollTo" scroll-target="#top"><i class="fi-arrow-up right" style="margin-top: 1em; color: #fff;"> Back to Top</i></a>
+                    <div class="mt20 small-12 columns">
+                        <div class="row">
+                            <div class="large-6 columns">
+                                <a style="color: #FFF;" href="<?php echo $this->url->link('information/terms_of_service', '', 'SSL'); ?>">Terms Of Service</a>
+                            </div>
+                            <div class="large-6 columns">
+                                <a class="scrollTo" scroll-target="#top"><i class="fi-arrow-up right" style="margin-top: 1em; color: #fff;"> Back to Top</i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </footer>
