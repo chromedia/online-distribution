@@ -145,7 +145,7 @@ chown -R admin.www-data
 ```
 - Now the proper files and folders should be writable by the server. Next step.
 - Fill out all the fields, database access, back-end access, stripe, shippo, paypal.
-- If all is well the installation is now complete. The config.php file in the main folder has been modified by the server and the lower part should look like:    
+- If all is well the installation is now complete. The config.php file in the main folder has been modified by the server and the lower part should look like:
 ```
 // Stripe
 define('STRIPE_PRIVATE_KEY', 'KEY_HERE');
@@ -164,9 +164,14 @@ define('PAYPAL_SIGNATURE', 'VALUE');
 ### News and Updates
  1. Visit /news/wp-admin. You will be notified that a configuration file must be created. This is for the blog database. Follow instructions.
  2. Set up a database for the blog with the same user for the main site database.
- 3. Define the blog database name as a constant in the upload/config.php file:
- 	// Blog
-    define('DB_BLOG_DATABASE', 'BLOG_DATABASE_NAME'); 
+ 3. Define the blog database name as a constant in the upload/config.php file (note there is an existing line for this, just find it and fill in the value):
+
+```
+// DB
+...
+define('DB_BLOG_DATABASE', 'BLOG_DATABASE_NAME');
+...
+```
 
 ### Mail Settings
 - Go to /admin and log in. System > Settings > Edit (Your Store) > Mail Tab
