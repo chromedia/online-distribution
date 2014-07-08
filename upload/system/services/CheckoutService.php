@@ -43,7 +43,7 @@ class CheckoutService
             'state'     => 'CA',
             'zip'       => '94117',
             'country'   => 'US',
-            'phone'     => '+1 555 341 9393',
+            'phone'     => '15553419393',
             'email'     => 'floricel.colibao@gmail.com'
         );
 
