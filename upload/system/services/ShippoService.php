@@ -228,7 +228,7 @@ class ShippoService
                     $object = json_decode($response, true);
     
                     // Verify transaction request and save
-                    $package['shipping_transaction'] = $thi->__verifyTransaction($object['object_id']);
+                    $package['shipping_transaction'] = $this->__verifyTransaction($object['object_id']);
                     $newPackages[$key] = $package;
                 }
             }
@@ -280,6 +280,9 @@ class ShippoService
                 $wait = false;
             }
         }
+
+        /*$url = 'https://api.goshippo.com/v1/transactions/' . $transactionId;
+        $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION, false);*/
 
         return $response;
     }
