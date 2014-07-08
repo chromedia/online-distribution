@@ -10,7 +10,7 @@
     
     	<h2>Archives</h2>
     	<ul>
-    		<?php wp_get_archives('type=monthly'); ?>
+    		<?php wp_get_archives('type=yearly'); ?>
     	</ul>
         
         <h2>Categories</h2>

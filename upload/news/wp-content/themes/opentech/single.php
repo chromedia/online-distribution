@@ -48,6 +48,10 @@
 				</div>
 				<?php endwhile; endif; ?>
 				</div>
+						 <!-- Footer widget area 4 -->
+			              <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Footer Area 4') ) : else : ?>	
+			              	
+					     <?php endif; ?>
 			</div>
 			<div class="col-lg-4 col-md-4 sidebar">
 				<h3>Latest Products</h3>
@@ -64,6 +68,11 @@
 				}
 				?>
 				<?php get_sidebar(); ?>
+
+						 <!-- Footer widget area 4 -->
+			              <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Page Sidebar') ) : else : ?>	
+			              	
+					     <?php endif; ?>
 			</div>
 		</div>
 	</section>
