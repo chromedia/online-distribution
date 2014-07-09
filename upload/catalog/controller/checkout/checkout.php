@@ -377,8 +377,7 @@ class ControllerCheckoutCheckout extends Controller {
     private function __addShippingInformation($data, $rates = array())
     {
         $this->session->data['shipping'] = array(
-            'firstname' => $data['name'],
-            'lastname'  => '',
+            'name'      => $data['name'],
             'address'   => $data['street1'],
             'city'      => $data['city'],
             'country'   => $data['country'],

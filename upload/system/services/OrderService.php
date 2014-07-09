@@ -114,8 +114,8 @@ class OrderService
     private function __grabShippingInfo($data)
     {
 
-        $data['shipping_firstname'] = isset($_SESSION['shipping']['firstname']) ? $_SESSION['shipping']['firstname'] : '';
-        $data['shipping_lastname'] = isset($_SESSION['shipping']['lastname']) ? $_SESSION['shipping']['lastname'] : '';    
+        $data['shipping_firstname'] = isset($_SESSION['shipping']['name']) ? $_SESSION['shipping']['name'] : '';
+        $data['shipping_lastname'] = '';    
         $data['shipping_company'] = ''; 
         $data['shipping_address_1'] = isset($_SESSION['shipping']['address1']) ? $_SESSION['shipping']['address1'] : '';
         $data['shipping_address_2'] = '';
