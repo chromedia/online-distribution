@@ -1,3 +1,5 @@
+var shipment_checking_xhr = null;
+
 var retrieveShipmentRates = function(form, event) {
     removeErrors(form);
     var hasError = showFormErrors(form);
@@ -6,10 +8,14 @@ var retrieveShipmentRates = function(form, event) {
     $('.display-on-rates-checked').hide();
     
     if (!hasError) {
-        var data = form.serialize();    
+        var data = form.serialize();
+
+        if(shipment_checking_xhr && shipment_checking_xhr.readyState != 4 && shipment_checking_xhr.readyState != 0){
+            shipment_checking_xhr.abort();
+        }
 
         // Send POST data to server
-        $.ajax({
+        shipment_checking_xhr = $.ajax({
             type: "POST",
             url: "index.php?route=checkout/checkout/checkShippingInfo",
             data: data,
@@ -78,6 +84,7 @@ var shipmentFormStatus = function(form, is_active) {
         $('.qty-in-cart').show();
         $('.qty-in-cart').next('span').hide();
     } else {
+        form.removeLoader();
         FormManager.disableFormFields(form);
         form.children(':not(.loader)').css({'opacity' : '0.3'});
         form.showLoader({'size' : 'small'});
