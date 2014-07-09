@@ -95,11 +95,12 @@
             </tr>
 
             <!-- List of Orders -->
-            <?php if ($orders) { ?>
+            <?php if ($orders) {
+            // Debug string
+            echo var_dump($orders);
+            ?>
             <?php foreach ($orders as $order) { ?>
               <?php
-              // Debug string
-              echo var_dump($orders);
 
               // Count Packages
               $count = count($order['packages']);
@@ -115,11 +116,10 @@
               <td class="right"><?php echo $order['order_id']; ?></td>
               <td class="left"><?php //echo $order['customer']; ?></td>
 
-              <td class="left contents">
+              <td class="contents">
 
                 <!-- Display Number of Packages -->
-              	<div class="contents1"><?php echo $count . ' Packages'; ?></div>
-                <br>
+              	<div class="contents1"><?php echo 'Package Count: ' . $count; ?></div>
 
               	<!-- Package Details -->
                 <div class='contents2'>
@@ -128,19 +128,24 @@
                 foreach($order['packages'] as $package) {
 	                	$label_url = $package['label_url'];
                     $tracking_number = $package['tracking_number'];
+                    $tracking_link = $package['tracking_url_provider'];
                     $content = $package['content'];
 	            	?>
-    	            	<!-- Display Label URL & Tracking Number & Item of Package -->
+    	            	<!-- Display Label URL & Tracking Number & Tracking Link & Item of Package -->
     	              <div><a href="<?php echo $label_url; ?>">Shipping Label</a></div>
                     <div><?php echo $tracking_number; ?></div>
-		            		<div><?php echo $content['product_id'] . $content['product_name'] . $content['quantity']; ?></div>
+                    <div><a href="<?php echo $tracking_link; ?>">Tracking Link</a></div>
+		            		<div>
+                      <ul>
+                        <li>Name: <?php echo $content['product_name']; ?></li>
+                        <li>ID: <?php echo $content['product_id']; ?></li>
+                        <li>Quantity: <?php echo $content['quantity']; ?></li>
+                      </ul>
+                    </div>
                     <br>
 
-      		          <?php } ?>
-                <?php
-	            	}
-	            	?>
-              </div>
+  		          <?php } ?>
+                </div>
               </td>
 
               <td class="left"><?php echo $order['status']; ?></td>
@@ -151,6 +156,7 @@
                 [ <a href="<?php echo $action['href']; ?>"><?php echo $action['text']; ?></a> ]
                 <?php } ?></td>
             </tr>
+            <?php } ?>
 
             <!-- If No Orders -->
             <?php } else { ?>
@@ -167,13 +173,13 @@
   </div>
 </div>
 
-<!-- Show Order Contents -->
+<!-- Toggle Display of Order Contents -->
 <script type="text/javascript">
-$(".contents1").on("click", function(){
+$(".contents1").on("click", function(event){
 	var target = $( event.target );
 	target.parent().children(".contents2").toggle();
 });
-//$(".contents2").hide();
+$(".contents2").hide();
 </script>
 
 <!-- Filter -->
