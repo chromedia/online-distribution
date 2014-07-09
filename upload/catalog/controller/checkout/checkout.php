@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once(DIR_SYSTEM . 'services/StripeService.php');
 require_once(DIR_SYSTEM . 'services/ShippoService.php');
@@ -25,7 +25,7 @@ require_once(DIR_SYSTEM . 'services/OrderService.php');
 /**
  * Checkout controller class
  */
-class ControllerCheckoutCheckout extends Controller { 
+class ControllerCheckoutCheckout extends Controller {
 
     /**
      * Handles final order
@@ -117,7 +117,7 @@ class ControllerCheckoutCheckout extends Controller {
          */
         if(!isset($result['TOKEN'])) {
             $this->session->data['error'] = $result['L_LONGMESSAGE0'];
-        
+
             if($this->config->get('pp_express_debug')) {
                 $this->log->write(serialize($result));
             }
@@ -172,7 +172,7 @@ class ControllerCheckoutCheckout extends Controller {
         $this->__saveOrder($paymentInfo);
 
         $this->redirect($this->url->link('checkout/success', '', 'SSL'));
-    }   
+    }
 
     /**
      * Checks shipping info
@@ -300,7 +300,7 @@ class ControllerCheckoutCheckout extends Controller {
                 'address_format'    => $country_info['address_format'],
                 'postcode_required' => $country_info['postcode_required'],
                 'zone'              => $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']),
-                'status'            => $country_info['status']      
+                'status'            => $country_info['status']
             );
         }
 
@@ -331,7 +331,7 @@ class ControllerCheckoutCheckout extends Controller {
             'country' => $country['iso_code_2'],
             'state'   => $zone['code'],
             'zip'     => $this->config->get('shipping_zip'),
-            'phone'   => $this->config->get('config_telephone'),
+            //'phone'   => $this->config->get('config_telephone'),
             'email'   => $this->config->get('config_email')
         );
     }
