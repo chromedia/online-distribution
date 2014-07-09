@@ -48,6 +48,7 @@ class ShippoService
     }
 
     /**
+     * For each package
      * Make parcels call
      * Make shipment call
      * Retrieve rates
@@ -61,6 +62,7 @@ class ShippoService
         $ratesInfo = array('carriers' => array(), 'ratesOptionPerPackage' => array());
         $newPackages = array();
 
+        // Parcel Call and Shipment Call
         foreach ($packages as $key => $package) {
             $parcelInfoArray = $this->makeParcelCall($package);
 
@@ -73,7 +75,7 @@ class ShippoService
             } else {
                 throw new Exception(json_encode($parcelInfoArray));
             }
-        }
+        }   
 
         $_SESSION['packages'] = $newPackages;
         
@@ -91,7 +93,7 @@ class ShippoService
      */
     public function makeParcelCall($package)
     {
-        sleep(1);
+        //sleep(1);
         // Parcel Data
         $data = array(
             'length'    => number_format($package['length'], 2, '.', ''),
@@ -119,7 +121,7 @@ class ShippoService
      */
     public function makeShipmentCall($parcel, $addressFrom, $addressTo)
     {
-        sleep(1);
+        //sleep(1);
         // Shipment Data
         $data = array(
             "object_purpose" => "PURCHASE",

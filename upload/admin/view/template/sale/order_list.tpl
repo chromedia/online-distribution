@@ -114,7 +114,7 @@
 	              	// Count Packages
 	              	$count = count($order['packages']);
 
-                  //var_dump($order);
+                  var_dump($order);
 	              	?>
 
 	              	<!-- Display Number of Packages -->
@@ -129,7 +129,7 @@
 	                	// Get Label URL
 	                	$label_url = $package['label_url'];
 	                	// Get Contents
-	                	$contents = $package['contents'];
+	                	$contents = $package['content'];
 	            	?>
 	            		<!-- Display Label URL for the package -->
 	                	<div><a href="<?php echo $label_url; ?>">Shipping Label</a></div>

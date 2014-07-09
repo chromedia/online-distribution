@@ -6,6 +6,21 @@ require_once(DIR_SYSTEM . 'services/CheckoutService.php');
 require_once(DIR_SYSTEM . 'services/ProductService.php');
 require_once(DIR_SYSTEM . 'services/OrderService.php');
 
+/*
+    processOrder
+    payViaPaypal
+    paypalPaymentDone
+    checkShippingInfo
+    shippingForm
+    paymentForm
+    country
+    __getFromAddressOfShipment
+    __prepareSelectedShipping
+    __saveOrder
+    __addShippingInformation
+    storeShippingInformation
+*/
+
 
 /**
  * Checkout controller class
@@ -160,14 +175,17 @@ class ControllerCheckoutCheckout extends Controller {
     }   
 
     /**
-     * Checks shipping info/rates
+     * Checks shipping info
+     * Gets shipping rates
      */
     public function checkShippingInfo()
     {
         try {
+            // Get items in cart
             $checkoutService = CheckoutService::getInstance();
             $packages = $checkoutService->preparePackages($this->cart->getProducts());
 
+            // Get To Address
             $toAddressData = array(
                 'name' => $this->request->post['name'],
                 'street1' => $this->request->post['address'],
@@ -178,16 +196,20 @@ class ControllerCheckoutCheckout extends Controller {
                 'email'   => $this->request->post['email']
             );
 
+            // Get From Address
             $fromAddressData = $this->__getFromAddressOfShipment();
             $shippoService = ShippoService::getInstance();
 
+            // Confirm From and To Addresses
             $toAddress = $shippoService->confirmAddress($toAddressData);
             $fromAddress = $shippoService->confirmAddress($fromAddressData);
 
+            // Get Shipping Rates
             if (isset($fromAddress['object_id']) && isset($toAddress['object_id'])) {
                 $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
                 $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
 
+                // Temporarily Store User Shipping Info and Retrieved Rates
                 $this->__addShippingInformation($toAddressData, $info);
 
                 echo json_encode($rates);
@@ -259,6 +281,9 @@ class ControllerCheckoutCheckout extends Controller {
         $this->render();
     }
 
+    /**
+     * ???
+     */
     public function country() {
         $json = array();
 
@@ -292,12 +317,15 @@ class ControllerCheckoutCheckout extends Controller {
         $this->load->model('localisation/country');
         $this->load->model('localisation/zone');
 
+        // Convert Country Name to ID
         $countryId = $this->config->get('shipping_country');
         $country = $this->model_localisation_country->getCountry($countryId);
 
+        // Convert Zone Name to ID
         $zoneId = $this->config->get('shipping_zone');
         $zone = $this->model_localisation_zone->getZone($zoneId);
 
+        // Return From Address
         return array(
             'name'    => $this->config->get('shipper_name'),
             'street1' => $this->config->get('shipping_street'),
