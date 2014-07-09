@@ -53,108 +53,156 @@ p, span {
 	font-weight: 400;
 }
 .single-post {
-  padding: 20px;
-  .sidebar {
-    margin-top: 15px;
-    padding-left: 35px;
-  }
-  p {
-    margin-top: 20px;
-  }
-  .post-entry {
-    border: none !important; 
-  }
-  .author {
-    padding: 20px;
-    img {
-      margin-top: 10px;
-      width: 60% !important;
-      padding: 2px;
-      background-color: @gray-lighter;
-    }
-    span {
-      text-transform: uppercase;
-      border-bottom: 1px solid @gray-lighter;
-      margin: 0;
-      padding: 0;
-      display: block;
-    }
-  }
-  .ssba {
-    img {
-      width: 5% !important;
-    }
-  }
+  	padding: 20px;
+  	.sidebar {
+		margin-top: 15px;
+		padding-left: 35px;
+  	}
+  	p {
+		margin-top: 20px;
+  	}
+  	.post-entry {
+		border: none !important; 
+  	}
+  	.author {
+		img {
+	  		padding: 2px;
+	  		background-color: @gray-lighter;
+		}
+		span {
+	  		text-transform: uppercase;
+	  		border-bottom: 1px solid @gray-lighter;
+	  		margin: 0;
+	  		padding: 0;
+	  		display: block;
+		}
+  	}
+  	.ssba {
+		img {
+	  		width: 5% !important;
+		}
+  	}
 }
 a.alert-links {
-    background-color: @brand-primary;
-    color: @white;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    display: inline-block;
-    text-transform: uppercase;
+	background-color: @brand-primary;
+	color: @white;
+	padding: 10px 20px;
+	margin-bottom: 10px;
+	display: inline-block;
+	text-transform: uppercase;
 }
 .post-date {
-  text-transform: uppercase;
-  margin-left: 10px;
-color: @gray-light;
+  	text-transform: uppercase;
+  	margin-left: 10px;
+	color: @gray-light;
 }
 #sidebar {
-  h3 {
-    font-size: 18px;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-      .widget_categories {
-      ul {
-        margin: 0;
-        li {
-          border-bottom: 1px solid @gray-lighter;
-          padding: 10px 0 10px 15px;
-          list-style-type: none;
-          a {
-            color: @gray;
-          }
-        }
-      }
-    }
-  .row {
-    margin: 20px 0;
-    h1, h2, h3, h4, h5, h6 {
-      margin: 0;
-      padding: 0;
-    }
-    h4 {
-      font-size: 16px;
-      a {
-        color: @gray-dark;
-      }
-    }
-    h5 {
-      text-transform: uppercase;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 5px;
-      color: @gray-light;
-    }
-    .post-widget-text {
-      padding: 15px 15px 5px 15px;
-    }
-  }
+	display: block;
+	margin-top: 30px;
+	.row {
+		margin-bottom: 30px;
+	}
+}
+.sidebar {
+  	h3 {
+		font-size: 18px !important;
+		text-transform: uppercase !important;
+		font-weight: 600;
+		letter-spacing: 1px;
+		margin-left: -15px;
+  	}
+	.widget_categories {
+		ul {
+			margin: 0 -15px;
+			li {
+		  		border-bottom: 1px solid @gray-lighter;
+		  		padding: 10px 0 10px 15px;
+		  		list-style-type: none;
+		  		a {
+					color: @gray;
+		  		}
+			}
+	  	}
+	}
+  	.row {
+		margin: 20px 0;
+		h1, h2, h3, h4, h5, h6 {
+	  		margin: 0;
+	  		padding: 0;
+		}
+		h4 {
+	  		font-size: 16px;
+	  		a {
+				color: @gray-dark;
+	  		}
+		}
+		h5 {
+	  		text-transform: uppercase;
+	  		font-size: 14px;
+	  		font-weight: 600;
+	  		margin-bottom: 5px;
+	  		color: @gray-light;
+		}
+		.post-widget-text {
+	  		padding: 15px 15px 5px 15px;
+		}
+  	}
 }
 .recent_posts_extra_widget {
-  ul {
-    margin-left: 0;
-    li {
-      list-style-type: none;
-      img {
-        height: 150px;
-      }
-      .sidebar-list {
-        display: block;
-        margin-bottom: 10px;
-      }
-    }
-  }
+	ul {
+		margin-left: 0;
+		li {
+	  		list-style-type: none;
+	  		img {
+				height: 150px;
+	  		}
+	  		.sidebar-list {
+				display: block;
+				margin-bottom: 10px;
+	  		}
+		}
+  	}
+}
+.row {
+	&.author {
+		border: none !important;
+		padding: 10px;
+  	}
+  	&.products {
+  		margin-bottom: 20px;
+  		display: block;
+  		/*border: none !important;*/
+  	}
+}
+ul.latest-products-container {
+	clear: both;
+	margin: 0;
+	padding: 0;
+	display: block;
+	li {
+		width: 50%;
+		float: left;
+		display: inline-block;
+		text-align: center;
+		border: 10px solid @gray-lighter;
+		img {
+			width: 100% !important;
+			a {
+				background-color: @brand-info;
+			}
+		}
+		a {
+			color:@white;
+			background-color: @brand-primary;
+			display: block;
+			font-weight: 400;
+		}
+	}
+}
+ul.jaw_widget {
+	list-style-type: none;
+	margin: 0 -15px;
+	li {
+		list-style-type: none;
+	}
 }

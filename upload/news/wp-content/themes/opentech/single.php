@@ -1,20 +1,20 @@
 <?php get_header(); ?>
-	<ul class="breadcrumbs">
-		<li>
-			<a href="/">Home</a>
-		</li>
-		<li>
-			<a href="/">News List</a>
-		</li>
-		<li>
-			<?php the_title(); ?>
-		</li>
-	</ul>
-	<section class="blog-article">
-		<div class="row single-post">
-			<div class="col-lg-8 col-md-8">
-				<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
-					<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+<ul class="breadcrumbs">
+	<li>
+		<a href="/">Home</a>
+	</li>
+	<li>
+		<a href="/">News List</a>
+	</li>
+	<li>
+		<?php the_title(); ?>
+	</li>
+</ul>
+<section class="blog-article">
+	<div class="row single-post">
+		<div class="col-lg-8 col-md-8">
+			<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
+				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 					<nav class="nav-single">
 						<h1 class="assistive-text"><?php the_title(); ?></h1>
 					</nav><!-- .nav-single -->
@@ -38,54 +38,52 @@
 					<? endif; ?>
 					<div class="entry blog-p">
 						<div class="row post-entry">
-							<div class="col-lg-9"><?php the_content(); ?></div>
-							<div class="col-lg-3 author">
-								<?php echo get_avatar( get_the_author_meta( 'ID' ), 32 ); ?>
-								<span class="author"><?php the_author(); ?></span>
-								<p><?php the_tags(); ?></p>
+							<div class="col-lg-12"><?php the_content(); ?></div>
+							<div class="row author">
+								<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+									<?php echo get_avatar( get_the_author_meta( 'ID' ), 32 ); ?>
+								</div>
+								<div class="col-lg-10 col-md-10 col-sm-9 col-xs-6">
+									<span class="author"><?php the_author(); ?></span>
+									<p><?php the_tags(); ?></p>
+								</div>
 							</div>
 						</div>
 					</div>
-					<?php endwhile; endif; ?>
-					
-					</div>
-						 <!-- Footer widget area 4 -->
-			              <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Footer Area 4') ) : else : ?>	
-			              	
-					     <?php endif; ?>
+				<?php endwhile; endif; ?>
 			</div>
-			<div class="col-lg-4 col-md-4 sidebar">
-				<h3>Latest Products</h3>
-				
-				<span class="latest-products-container"></span>
-
-				<?php get_sidebar(); ?>
-
-				<!-- Footer widget area 4 -->
-	            <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Page Sidebar') ) : else : ?>	
-	              	
-			    <?php endif; ?>
-			</div>
+			<!-- Footer widget area 4 -->
+			<?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Footer Area 4') ) : else : ?>
+			<?php endif; ?>
 		</div>
-	</section>
-
+		<div class="col-lg-4 col-md-4 sidebar">
+				<h3>Latest Products</h3>
+				<div class="row products"><ul class="latest-products-container"></ul></div>
+				<?php get_sidebar(); ?>
+				<!-- Footer widget area 4 -->
+				<?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Page Sidebar') ) : else : ?>
+				<?php endif; ?>
+				<?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Footer Area 3') ) : else : ?>
+				<?php endif; ?>
+		</div>
+	</div>
+</section>
 	<script type="text/javascript">
-	  	$(function() {
-	        $.ajax({
-	            url: '<?php echo DIR_HOME;?>/index.php?route=api/product/getLatestProducts',
-	            type: 'post',
-	            dataType: 'json',
-	            success: function(json) {
-	            	var products = json.products;
-
-	            	$.each(products, function(index, product) {
-	                    $('.latest-products-container').append('<a href="'+product.href+'"><div><img src="'+product.thumb+'"/> '+product.name+'</div></a>');
-	                });
-	            },
-	            error: function(error) {
-	              console.log(error);
-	            }
-	        });
-	    });
+		$(function() {
+			$.ajax({
+				url: '<?php echo DIR_HOME;?>/index.php?route=api/product/getLatestProducts',
+				type: 'post',
+				dataType: 'json',
+				success: function(json) {
+					var products = json.products;
+					$.each(products, function(index, product) {
+					$('.latest-products-container').append('<li><a href="'+product.href+'"><img src="'+product.thumb+'"/> '+product.name+'</a></li>');
+					});
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		});
 	</script>
 <?php get_footer(); ?>
