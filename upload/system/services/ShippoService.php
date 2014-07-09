@@ -57,43 +57,101 @@ class ShippoService
      * @param array $addressFrom
      * @param array $addressTo
      */
+    // public function getShipmentInfo2($packages, $addressFrom, $addressTo)
+    // {
+    //     $ratesInfo = array('carriers' => array(), 'ratesOptionPerPackage' => array());
+    //     $newPackages = array();
+
+    //     // Parcel Call and Shipment Call
+    //     foreach ($packages as $key => $package) {
+    //         $parcelInfoArray = $this->makeParcelCall($package);
+
+    //         if (isset($parcelInfoArray['object_id'])) {
+    //             $shipmentInfoArray = $this->makeShipmentCall($parcelInfoArray, $addressFrom, $addressTo);
+    //             $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
+    //             $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
+                
+    //             $newPackages[$key] = $package;
+    //         } else {
+    //             throw new Exception(json_encode($parcelInfoArray));
+    //         }
+    //     }   
+
+    //     $_SESSION['packages'] = $newPackages;
+        
+    //     return $ratesInfo['carriers'];
+    // }
+
+    /**
+     * Gets shipment info
+     */
     public function getShipmentInfo($packages, $addressFrom, $addressTo)
     {
-        $ratesInfo = array('carriers' => array(), 'ratesOptionPerPackage' => array());
-        $newPackages = array();
+        $parcels = $this->makeParcelsForPackages($packages);
+        sleep(1);
+
+        $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo);
+        sleep(1);
+
+        $rates = $this->__sortRates($this->checkShipmentRates($shipments, $packages));
+
+        return $rates;
+    }
+
+    /**
+     * Make parcels for packages
+     */
+    public function makeParcelsForPackages($packages)
+    {
+        $parcels = array();
 
         // Parcel Call and Shipment Call
         foreach ($packages as $key => $package) {
-            $parcelInfoArray = $this->makeParcelCall($package);
+            $parcels[$key] = $this->makeParcelCall($package);
+        }
 
-            if (isset($parcelInfoArray['object_id'])) {
-                $shipmentInfoArray = $this->makeShipmentCall($parcelInfoArray, $addressFrom, $addressTo);
-                $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
-                $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
-                
-                $newPackages[$key] = $package;
-            } else {
-                throw new Exception(json_encode($parcelInfoArray));
-            }
-        }   
+        return $parcels;
+    }
 
-        $_SESSION['packages'] = $newPackages;
-        
+    /**
+     * Make shipments for packages
+     */
+    public function makeShipmentsForParcels($parcels, $addressFrom, $addressTo)
+    {
+        $shipments = array();
+
+        foreach ($parcels as $key => $parcel) {
+            $shipments[$key] = $this->makeShipmentCall($parcel, $addressFrom, $addressTo);
+        }
+
+        return $shipments;
+    }
+
+    /**
+     * Checking rates for parcel shipments
+     */
+    public function checkShipmentRates($shipments, $packages)
+    {   
+
+        $ratesInfo = array('carriers' => array(), 'options' => array());
+
+        foreach ($shipments as $key => $shipment) {
+            $ratesInfo = $this->checkRates($shipment['rates_url'], $ratesInfo['options']);
+            $packages[$key]['rates'] = $ratesInfo['options'];
+        }
+
+        $_SESSION['packages'] = $packages;
+
         return $ratesInfo['carriers'];
     }
 
     /**
-     * Update 
-     */
-
-    /**
-     * Make parcels call
+     * Make parcel call
      *
      * @return array
      */
     public function makeParcelCall($package)
     {
-        //sleep(1);
         // Parcel Data
         $data = array(
             'length'    => number_format($package['length'], 2, '.', ''),
@@ -112,7 +170,6 @@ class ShippoService
         $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
         $parcel = json_decode($response, true);
 
-        // TODO: check for errors/invalidities
         return $parcel;
     }
 
@@ -121,7 +178,6 @@ class ShippoService
      */
     public function makeShipmentCall($parcel, $addressFrom, $addressTo)
     {
-        //sleep(1);
         // Shipment Data
         $data = array(
             "object_purpose" => "PURCHASE",
@@ -142,7 +198,6 @@ class ShippoService
         $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
         $shipment = json_decode($response, true);
 
-        // TODO: check for errors/invalidities
         return $shipment;
     }
 
@@ -151,7 +206,6 @@ class ShippoService
      */
     public function checkRates($ratesUrl, $carriers = array())
     {
-        sleep(1);
         $response = $this->curlUtil->call($ratesUrl, 'GET', SHIPPO_AUTHORIZATION);
         $response = json_decode($response, true);
 
@@ -193,10 +247,9 @@ class ShippoService
         }
 
         return array(
-            'carriers'              => $carriers,
-            'ratesOptionPerPackage' => $ratesOptions
+            'carriers' => $carriers,
+            'options'  => $ratesOptions
         );
-        //$ratesInfo;
     }
 
     /**
@@ -244,18 +297,6 @@ class ShippoService
     }
 
     /**
-     * Request shipping info given object id
-     */
-    public function requestShippingInfoOfObject($objectId)
-    {
-        $url = self::END_POINT.'transactions/'.$objectId;
-        $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION);
-        $object = json_decode($response, true);
-
-        return $object;
-    }
-
-    /**
      * Verify shipping transaction status
      */
     private function __verifyTransaction($transactionId)
@@ -283,9 +324,6 @@ class ShippoService
             }
         }
 
-        /*$url = 'https://api.goshippo.com/v1/transactions/' . $transactionId;
-        $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION, false);*/
-
         return $response;
     }
 
@@ -303,5 +341,35 @@ class ShippoService
         }
 
         return $rateId;
+    }
+
+    /**
+     * Sorts carriers
+     */
+    private function __sortRates($rates)
+    {
+        $sorted = array();
+
+        $keys = array_keys($rates);
+        $length = sizeof($keys);
+
+        for ($i = 0; $i < $length - 1; ++$i) {
+            for ($j = 0; $j < $length - $i - 1; ++$j) {
+                $rate1 = $rates[$keys[$j]];
+                $rate2 = $rates[$keys[$j + 1]];
+
+                if ($rate1['total'] > $rate2['total']) {
+                    $temp = $keys[$j];
+                    $keys[$j] = $keys[$j + 1];
+                    $keys[$j + 1] = $temp;
+                }
+            }
+        }
+
+        foreach ($keys as $key) {
+            $sorted[$key] = $rates[$key];
+        }
+
+        return $sorted;
     }
 }

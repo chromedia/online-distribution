@@ -21,14 +21,6 @@ class CheckoutService
         return self::$instance;
     }
 
-    // /**
-    //  * Process order
-    //  */
-    // public function onSuccessfulCheckout()
-    // {
-        
-    // }
-
     /**
      * Get Shippo Shipment data
      */
@@ -219,17 +211,4 @@ class CheckoutService
 
         return $contents;
     }
-
-    /***** JUST A TODO ****/
-    /***** For the meantime, returned values are sorted *****/
-    
-    /**
-     * Sorts rates
-     */
-    // public function sortRates($rates)
-    // {
-    //     foreach ($rates) {
-
-    //     }
-    // }
 }

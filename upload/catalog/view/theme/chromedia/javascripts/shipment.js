@@ -30,7 +30,7 @@ var retrieveShipmentRates = function(form, event) {
                             var service = rate.service;
                             var alias = service.split(' ').join('-');
 
-                            $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' days - <b>'+rate.total+'</b>)</em></label>');
+                            $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
                         });
 
                         $('.display-on-rates-checked').show();
