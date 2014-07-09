@@ -76,10 +76,6 @@ class ModelInstall extends Model {
 					$sql .= $line;
 
 					if (preg_match('/;\s*$/', $line)) {
-						// $sql = str_replace("DROP TABLE IF EXISTS `", "DROP TABLE IF EXISTS `" . $data['db_prefix'], $sql);
-						// $sql = str_replace("CREATE TABLE `", "CREATE TABLE `" . $data['db_prefix'], $sql);
-						// $sql = str_replace("INSERT INTO `", "INSERT INTO `" . $data['db_prefix'], $sql);
-
 						$db->query($sql);
 
 						$sql = '';
@@ -88,13 +84,21 @@ class ModelInstall extends Model {
 			}
 		}
 
+		// Customizes product table
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `is_featured` TINYINT NOT NULL DEFAULT '1'; ");
-		// $db->query("ALTER TABLE `" . $data['db_prefix'] . "product` ADD `video_link` VARCHAR(500) NOT NULL DEFAULT ''; ");
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `details` TEXT NOT NULL DEFAULT ''; ");
 		$db->query("ALTER TABLE `" . $data['db_prefix'] . "product_description` ADD `documentation` TEXT NOT NULL DEFAULT ''; ");
 
+		// Alters shipping code type
+		$db->query("ALTER TABLE `" . $data['db_prefix'] . "order` MODIFY `shipping_code` TEXT NOT NULL DEFAULT ''; ");
+
+		// Sets setting to use seo by default
+		$db->query("DELETE FROM `" . $data['db_prefix'] . "setting` WHERE `key` = 'config_seo_url'");
+		$db->query("INSERT INTO `" . $data['db_prefix'] . "setting` SET `group` = 'config', `key` = 'config_seo_url', value = '" . $db->escape(1) . "'");
+
 		$this->createVideoTable($db, $data['db_prefix']);
 		$this->addShippingDefaultInformation($db, $data['db_prefix']);
+		$this->addDefaultUrlAlias($db, $data['db_prefix']);
 	}
 
 	/**
@@ -136,6 +140,22 @@ class ModelInstall extends Model {
 			} else {
 				$db->query("INSERT INTO " . $prefix . "setting SET `group` = '" . $db->escape($group) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape(serialize($value)) . "', serialized = '1'");
 			}
+		}
+	}
+
+	/**
+	 * Add page url alias
+	 */
+	public function addDefaultUrlAlias($db, $prefix)
+	{
+		$data = array(
+			array('query' => 'information/learnmore', 'keyword' => 'about-us.html'),
+			array('query' => 'collaborate/products', 'keyword' => 'active-projects.html'),
+			array('query' => 'checkout/cart', 'keyword' => 'cart.html'),
+		);
+
+		foreach ($data as $entry) {
+			$db->query("INSERT INTO " . $prefix . "url_alias SET `query` = '" . $db->escape($entry['query']) . "', `keyword` = '" . $db->escape($entry['keyword']));
 		}
 	}
 }

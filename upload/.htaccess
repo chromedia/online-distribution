@@ -1,0 +1,30 @@
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine On
+
+    ### Collaborate Page
+    #RewriteRule index.php?route=collaborate/products /active-projects.html [R=301,L]
+
+    ### Learn more Page
+    #RewriteRule index.php?route=information/learnmore  /about-us.html [R=301,L]
+
+    ### Cart
+    #RewriteRule index.php?route=checkout/cart /cart.html [R=301,L]
+
+    ### for seo enabled
+    RewriteBase /
+    RewriteRule ^sitemap.xml$ index.php?route=feed/google_sitemap [L]
+    RewriteRule ^googlebase.xml$ index.php?route=feed/google_base [L]
+    RewriteRule ^download/(.*) /index.php?route=error/not_found [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+    RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+
+    ### Rewrite index.php
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.php\?route=common/home[?\s] [NC]
+    RewriteRule ^ /? [R=301,L]
+
+    ### Redirect not found page
+    ErrorDocument 404 /index.php?route=error/not_found
+</IfModule>

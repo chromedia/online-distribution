@@ -58,22 +58,22 @@ class ProductService
 
             $stringUtil = StringUtil::getInstance();
 
-            $videoEmbedTag = '';
-            $videoThumbnail = '';
+            // $videoEmbedTag = '';
+            // $videoThumbnail = '';
 
-            if (isset($product['video']['videoKey']) && $product['video']['videoKey']) {
-                $factory = VideoUtilTypeFactory::getInstance($product['video']['url']);
-                $videoUtil = $factory->getVideoUtility();
+            // if (isset($product['video']['videoKey']) && $product['video']['videoKey']) {
+            //     $factory = VideoUtilTypeFactory::getInstance($product['video']['url']);
+            //     $videoUtil = $factory->getVideoUtility();
 
-                $videoEmbedTag = $videoUtil->getVideoEmbedTag($product['video']['videoKey']);
-                $videoThumbnail = $product['video']['videoThumbnail'];
-            }
+            //     $videoEmbedTag = $videoUtil->getVideoEmbedTag($product['video']['videoKey']);
+            //     $videoThumbnail = $product['video']['videoThumbnail'];
+            // }
                 
             $data[] = array(
                 'product_id'      => $product['product_id'],
                 'description'     => $stringUtil->truncateString(strip_tags(html_entity_decode($product['description'])), 100),
-                'videoEmbedTag'   => $videoEmbedTag,
-                'videoThumbnail'  => $videoThumbnail,
+                //'videoEmbedTag'   => $videoEmbedTag,
+                //'videoThumbnail'  => $videoThumbnail,
                 'thumb'           => $image,
                 'name'            => $product['name'],
                 'price'           => $price,

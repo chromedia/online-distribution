@@ -63,6 +63,6 @@ if(function_exists('register_sidebar')) {
 include('includes/custom-widgets/recent-posts-extra-widget.php');
 
 //Recent portfolio items
-include('includes/custom-widgets/recent-projects-widget.php');
+// include('includes/custom-widgets/recent-projects-widget.php');
 
 ?>
