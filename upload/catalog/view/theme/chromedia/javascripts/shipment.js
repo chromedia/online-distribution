@@ -148,7 +148,7 @@ $('.shipping-selection').on('click', '.shipping-option', function() {
         method : $(this).val()
     }
 
-    storeShipmentDataInSession(data);
+    //storeShipmentDataInSession(data);
 });
 
 $('#shipment-form').off('submit').on('submit', function(e) {

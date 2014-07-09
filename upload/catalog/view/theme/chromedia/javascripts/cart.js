@@ -75,11 +75,11 @@
     });
 }
 
-$('.qty-in-cart').on('input', function() {
+$('.qty-in-cart').on('change', function() {
     var qtyInput = $(this);
     var quantity = qtyInput.val();
 
-    //quantity = quantity.length > 0 ? quantity : 1;
+    quantity = quantity.length > 0 && quantity != 0 ? quantity : 1;
 
     if (quantity) {
         var data = {

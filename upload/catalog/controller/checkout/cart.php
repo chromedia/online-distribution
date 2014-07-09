@@ -94,6 +94,7 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			if (!$json) {
+				$this->__unsetShippingDetails();
 				$this->cart->add($this->request->post['product_id'], $quantity, ''/*, $option, $profile_id*/);
 
 				$json['success'] = sprintf($this->language->get('text_success'), $product_info['name'], $this->url->link('checkout/cart'));
@@ -131,6 +132,7 @@ class ControllerCheckoutCart extends Controller {
 
 		// Update
 		if (!empty($key) && !empty($quantity)) {
+			$this->__unsetShippingDetails();
 			$this->cart->update($key, $quantity);
 
 			$products = $this->cart->getProducts();
@@ -155,6 +157,7 @@ class ControllerCheckoutCart extends Controller {
 		$key = $this->request->post['key'];
 
 		if (!empty($key)) {
+			$this->__unsetShippingDetails();
 			$this->cart->remove($key);
 
 			return $this->response->setOutput(json_encode(array(
@@ -162,8 +165,6 @@ class ControllerCheckoutCart extends Controller {
 				'total'   => number_format($this->cart->getTotal(), 2, '.', ','),
 				'productsCount' => $this->cart->countProducts()
 			)));
-
-			// TODO: Check shipments rate
 		}
 
 		return $this->response->setOutput(json_encode(array('success' => false, 'msg' => 'Invalid product key.')));		
@@ -192,5 +193,19 @@ class ControllerCheckoutCart extends Controller {
 		}
 
 		$this->response->setOutput(json_encode($json));
+	}
+
+	/**
+	 * Unsets session shipping saved data
+	 */
+	private function __unsetShippingDetails()
+	{
+		if (isset($this->session->data['shipping']['cost'])) {
+			$this->session->data['shipping']['cost'] = 0;
+		}
+
+		if (isset($this->session->data['rates'])) {
+			unset($this->session->data['rates']);
+		}
 	}
 }
