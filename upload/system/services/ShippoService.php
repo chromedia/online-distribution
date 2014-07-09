@@ -358,11 +358,6 @@ class ShippoService
                 $rate1 = $rates[$keys[$j]];
                 $rate2 = $rates[$keys[$j + 1]];
 
-                if (!isset($rate1['total']) || !isset($rate1['total'])) {
-                    var_dump($rate1);
-                    var_dump($rate2);exit;
-                }
-
                 if ($rate1['total'] > $rate2['total']) {
                     $temp = $keys[$j];
                     $keys[$j] = $keys[$j + 1];
