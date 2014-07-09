@@ -24,6 +24,8 @@ class ControllerProductProduct extends Controller {
 		}
 
 		$this->load->model('catalog/category');
+
+
 		if (isset($this->request->get['product_id'])) {
 			$product_id = (int)$this->request->get['product_id'];
 		} else {
@@ -32,101 +34,108 @@ class ControllerProductProduct extends Controller {
 
 		$this->load->model('catalog/product');
 
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_status = $this->model_catalog_product->getProductStatus($product_id);
 
-		if ($product_info) {
-			$url = '';
+		if ($product_status == ModelCatalogProduct::IN_STORE) {
+			$product_info = $this->model_catalog_product->getProduct($product_id);
 
-			$this->data['breadcrumbs'][] = array(
-				'text'      => $product_info['name'],
-				'href'      => '', //$this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id']),
-				'separator' => $this->language->get('text_separator')
-			);
+			if ($product_info) {
+				$url = '';
 
-			$this->data['heading_title'] = $product_info['name'];
-
-			if ($product_info['quantity'] <= 0) {
-				$this->data['stock'] = $product_info['stock_status'];
-			} elseif ($this->config->get('config_stock_display')) {
-				$this->data['stock'] = $product_info['quantity'];
-			} else {
-				$this->data['stock'] = $this->language->get('text_instock');
-			}
-
-			$this->load->model('tool/image');
-
-			if ($product_info['image']) {
-				$this->data['header_img'] = $this->model_tool_image->resize($product_info['image'], 700, 200);
-				$this->data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));
-				$this->data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));
-			} else {
-				$this->data['popup'] = '';
-				$this->data['thumb'] = '';
-			}
-
-			if (!isset($this->data['header_img']) || empty($this->data['header_img'])) {
-				$this->data['header_img'] = $this->model_tool_image->resize('no_image.jpg', 300, 100);
-			}
-
-			$this->data['images'] = array();
-
-			$results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
-
-			foreach ($results as $result) {
-				$this->data['images'][] = array(
-					'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')),
-					'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'))
+				$this->data['breadcrumbs'][] = array(
+					'text'      => $product_info['name'],
+					'href'      => '', //$this->url->link('product/product', $url . '&product_id=' . $this->request->get['product_id']),
+					'separator' => $this->language->get('text_separator')
 				);
+
+				$this->data['heading_title'] = $product_info['name'];
+
+				if ($product_info['quantity'] <= 0) {
+					$this->data['stock'] = $product_info['stock_status'];
+				} elseif ($this->config->get('config_stock_display')) {
+					$this->data['stock'] = $product_info['quantity'];
+				} else {
+					$this->data['stock'] = $this->language->get('text_instock');
+				}
+
+				$this->load->model('tool/image');
+
+				if ($product_info['image']) {
+					$this->data['header_img'] = $this->model_tool_image->resize($product_info['image'], 700, 200);
+					$this->data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));
+					$this->data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));
+				} else {
+					$this->data['popup'] = '';
+					$this->data['thumb'] = '';
+				}
+
+				if (!isset($this->data['header_img']) || empty($this->data['header_img'])) {
+					$this->data['header_img'] = $this->model_tool_image->resize('no_image.jpg', 300, 100);
+				}
+
+				$this->data['images'] = array();
+
+				$results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
+
+				foreach ($results as $result) {
+					$this->data['images'][] = array(
+						'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')),
+						'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'))
+					);
+				}
+
+				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+					$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+				} else {
+					$this->data['price'] = false;
+				}
+
+				$this->data['product_id'] = $product_id;
+
+				if ($product_info['minimum']) {
+					$this->data['minimum'] = $product_info['minimum'];
+				} else {
+					$this->data['minimum'] = 1;
+				}
+
+				$this->data['review_status'] = $this->config->get('config_review_status');
+				
+				$this->data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
+				$this->data['details'] = html_entity_decode($product_info['details'], ENT_QUOTES, 'UTF-8');
+				$this->data['documentation'] = html_entity_decode($product_info['documentation'], ENT_QUOTES, 'UTF-8');
+				$this->data['text_payment_profile'] = $this->language->get('text_payment_profile');
+				$this->data['profiles'] = $this->model_catalog_product->getProfiles($product_info['product_id']);
+
+				$this->data['video_tag'] = '';
+
+	            if (isset($product_info['video']['videoKey']) && $product_info['video']['videoKey']) {
+	                $factory = VideoUtilTypeFactory::getInstance($product_info['video']['url']);
+	                $videoUtil = $factory->getVideoUtility();
+
+	                $this->data['video_tag'] = $videoUtil->getVideoEmbedTag($product_info['video']['videoKey']);
+	            }
+
+				$this->model_catalog_product->updateViewed($this->request->get['product_id']);
+
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/product/product.tpl')) {
+					$this->template = $this->config->get('config_template') . '/template/product/product.tpl';
+				} else {
+					$this->template = 'default/template/product/product.tpl';
+				}
+
+				$this->children = array(
+					'common/footer',
+					'common/header'
+				);
+
+				return $this->response->setOutput($this->render());
 			}
-
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
-			} else {
-				$this->data['price'] = false;
-			}
-
-			$this->data['product_id'] = $product_id;
-
-			if ($product_info['minimum']) {
-				$this->data['minimum'] = $product_info['minimum'];
-			} else {
-				$this->data['minimum'] = 1;
-			}
-
-			$this->data['review_status'] = $this->config->get('config_review_status');
-			
-			$this->data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
-			$this->data['details'] = html_entity_decode($product_info['details'], ENT_QUOTES, 'UTF-8');
-			$this->data['documentation'] = html_entity_decode($product_info['documentation'], ENT_QUOTES, 'UTF-8');
-			$this->data['text_payment_profile'] = $this->language->get('text_payment_profile');
-			$this->data['profiles'] = $this->model_catalog_product->getProfiles($product_info['product_id']);
-
-			$this->data['video_tag'] = '';
-
-            if (isset($product_info['video']['videoKey']) && $product_info['video']['videoKey']) {
-                $factory = VideoUtilTypeFactory::getInstance($product_info['video']['url']);
-                $videoUtil = $factory->getVideoUtility();
-
-                $this->data['video_tag'] = $videoUtil->getVideoEmbedTag($product_info['video']['videoKey']);
-            }
-
-			$this->model_catalog_product->updateViewed($this->request->get['product_id']);
-
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/product/product.tpl')) {
-				$this->template = $this->config->get('config_template') . '/template/product/product.tpl';
-			} else {
-				$this->template = 'default/template/product/product.tpl';
-			}
-
-			$this->children = array(
-				'common/footer',
-				'common/header'
-			);
-
-			$this->response->setOutput($this->render());
-		} else {
-			return $this->redirect($this->url->link('error/not_found', '', 'SSL'));
-		}
+		} elseif ($product_status == ModelCatalogProduct::IN_DEVELOPMENT) {
+			return $this->forward('collaborate/products', array('product_id' => $this->request->get['product_id']));
+		} 
+		
+		return $this->redirect($this->url->link('error/not_found', '', 'SSL'));
+		
 	}
 
 	public function review() {

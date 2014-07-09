@@ -11,10 +11,10 @@
             <div class="large-4 columns">
                 <div class="card-bordered">
                     <div class="card-title">
-                        <a href="<?php echo  $this->url->link('collaborate/products', 'product_id=' . $product['product_id']); ?>"><?php echo $product['name']; ?></a>  
+                        <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>"><?php echo $product['name']; ?></a>  
                     </div>
                     <div class="card-thumb">
-                        <a href="<?php echo  $this->url->link('collaborate/products', 'product_id=' . $product['product_id']); ?>">
+                        <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>">
                             <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>">
                         </a>
                     </div>
@@ -25,7 +25,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="small-12 columns">
-                                <a href="<?php echo  $this->url->link('collaborate/products', 'product_id=' . $product['product_id']); ?>" class="btn-view-small">View</a>
+                                <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>" class="btn-view-small">View</a>
                             </div>
                         </div>
                     </div>

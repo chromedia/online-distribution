@@ -96,6 +96,20 @@ class ModelCatalogProduct extends Model {
 		}
 	} 
 
+	/**
+	 * Returns product status
+	 */
+	public function getProductStatus($product_id)
+	{
+		$query = $this->db->query("SELECT DISTINCT p.status FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'" );
+
+		if ($query->num_rows) {
+			return $query->row['status'];
+		} else {
+			return null;
+		}
+
+	}
 
 	// End of added methods
 
