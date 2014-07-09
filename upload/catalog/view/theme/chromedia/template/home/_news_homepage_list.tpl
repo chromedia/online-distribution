@@ -5,7 +5,7 @@
             <div class="small-12 columns" style="margin:-20px auto -30px auto">
                 <h1 style="float:left;" name="latest_news">Latest News</h1>
                 <!-- <a href="<?php //echo $this->url->link('information/news', '', 'SSL'); ?>" class="view-all-news">View All Updates</a> -->
-                <a href="/news" class="view-all-news">View All Updates</a>
+                <a href="/news" class="view-all-news">View All News</a>
             </div>
 
             <?php foreach($news as $newsItem): ?>

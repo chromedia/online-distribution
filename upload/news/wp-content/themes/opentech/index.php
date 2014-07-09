@@ -1,17 +1,25 @@
 <?php // Template Name: Home page ?>
 <?php  get_header(); ?>
 
+<ul class="breadcrumbs">
+    <li>
+        <a href="/">Home</a>
+    </li>
+    <li>
+        News List
+    </li>
+</ul>
 
-<section class="row">
+<section class="row mtb-20 news-section">
   <div class="small-12 columns">
     <h1 style="margin: 1em auto 1em auto;" name="latest_news">Latest News</h1>
         <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
           <div class="blog-post-box blog-box-left small-12 medium-6 columns ">
             <?php 
-      if(has_post_thumbnail()){
-    ?>
+              if(has_post_thumbnail()){
+            ?>
         
-        <?php the_post_thumbnail(); } ?>
+            <?php the_post_thumbnail(); } ?>
       
             <h3 class="title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
             <div class="ptb20 post-excerpt">
@@ -30,9 +38,9 @@
 
     <h2>Not Found</h2>
 
-  <?php endif; ?>
+    <?php endif; ?>
         
-  </div>
+    </div>
 </section>
 
 

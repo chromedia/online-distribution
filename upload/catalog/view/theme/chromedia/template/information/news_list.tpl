@@ -7,9 +7,8 @@
 <?php if(!empty($news)): ?>
     <?php $noOfSections = (count($news) + 1) / 2; ?>
 
-
     <section class="row mtb-20 news-section">
-        <h1>News and Updates</h1>
+        <h1>Latest News</h1>
         <?php foreach($news as $newsItem): ?>
             
             <div class="small-12 medium-6 columns blog-box-left news-item">
