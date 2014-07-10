@@ -1,4 +1,7 @@
 <?php echo $header; ?>
+
+<div id="token" value="<?php echo $token; ?>" type="hidden"></div>
+
 <div id="content">
 
   <?php if ($error_warning) { ?>
@@ -121,10 +124,9 @@
                 <!-- Display Number of Packages -->
               	<div class="contents1"><?php echo 'Package Count: ' . $count; ?></div>
 
-              	<!-- Package Details -->
+              	<!-- Show Each Package Details -->
                 <div class='contents2'>
 	              <?php
-                // For each package
                 foreach($order['packages'] as $package) {
 	                	$label_url = $package['label_url'];
                     $tracking_number = $package['tracking_number'];
@@ -148,7 +150,18 @@
                 </div>
               </td>
 
-              <td class="left"><?php echo $order['status']; ?></td>
+              <!-- View and Change Order Status -->
+              <td class="left">
+                <div type="hidden" class="order_id" value="<?php echo $order['order_id']; ?>"></div>
+                <span class="current_status"><?php echo $order['status']; ?></span>
+                <select class="new_status">
+                  <option value="0"></option>
+                  <option value="1">Pending</option>
+                  <option value="2">Processed</option>
+                  <option value="3">Shipped</option>
+                </select>
+              </td>
+
               <td class="right"><?php echo $order['total']; ?></td>
               <td class="left"><?php echo $order['date_added']; ?></td>
               <td class="left"><?php echo $order['date_modified']; ?></td>
@@ -173,14 +186,8 @@
   </div>
 </div>
 
-<!-- Toggle Display of Order Contents -->
-<script type="text/javascript">
-$(".contents1").on("click", function(event){
-	var target = $( event.target );
-	target.parent().children(".contents2").toggle();
-});
-$(".contents2").hide();
-</script>
+<!-- Import Orders Javascript -->
+<script type="text/javascript" src="<?php echo HTTP_SERVER;?>view/javascript/orders.js"></script>
 
 <!-- Filter -->
 <script type="text/javascript"><!--

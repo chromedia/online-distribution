@@ -1,13 +1,13 @@
 <?php
 
-// Configuration
+// Require Configuration Data
 if (file_exists('config.php')) {
 	require_once('config.php');
 }
 
-// Install
+// Redirect to Install Page if filepaths not defined
 if (!defined('DIR_APPLICATION')) {
-	header('Location: ../install/index.php');
+	header('Location: install/index.php');
 	exit;
 }
 
@@ -19,13 +19,13 @@ $_SESSION['HOME'] = DIR_HOME;
 require_once(DIR_SYSTEM . 'startup.php');
 
 // Url
-$url = new Url(HTTP_SERVER, $config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER);	
+$url = new Url(HTTP_SERVER, $config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER);
 $registry->set('url', $url);
 
 // Language
 $languages = array();
 
-$query = $db->query("SELECT * FROM `" . DB_PREFIX . "language`"); 
+$query = $db->query("SELECT * FROM `" . DB_PREFIX . "language`");
 
 foreach ($query->rows as $result) {
 	$languages[$result['code']] = $result;
@@ -33,9 +33,9 @@ foreach ($query->rows as $result) {
 
 $config->set('config_language_id', $languages[$config->get('config_admin_language')]['language_id']);
 
-// Language	
+// Language
 $language = new Language($languages[$config->get('config_admin_language')]['directory']);
-$language->load($languages[$config->get('config_admin_language')]['filename']);	
+$language->load($languages[$config->get('config_admin_language')]['filename']);
 $registry->set('language', $language);
 
 // Login

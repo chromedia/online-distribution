@@ -5,6 +5,7 @@ class ControllerSaleOrder extends Controller {
 /*
 	function list:
 	index
+	changeOrderStatus
 	insert
 	update
 	delete
@@ -35,6 +36,23 @@ class ControllerSaleOrder extends Controller {
 		$this->load->model('sale/order');
 
 		$this->getList();
+	}
+
+	public function changeOrderStatus() {
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		$data = $this->request->post;
+
+		if(isset($data['order_id']) == true && isset($data['new_status']) == true){
+			$this->model_sale_order->changeOrderStatus($data);
+			$response = array(
+				'new_status' => $data['new_status']
+			);
+			echo json_encode($response);
+		}
+		exit;
 	}
 
 	public function insert() {
@@ -501,6 +519,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
+		$this->data['token'] = $this->session->data['token'];
 
 		$this->template = 'sale/order_list.tpl';
 		$this->children = array(

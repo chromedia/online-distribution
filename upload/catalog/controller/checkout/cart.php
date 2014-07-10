@@ -22,7 +22,8 @@ class ControllerCheckoutCart extends Controller {
 
 		$products = $this->cart->getProducts();
 
-		if ($products) {	
+		// Display Checkout Page
+		if ($products) {
 			$this->data['heading_title'] = $this->language->get('heading_title');
 
 			$this->load->model('tool/image');
@@ -46,10 +47,12 @@ class ControllerCheckoutCart extends Controller {
 				'paymentForm'  => 'checkout/checkout/paymentForm',
 				'shippingForm' => 'checkout/checkout/shippingForm',
 				'common/footer',
-				'common/header'	
+				'common/header'
 			);
 
-			$this->response->setOutput($this->render());					
+			$this->response->setOutput($this->render());
+			
+		// Display Empty Cart Page
 		} else {
 			$this->data['heading_title'] = $this->language->get('heading_title');
 
@@ -63,10 +66,10 @@ class ControllerCheckoutCart extends Controller {
 
 			$this->children = array(
 				'common/footer',
-				'common/header'	
+				'common/header'
 			);
 
-			$this->response->setOutput($this->render());			
+			$this->response->setOutput($this->render());
 		}
 	}
 
@@ -86,7 +89,7 @@ class ControllerCheckoutCart extends Controller {
 
 		$product_info = $this->model_catalog_product->getProduct($product_id);
 
-		if ($product_info) {			
+		if ($product_info) {
 			if (isset($this->request->post['quantity'])) {
 				$quantity = $this->request->post['quantity'];
 			} else {
@@ -107,9 +110,9 @@ class ControllerCheckoutCart extends Controller {
 				// Totals
 				$this->load->model('setting/extension');
 
-				$total_data = array();					
+				$total_data = array();
 				$total = 0;
-				
+
 
 				$json['total'] = $this->cart->countProducts();// + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0); //sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
 
@@ -118,7 +121,7 @@ class ControllerCheckoutCart extends Controller {
 			}
 		}
 
-		$this->response->setOutput(json_encode($json));		
+		$this->response->setOutput(json_encode($json));
 	}
 
 	/**
@@ -167,7 +170,7 @@ class ControllerCheckoutCart extends Controller {
 			)));
 		}
 
-		return $this->response->setOutput(json_encode(array('success' => false, 'msg' => 'Invalid product key.')));		
+		return $this->response->setOutput(json_encode(array('success' => false, 'msg' => 'Invalid product key.')));
 	}
 
 	public function country() {
@@ -188,7 +191,7 @@ class ControllerCheckoutCart extends Controller {
 				'address_format'    => $country_info['address_format'],
 				'postcode_required' => $country_info['postcode_required'],
 				'zone'              => $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']),
-				'status'            => $country_info['status']		
+				'status'            => $country_info['status']
 			);
 		}
 
