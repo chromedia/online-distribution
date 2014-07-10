@@ -16,7 +16,7 @@ $(".new_status").on("change", function(event){
 	var data = { new_status : new_status, order_id : order_id };
 	var token = $('#token').attr('value');
 
-	if(new_status != "0"){
+	if(new_status != "null"){
 		// Send POST data to server
 		$(function() {
 			$.ajax({

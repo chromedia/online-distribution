@@ -151,13 +151,13 @@
               </td>
 
               <!-- View and Change Order Status -->
+              <!-- 0:DELETE, 1:Pending, 2:Processing, 3:Shipped, 5:Complete, 7:Canceled, 8:Denied,  -->
               <td class="left">
                 <div type="hidden" class="order_id" value="<?php echo $order['order_id']; ?>"></div>
                 <span class="current_status"><?php echo $order['status']; ?></span>
                 <select class="new_status">
-                  <option value="0"></option>
+                  <option value="null"></option>
                   <option value="1">Pending</option>
-                  <option value="2">Processed</option>
                   <option value="3">Shipped</option>
                 </select>
               </td>
