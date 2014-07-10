@@ -48,41 +48,6 @@ class ShippoService
     }
 
     /**
-     * For each package
-     * Make parcels call
-     * Make shipment call
-     * Retrieve rates
-     *
-     * @param array $packages
-     * @param array $addressFrom
-     * @param array $addressTo
-     */
-    // public function getShipmentInfo2($packages, $addressFrom, $addressTo)
-    // {
-    //     $ratesInfo = array('carriers' => array(), 'ratesOptionPerPackage' => array());
-    //     $newPackages = array();
-
-    //     // Parcel Call and Shipment Call
-    //     foreach ($packages as $key => $package) {
-    //         $parcelInfoArray = $this->makeParcelCall($package);
-
-    //         if (isset($parcelInfoArray['object_id'])) {
-    //             $shipmentInfoArray = $this->makeShipmentCall($parcelInfoArray, $addressFrom, $addressTo);
-    //             $ratesInfo = $this->checkRates($shipmentInfoArray['rates_url'], $ratesInfo['carriers']);
-    //             $package['rates'] = $ratesInfo['ratesOptionPerPackage'];
-                
-    //             $newPackages[$key] = $package;
-    //         } else {
-    //             throw new Exception(json_encode($parcelInfoArray));
-    //         }
-    //     }   
-
-    //     $_SESSION['packages'] = $newPackages;
-        
-    //     return $ratesInfo['carriers'];
-    // }
-
-    /**
      * Gets shipment info
      */
     public function getShipmentInfo($packages, $addressFrom, $addressTo)

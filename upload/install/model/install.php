@@ -155,7 +155,7 @@ class ModelInstall extends Model {
 		);
 
 		foreach ($data as $entry) {
-			$db->query("INSERT INTO " . $prefix . "url_alias SET `query` = '" . $db->escape($entry['query']) . "', `keyword` = '" . $db->escape($entry['keyword']));
+			$db->query("INSERT INTO " . $prefix . "url_alias SET `query` = '" . $db->escape($entry['query']) . "', `keyword` = '" . $db->escape($entry['keyword']) ."'");
 		}
 	}
 }
