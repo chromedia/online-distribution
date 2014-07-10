@@ -28,3 +28,5 @@
     ### Redirect not found page
     ErrorDocument 404 /index.php?route=error/not_found
 </IfModule>
+
+php_value display_errors 1

@@ -35,8 +35,8 @@ label {
 }
 /* header */
 #header {
-	position: relative;	
-	background-color: #FFFFFF;	
+	position: relative;
+	background-color: #FFFFFF;
 	height: auto;
 	z-index: 99;
 	padding: none;
@@ -51,8 +51,8 @@ label {
 #header .div2 {
 	font-family: Arial, Helvetica, sans-serif;
 	text-decoration: none;
-	display: inline-block;	
-	float: left;	
+	display: inline-block;
+	float: left;
 	vertical-align: center;
 	color: #222222;
 	padding: 3px 10px 3px 10px;
@@ -131,7 +131,7 @@ label {
 	clear: both;
 }
 #menu > ul .parent {
-	background-image: url('../image/arrow-right.png'); 
+	background-image: url('../image/arrow-right.png');
 	background-position: 95% center;
 	background-repeat:no-repeat;
 }
@@ -141,13 +141,13 @@ label {
 #menu > ul li li a {
 	padding: 5px;
 	margin: 1px;
-	color: #FFFFFF;	
+	color: #FFFFFF;
 	width: 147px;
 }
 #menu > ul li li > a:hover {
 	margin: 0px;
 	border: 1px solid #BD4C14;
-	background-color: #391706; 
+	background-color: #391706;
 }
 
 
@@ -163,6 +163,20 @@ body > #container {
 	min-width: 900px;
 	padding-bottom: 128px;
 }
+/* Orders */
+.contents {
+	margin: none;
+	padding: none;
+	border: none;
+}
+.contents1 {
+	display: block;
+	margin: none;
+	padding: none;
+	background-color: #C2E0FF;
+	line-height: 20px;
+}
+
 /* login */
 .login {
 	padding-top: 10%;
@@ -178,25 +192,25 @@ body > #container {
 }
 .portal_input {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;	
+	-moz-box-sizing: border-box;
 	width: 300px;
 	height: 50px;
 	font-size: 15px;
 	text-align: center;
 	padding: 0;
 	border-radius: 3px;
-	border: 1px solid #CCC;	
+	border: 1px solid #CCC;
 	background-color: #FAFAFA;
-	color: #5B5C5C;		
+	color: #5B5C5C;
 }
 .portal_button {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;	
+	-moz-box-sizing: border-box;
 	width: 300px;
 	height: 50px;
 	font-size: 15px;
-	text-align: center;	
-	border-radius: 3px;	
+	text-align: center;
+	border-radius: 3px;
 	border: 1px solid #CCC;
 	background-color: #3686bb;
 	color: #FFFFFF;
@@ -342,13 +356,13 @@ footer {
 .box > .heading .buttons .button {
 	margin-left: 5px;
 }
-.box > .content h2 { 
+.box > .content h2 {
 	text-transform: uppercase;
 	color: #FF802B;
 	font-size: 15px;
 	font-weight: bold;
 	padding-bottom: 3px;
-	border-bottom: 1px dotted #000000;	
+	border-bottom: 1px dotted #000000;
 }
 .box > .content {
 	padding: 10px;
@@ -394,7 +408,7 @@ a.button, .list a.button {
 }
 .list tbody td {
 	vertical-align: middle;
-	padding: 0px 5px;
+	padding: none;
 	background: #FFFFFF;
 }
 .list tbody tr:hover td {

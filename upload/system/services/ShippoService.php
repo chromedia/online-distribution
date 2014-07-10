@@ -94,7 +94,7 @@ class ShippoService
      * Checking rates for parcel shipments
      */
     public function checkShipmentRates($shipments, $packages)
-    {   
+    {
 
         $ratesInfo = array('carriers' => array(), 'options' => array());
 
@@ -123,8 +123,8 @@ class ShippoService
             'distance_unit' => $package['length_unit'],
             'weight'    => number_format($package['weight'], 2, '.', ''),
             'mass_unit' => $package['weight_unit'],
-            'metadata'  => $package['content']['product_id']                  
-        );    
+            'metadata'  => $package['content']['product_id']
+        );
 
         // Call Data
         $url = self::END_POINT.'parcels/';
@@ -152,7 +152,7 @@ class ShippoService
             "extra" => json_encode(array(
                 "signature_confirmation" => true
             ))
-        );      
+        );
 
         // Call Data
         $url = self::END_POINT.'shipments/';
@@ -237,20 +237,20 @@ class ShippoService
                         "notification_email_other" => "",
                         "metadata" => $package['content']['product_name']
                     );
-                    
+
                     // Call Data
                     $url = self::END_POINT.'transactions/';
 
                     // Run call (label purchase request)
                     $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
                     $object = json_decode($response, true);
-    
+
                     // Verify transaction request and save
                     $package['shipping_transaction'] = $this->__verifyTransaction($object['object_id']);
                     $newPackages[$key] = $package;
                 }
             }
-            
+
             $_SESSION['packages'] = $newPackages;
 
             return true;

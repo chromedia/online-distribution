@@ -7,7 +7,7 @@
   <?php if ($success) { ?>
   <div class="success"><?php echo $success; ?></div>
   <?php } ?>
-  
+
   <div class="box">
 
     <div class="heading">
@@ -35,10 +35,10 @@
                 <a href="<?php echo $sort_customer; ?>"><?php echo $column_customer; ?></a>
                 <?php } ?></td>
 
-              <!-- Order Contents Title -->  
+              <!-- Order Contents Title -->
               <td class="left">
                 <a href="<?php echo $sort_customer; ?>" class="<?php echo strtolower($order); ?>"><?php echo 'Contents'; ?></a>
-              </td>     
+              </td>
 
               <td class="left"><?php if ($sort == 'status') { ?>
                 <a href="<?php echo $sort_status; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_status; ?></a>
@@ -95,8 +95,18 @@
             </tr>
 
             <!-- List of Orders -->
-            <?php if ($orders) { ?>
+            <?php if ($orders) {
+            // Debug string
+            echo var_dump($orders);
+            ?>
             <?php foreach ($orders as $order) { ?>
+              <?php
+
+              // Count Packages
+              $count = count($order['packages']);
+
+              ?>
+
             <tr>
               <td style="text-align: center;"><?php if ($order['selected']) { ?>
                 <input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" checked="checked" />
@@ -104,54 +114,41 @@
                 <input type="checkbox" name="selected[]" value="<?php echo $order['order_id']; ?>" />
                 <?php } ?></td>
               <td class="right"><?php echo $order['order_id']; ?></td>
-              <td class="left"><?php echo $order['customer']; ?></td>
+              <td class="left"><?php //echo $order['customer']; ?></td>
 
-              <!-- Display Order Contents -->
-              <td class="left contents">
+              <td class="contents">
 
-              	<div class="contents1">
-	              	<?php 
-	              	// Count Packages
-	              	$count = count($order['packages']);
+                <!-- Display Number of Packages -->
+              	<div class="contents1"><?php echo 'Package Count: ' . $count; ?></div>
 
-                  var_dump($order);
-	              	?>
-
-	              	<!-- Display Number of Packages -->
-	              	<div><?php echo $count . ' Packages'; ?></div>
-              	</div>	
-
-              	<!-- Contents Details -->
-              	<div class='contents2'>
-	                <?php 
-	                // For each package
-	                foreach($order['packages'] as $package) {
-	                	// Get Label URL
+              	<!-- Package Details -->
+                <div class='contents2'>
+	              <?php
+                // For each package
+                foreach($order['packages'] as $package) {
 	                	$label_url = $package['label_url'];
-	                	// Get Contents
-	                	$contents = $package['content'];
+                    $tracking_number = $package['tracking_number'];
+                    $tracking_link = $package['tracking_url_provider'];
+                    $content = $package['content'];
 	            	?>
-	            		<!-- Display Label URL for the package -->
-	                	<div><a href="<?php echo $label_url; ?>">Shipping Label</a></div>
-	            	<?php
-	                	// For each item
-	                	foreach($contents as $item) {          
-	                		// Get item data
-	                		$id = $item['product_id'];
-	                		$name = $item['product_name'];
-	                		$quantity = $item['quantity'];
-	        		?>
-		            		<!-- Display Item Data -->
-		            		<div><?php echo $id . '---' . $name . '---' . $quantity; ?></div>
-	        		<?php
-	                	}
-	            	} 
-	            	?>
-            	</div>
+    	            	<!-- Display Label URL & Tracking Number & Tracking Link & Item of Package -->
+    	              <div><a href="<?php echo $label_url; ?>">Shipping Label</a></div>
+                    <div><?php echo $tracking_number; ?></div>
+                    <div><a href="<?php echo $tracking_link; ?>">Tracking Link</a></div>
+		            		<div>
+                      <ul>
+                        <li>Name: <?php echo $content['product_name']; ?></li>
+                        <li>ID: <?php echo $content['product_id']; ?></li>
+                        <li>Quantity: <?php echo $content['quantity']; ?></li>
+                      </ul>
+                    </div>
+                    <br>
+
+  		          <?php } ?>
+                </div>
               </td>
 
               <td class="left"><?php echo $order['status']; ?></td>
-
               <td class="right"><?php echo $order['total']; ?></td>
               <td class="left"><?php echo $order['date_added']; ?></td>
               <td class="left"><?php echo $order['date_modified']; ?></td>
@@ -176,83 +173,83 @@
   </div>
 </div>
 
-<!-- Show Order Contents -->
+<!-- Toggle Display of Order Contents -->
 <script type="text/javascript">
-$(".contents1").on("click", function(){
+$(".contents1").on("click", function(event){
 	var target = $( event.target );
 	target.parent().children(".contents2").toggle();
 });
-//$(".contents2").hide();
+$(".contents2").hide();
 </script>
 
 <!-- Filter -->
 <script type="text/javascript"><!--
 function filter() {
 	url = 'index.php?route=sale/order&token=<?php echo $token; ?>';
-	
+
 	var filter_order_id = $('input[name=\'filter_order_id\']').attr('value');
-	
+
 	if (filter_order_id) {
 		url += '&filter_order_id=' + encodeURIComponent(filter_order_id);
 	}
-	
+
 	var filter_customer = $('input[name=\'filter_customer\']').attr('value');
-	
+
 	if (filter_customer) {
 		url += '&filter_customer=' + encodeURIComponent(filter_customer);
 	}
-	
+
 	var filter_order_status_id = $('select[name=\'filter_order_status_id\']').attr('value');
-	
+
 	if (filter_order_status_id != '*') {
 		url += '&filter_order_status_id=' + encodeURIComponent(filter_order_status_id);
-	}	
+	}
 
 	var filter_total = $('input[name=\'filter_total\']').attr('value');
 
 	if (filter_total) {
 		url += '&filter_total=' + encodeURIComponent(filter_total);
-	}	
-	
+	}
+
 	var filter_date_added = $('input[name=\'filter_date_added\']').attr('value');
-	
+
 	if (filter_date_added) {
 		url += '&filter_date_added=' + encodeURIComponent(filter_date_added);
 	}
-	
+
 	var filter_date_modified = $('input[name=\'filter_date_modified\']').attr('value');
-	
+
 	if (filter_date_modified) {
 		url += '&filter_date_modified=' + encodeURIComponent(filter_date_modified);
 	}
-				
+
 	location = url;
 }
-//--></script>  
+//--></script>
 <script type="text/javascript"><!--
 $(document).ready(function() {
 	$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 });
-//--></script> 
+//--></script>
 <script type="text/javascript"><!--
 $('#form input').keydown(function(e) {
 	if (e.keyCode == 13) {
 		filter();
 	}
 });
-//--></script> 
+//--></script>
 <script type="text/javascript"><!--
 $.widget('custom.catcomplete', $.ui.autocomplete, {
 	_renderMenu: function(ul, items) {
 		var self = this, currentCategory = '';
-		
+
 		$.each(items, function(index, item) {
 			if (item.category != currentCategory) {
 				ul.append('<li class="ui-autocomplete-category">' + item.category + '</li>');
-				
+
 				currentCategory = item.category;
 			}
-			
+
 			self._renderItem(ul, item);
 		});
 	}
@@ -264,7 +261,7 @@ $('input[name=\'filter_customer\']').catcomplete({
 		$.ajax({
 			url: 'index.php?route=sale/customer/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
 			dataType: 'json',
-			success: function(json) {		
+			success: function(json) {
 				response($.map(json, function(item) {
 					return {
 						category: item.customer_group,
@@ -274,15 +271,15 @@ $('input[name=\'filter_customer\']').catcomplete({
 				}));
 			}
 		});
-	}, 
+	},
 	select: function(event, ui) {
 		$('input[name=\'filter_customer\']').val(ui.item.label);
-						
+
 		return false;
 	},
 	focus: function(event, ui) {
       	return false;
    	}
 });
-//--></script> 
+//--></script>
 <?php echo $footer; ?>

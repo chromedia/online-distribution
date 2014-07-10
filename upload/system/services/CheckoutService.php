@@ -3,12 +3,12 @@
 
 
 /**
- * Provides services for checkou
+ * Provides services for checkout
  */
 class CheckoutService
 {
     private static $instance;
-    
+
     /**
      * Returns instance
      */
@@ -139,8 +139,8 @@ class CheckoutService
                 'message' => $message,
                 'email'   => $emailData['recipient'],
                 'subject' => 'Opentech Collaborative Order'
-            )); 
-        } 
+            ));
+        }
     }
 
 
@@ -155,7 +155,7 @@ class CheckoutService
 
         if (isset($_SESSION['packages'])) {
             $packages = $_SESSION['packages'];
-            
+
             foreach ($packages as $package) {
                 $transaction = json_decode($package['shipping_transaction'], true);
 
@@ -185,14 +185,14 @@ class CheckoutService
                 'message' => $orderInfo,
                 'email'   => $recipientEmail,
                 'subject' => 'Opentech Order History'
-            ));            
+            ));
         }
     }
 
 
     /**
      * Create order confirmation email template
-     */ 
+     */
     public function getOrderConfirmationEmailTemplate($data)
     {
         $contents = file_get_contents(DIR_SYSTEM . 'email_templates/checkout_confirmation.php');
