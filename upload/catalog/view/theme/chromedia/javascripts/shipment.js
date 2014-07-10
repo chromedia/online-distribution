@@ -28,16 +28,33 @@ var retrieveShipmentRates = function(form, event) {
 
                 if (jsondata.success && jsondata.rates) {
                     var rates = jsondata.rates;
+                    var providers = jsondata.providers;
 
                     $('.shipping-selection').children().not('.items-header').remove();
 
                     if (jsondata.rates_count > 0) {
-                        $.each(rates, function(index, rate) {
-                            var service = rate.service;
-                            var alias = service.split(' ').join('-');
+                        $.each(providers, function(index, provider) {
+                            var ratesOfProvider = rates[provider];
+                            var labelStyle = "margin-top: 10px;"
 
-                            $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
+                            $('.shipping-selection').append('<span style="padding:10px;">'+provider+'</span>');
+
+                            $.each(ratesOfProvider, function(index, rate) {
+                                var service = rate.service;
+                                var alias = service.split(' ').join('-');
+
+                                $('.shipping-selection').append('<label for="'+alias+'" style="'+labelStyle+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
+                                labelStyle = '';
+                            });
                         });
+
+
+                        // $.each(rates, function(index, rate) {
+                        //     var service = rate.service;
+                        //     var alias = service.split(' ').join('-');
+
+                        //     $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
+                        // });
 
                         $('.display-on-rates-checked').show();
                         $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');

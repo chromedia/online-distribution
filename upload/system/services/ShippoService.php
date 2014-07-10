@@ -23,7 +23,6 @@ class ShippoService
         return self::$instance;
     }
 
-
     /**
      * Instantiates shippo service class
      */
@@ -312,6 +311,7 @@ class ShippoService
     private function __sortRates($rates)
     {
         $sorted = array();
+        $groupedByProvider = array();
 
         $keys = array_keys($rates);
         $length = sizeof($keys);
@@ -331,8 +331,12 @@ class ShippoService
 
         foreach ($keys as $key) {
             $sorted[$key] = $rates[$key];
+            $groupedByProvider[$rates[$key]['provider']][] = $rates[$key];
         }
 
-        return $sorted;
+        return array(
+            'sorted_by_amount' => $sorted,
+            'group_by_provider' => $groupedByProvider
+        );
     }
 }
