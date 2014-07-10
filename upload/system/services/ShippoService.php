@@ -1,4 +1,4 @@
-2<?php
+<?php
 
 require_once(DIR_SYSTEM . 'utilities/CurlUtil.php');
 
