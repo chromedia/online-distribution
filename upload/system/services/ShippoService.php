@@ -1,4 +1,4 @@
-<?php
+2<?php
 
 require_once(DIR_SYSTEM . 'utilities/CurlUtil.php');
 
@@ -88,10 +88,8 @@ class ShippoService
     public function getShipmentInfo($packages, $addressFrom, $addressTo)
     {
         $parcels = $this->makeParcelsForPackages($packages);
-        sleep(1);
-
         $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo);
-        sleep(1);
+        sleep(3);
 
         $rates = $this->__sortRates($this->checkShipmentRates($shipments, $packages));
 
