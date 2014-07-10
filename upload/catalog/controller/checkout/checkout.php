@@ -207,12 +207,17 @@ class ControllerCheckoutCheckout extends Controller {
             // Get Shipping Rates
             if (isset($fromAddress['object_id']) && isset($toAddress['object_id'])) {
                 $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
-                $rates = array('success' => true, 'rates' => $info, 'rates_count' => count($info));
 
                 // Temporarily Store User Shipping Info and Retrieved Rates
-                $this->__addShippingInformation($toAddressData, $info);
+                $this->__addShippingInformation($toAddressData, $info['sorted_by_amount']);
 
-                echo json_encode($rates);
+                echo json_encode(array(
+                    'success'     => true,
+                    'rates'       => $info['group_by_provider'], 
+                    'providers'   => array_keys($info['group_by_provider']),
+                    'rates_count' => count($info['sorted_by_amount'])
+                ));
+
             } else {
                 throw new Exception('Shipping address has an error.');
             }

@@ -57,8 +57,6 @@
 			<?php endif; ?>
 		</div>
 		<div class="col-lg-4 col-md-4 sidebar">
-				<h3>Latest Products</h3>
-				<div class="row products"><ul class="latest-products-container"></ul></div>
 				<?php get_sidebar(); ?>
 				<!-- Footer widget area 4 -->
 				<?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Page Sidebar') ) : else : ?>
@@ -68,22 +66,4 @@
 		</div>
 	</div>
 </section>
-	<script type="text/javascript">
-		$(function() {
-			$.ajax({
-				url: '<?php echo DIR_HOME;?>/index.php?route=api/product/getLatestProducts',
-				type: 'post',
-				dataType: 'json',
-				success: function(json) {
-					var products = json.products;
-					$.each(products, function(index, product) {
-					$('.latest-products-container').append('<li><a href="'+product.href+'"><img src="'+product.thumb+'"/> '+product.name+'</a></li>');
-					});
-				},
-				error: function(error) {
-					console.log(error);
-				}
-			});
-		});
-	</script>
 <?php get_footer(); ?>

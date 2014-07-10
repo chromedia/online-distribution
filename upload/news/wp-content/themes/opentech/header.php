@@ -49,8 +49,6 @@
 	<?php if ( is_singular() ) wp_enqueue_script( 'comment-reply' ); ?>
 	
 	<script type="text/javascript" src="<?php bloginfo('template_directory') ?>/js/vendor/jquery.js"></script>
-	<script type="text/javascript" src="<?php bloginfo('template_directory') ?>/js/smooth-scroll.js"></script>
-
 </head>
 
 <!-- <body class="f-topbar-fixed" <?php body_class(); ?>> -->

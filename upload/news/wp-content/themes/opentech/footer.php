@@ -44,6 +44,12 @@
     </div>
 </footer>
 
+<!-- END FOOTER SECTION -->
+
+	<?php wp_footer(); ?>
+
+
+<!-- <script type="text/javascript" src="<?php //bloginfo('template_directory') ?>/js/vendor/jquery.js"></script> -->
 <script type="text/javascript">
   $(function() {
         $.ajax({
@@ -69,8 +75,6 @@
         $('.back-to-top').click(function() {
             var offset = $('.page-wrap').offset();
 
-            console.log(offset.top);
-
             if(offset) {
                 $('body').stop();
                 $('html, body').animate({
@@ -80,10 +84,6 @@
         });
     });
 </script>
-
-<!-- END FOOTER SECTION -->
-
-	<?php wp_footer(); ?>
 	
 	<!-- Don't forget analytics -->
 	
