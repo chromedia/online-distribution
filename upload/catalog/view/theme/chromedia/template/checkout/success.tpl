@@ -23,7 +23,7 @@
       </p>
       <p>Thank you, <br> OpenTechCollaborative</p>
     </div>
-    <div class="large-5 columns">
+    <div class="large-5 columns" style="margin-left: 80px;">
         
         <span>You have <strong><?php echo $products_in_cart_count; ?></strong> <?php echo $products_in_cart_count > 1 ? 'items' : 'item';?> in your shopping cart</span>
         <ul class="cart-list">

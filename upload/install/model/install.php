@@ -152,6 +152,7 @@ class ModelInstall extends Model {
 			array('query' => 'information/learnmore', 'keyword' => 'about-us.html'),
 			array('query' => 'collaborate/products', 'keyword' => 'active-projects.html'),
 			array('query' => 'checkout/cart', 'keyword' => 'cart.html'),
+			array('query' => 'checkout/success', 'keyword' => 'checkout-success.html')
 		);
 
 		foreach ($data as $entry) {
