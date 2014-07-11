@@ -20,7 +20,7 @@ if (ini_get('register_globals')) {
 
 	foreach ($globals as $global) {
 		foreach(array_keys($global) as $key) {
-			unset(${$key}); 
+			unset(${$key});
 		}
 	}
 }
@@ -37,7 +37,7 @@ if (ini_get('magic_quotes_gpc')) {
 		}
 
 		return $data;
-	}			
+	}
 
 	$_GET = clean($_GET);
 	$_POST = clean($_POST);
@@ -49,8 +49,8 @@ if (!ini_get('date.timezone')) {
 	date_default_timezone_set('UTC');
 }
 
-// Windows IIS Compatibility  
-if (!isset($_SERVER['DOCUMENT_ROOT'])) { 
+// Windows IIS Compatibility
+if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 	if (isset($_SERVER['SCRIPT_FILENAME'])) {
 		$_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen($_SERVER['PHP_SELF'])));
 	}
@@ -62,12 +62,12 @@ if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 	}
 }
 
-if (!isset($_SERVER['REQUEST_URI'])) { 
-	$_SERVER['REQUEST_URI'] = substr($_SERVER['PHP_SELF'], 1); 
+if (!isset($_SERVER['REQUEST_URI'])) {
+	$_SERVER['REQUEST_URI'] = substr($_SERVER['PHP_SELF'], 1);
 
-	if (isset($_SERVER['QUERY_STRING'])) { 
-		$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING']; 
-	} 
+	if (isset($_SERVER['QUERY_STRING'])) {
+		$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
+	}
 }
 
 if (!isset($_SERVER['HTTP_HOST'])) {
@@ -77,7 +77,7 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 
 // Start-up Procedure
 require_once(DIR_SYSTEM . 'procedure/settings.php');
-require_once(DIR_SYSTEM . 'procedure/error.php'); 
+require_once(DIR_SYSTEM . 'procedure/error.php');
 require_once(DIR_SYSTEM . 'procedure/session.php');
 
 // Application Classes
@@ -92,14 +92,14 @@ require_once(DIR_SYSTEM . 'library/cart.php');
 
 
 // Helper
-require_once(DIR_SYSTEM . 'helper/json.php'); 
-require_once(DIR_SYSTEM . 'helper/utf8.php'); 
+require_once(DIR_SYSTEM . 'helper/json.php');
+require_once(DIR_SYSTEM . 'helper/utf8.php');
 
 // Engine
-require_once(DIR_SYSTEM . 'engine/action.php'); 
+require_once(DIR_SYSTEM . 'engine/action.php');
 require_once(DIR_SYSTEM . 'engine/controller.php');
 require_once(DIR_SYSTEM . 'engine/front.php');
-require_once(DIR_SYSTEM . 'engine/loader.php'); 
+require_once(DIR_SYSTEM . 'engine/loader.php');
 require_once(DIR_SYSTEM . 'engine/model.php');
 require_once(DIR_SYSTEM . 'engine/registry.php');
 
@@ -144,12 +144,12 @@ if(defined('DIR_HOME')){
 	require_once(DIR_SYSTEM . 'procedure/settings2.php');
 
 	// Support Objects
-	$url = new Url($config->get('config_url'), $config->get('config_secure') ? $config->get('config_ssl') : $config->get('config_url'));	
+	$url = new Url($config->get('config_url'), $config->get('config_secure') ? $config->get('config_ssl') : $config->get('config_url'));
 	$log = new Log();
 	$language = new Language($languages[$code]['directory']);
 
 	// Load Language
-	$language->load($languages[$code]['filename']);	
+	$language->load($languages[$code]['filename']);
 
 	// Store objects in registry's data array
 	$registry->set('load', $loader);
@@ -158,18 +158,18 @@ if(defined('DIR_HOME')){
 	$registry->set('url', $url);
 	$registry->set('log', $log);
 	$registry->set('request', $request);
-	$registry->set('response', $response); 
-	$registry->set('cache', $cache); 
+	$registry->set('response', $response);
+	$registry->set('cache', $cache);
 	$registry->set('session', $session);
 	$registry->set('language', $language);
 
 	// Create objects in registry's data array
-	$registry->set('document', new Document()); 		
+	$registry->set('document', new Document());
 	$registry->set('customer', new Customer($registry));
 	// $registry->set('account', new Account($registry));
 	// $registry->set('restcall', new Restcall());
 	$registry->set('currency', new Currency($registry));
-	$registry->set('user', new User($registry));	
+	$registry->set('user', new User($registry));
 	$registry->set('tax', new Tax($registry));
 	$registry->set('weight', new Weight($registry));
 	$registry->set('length', new Length($registry));
@@ -178,14 +178,8 @@ if(defined('DIR_HOME')){
 
 	// Create Sector Objects with Registry Data
 	// $cart = new Cart($registry);
-	// $account = new Account($registry); 
+	// $account = new Account($registry);
 	$front = new Front($registry);
-
-	// Run end procedure
-	//require_once(DIR_SYSTEM . 'procedure/end.php');
-
-	// Routers
-	//require_once(DIR_SYSTEM . 'router/cart.php');	
 
 }
 
