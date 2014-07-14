@@ -195,8 +195,9 @@ class CheckoutService
      */
     public function getOrderConfirmationEmailTemplate($data)
     {
+        $logo = DIR_HOME.'catalog/view/theme/chromedia/image/logo.png';
         $contents = file_get_contents(DIR_SYSTEM . 'email_templates/checkout_confirmation.php');
-        $contents = sprintf($contents, $data['items'], $data['shippingCost'], $data['subTotal'], $data['total']);
+        $contents = sprintf($contents, $logo, $data['items'], $data['shippingCost'], $data['subTotal'], $data['total']);
 
         return $contents;
     }

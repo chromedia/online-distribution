@@ -1,3 +1,0 @@
-#RewriteEngine On
-#RewriteCond %{QUERY_STRING} !^show=dir$
-#Redirect /index.php?route=error/not_found

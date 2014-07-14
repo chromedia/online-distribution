@@ -246,7 +246,7 @@
                     <div class="content">
                     <table style="text-align: center">
                         <tr>
-                            <td><img src="http://www.opentechcollaborative.cc/img/logo.png" /></td>
+                            <td><img src="%s" /></td>
                             
                         </tr>
                     </table>
