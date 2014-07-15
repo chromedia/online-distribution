@@ -33,7 +33,7 @@
 					<? if( has_post_thumbnail( $post_id ) ): ?>
 						<div class="post-image">
 							<img title="image title" alt="thumb image" class="wp-post-image"
-							src="<?=wp_get_attachment_url( get_post_thumbnail_id() ); ?>" style="width:100%; height:auto;">
+							src="<?php echo wp_get_attachment_url( get_post_thumbnail_id() ); ?>" style="width:100%; height:auto;">
 						</div>
 					<? endif; ?>
 					<div class="entry blog-p">
