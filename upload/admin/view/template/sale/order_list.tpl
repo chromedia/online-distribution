@@ -100,7 +100,7 @@
             <!-- List of Orders -->
             <?php if ($orders) {
             // Debug string
-            echo var_dump($orders);
+            //echo var_dump($orders);
             ?>
             <?php foreach ($orders as $order) { ?>
               <?php
