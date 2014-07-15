@@ -26,13 +26,22 @@
   </div>
 
   <div class="row">
-    <div class="large-6 columns">
+    <div class="large-8 columns">
       <label for="shipping-city">
         City
         <input id="shipping-city" type="text" value="<?php echo isset($shipping['city']) ? $shipping['city'] : ''; ?>" name="city" size="25" required="required" />
       </label>
     </div>
 
+    <div class="large-4 columns">
+      <label for="field-shipping-postcode">
+        Postal Code
+        <input id="field-shipping-postcode" type="text" name="postcode" size="10" required="required" value="<?php echo isset($shipping['postcode']) ? $shipping['postcode'] : ''; ?>" />
+      </label>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="large-6 columns">
       <label for="shipping-country">
         Country
@@ -49,20 +58,14 @@
           <?php endforeach; ?>
         </select>
     </div>
-  </div>
 
-  <div class="row">
     <?php $has_country = isset($shipping['country']);?>
-    <div class="large-9 columns state-container">
+    <div class="large-6 columns state-container" <?php if($has_country && ($shipping['country'] != 'CA' && $shipping['country'] != 'US')): ?> style="display:none;" <?php endif;?> />
+      
       <label for="state">
-        State / Province
-        <input type="text" id="shipping-province" name="state" 
-            <?php if(!$has_country || ($has_country && ($shipping['country'] == 'CA' || $shipping['country'] == 'US'))): ?> style="display:none;"  disabled 
-            <?php elseif($has_country): ?> 
-              value="<?php echo isset($shipping['state']) ? $shipping['state'] : ''; ?>"
-            <?php endif;?> />
+        State / Region
       </label>
-
+      
         <select name="state" id="shipping-us-states" required="required" <?php if($has_country && $shipping['country'] != 'US'): ?>style="display:none;" disabled<?php endif;?>>
 
           <?php foreach($us_states as $state): ?>
@@ -91,55 +94,22 @@
           <?php endforeach;?>
         </select>
     </div>
-
-    <div class="large-3 columns">
-      <label for="field-shipping-postcode">
-        Postal Code
-        <input id="field-shipping-postcode" type="text" name="postcode" size="10" required="required" value="<?php echo isset($shipping['postcode']) ? $shipping['postcode'] : ''; ?>" />
-      </label>
-    </div>
     
   </div>
   <input type="submit" value="Check Shipping Rates" class="btn btn-small" />
 </form>
 
-  <?php $has_shipment_service = !empty($rates);?>
 
-  <div class="row display-on-rates-checked" <?php if(!$has_shipment_service):?>style="display:none;" <?php endif;?>>
+  <div class="row display-on-rates-checked" style="display:none;">
       <div class="large-12 columns">
         <div class="shipping-selection">
           <h3 class="items-header">Choose a shipping speed</h3>
 
-          <?php if($has_shipment_service): ?>
-            <?php foreach($rates as $rate): ?>
-              <?php $alias = implode(explode(' ', $rate['service']), '-');?>
-              <label for="<?php echo $alias;?>">
-                <?php if(isset($shipping['method']) && $shipping['method'] == $rate['service']): ?>
-                  <input class="shipping-option" type="radio" id="<?php echo $alias;?>" name="shipping-option" amount="<?php echo $rate['total'];?>" value="<?php echo $rate['service'];?>" days="<?php echo $rate['days'];?>;" checked="true"/> 
-                <?php else: ?>
-                  <input class="shipping-option" type="radio" id="<?php echo $alias;?>" name="shipping-option" amount="<?php echo $rate['total'];?>" value="<?php echo $rate['service'];?>" days="<?php echo $rate['days'];?>;"/> 
-                <?php endif;?>
-
-                  <?php echo $rate['service'];?>
-                  <em><?php echo '(average of '.$rate['days'].' days - '.$rate['total'].')';?></em>
-              </label>
-            <?php endforeach; ?>
-          <?php endif;?>
         </div>
       </div>
   </div>
 
-<!--   <div class="row display-on-rates-checked" style="display:none;">
-      <div class="mt20">
-        <div class="large-12 columns">
-          <label for="cc-info" class="use-cc-info">
-            <input type="checkbox" id="use-cc-info-checkbox" name="use-cc-info-checkbox"> Use this information for my credit card details
-          </label>  
-        </div>  
-      </div>
-  </div> -->
-
-  <div class="row display-on-rates-checked" <?php if(!$has_shipment_service):?>style="display:none;"<?php endif;?>>
+  <div class="row display-on-rates-checked" style="display:none;">
       <div class="mt20">
         <div class="large-12 columns">
           <a href="javascript:void(0);" id="step2-trigger-btn" class="btn">Next: Enter your credit card details</a>
@@ -148,3 +118,4 @@
   </div>
 
   <input type="hidden" id="shipment-cost" value="<?php echo isset($shipping['cost']) ? $shipping['cost'] : 0; ?>"/>
+

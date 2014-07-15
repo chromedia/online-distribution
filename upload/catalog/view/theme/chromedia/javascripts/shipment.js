@@ -30,34 +30,47 @@ var retrieveShipmentRates = function(form, event) {
                     var rates = jsondata.rates;
                     var providers = jsondata.providers;
 
-                    $('.shipping-selection').children().not('.items-header').remove();
+                    //$('.shipping-selection').children().not('.items-header').remove();
+
+                    $('.shipping-selection').find('select.select-rates').remove();
 
                     if (jsondata.rates_count > 0) {
-                        $.each(providers, function(index, provider) {
-                            var ratesOfProvider = rates[provider];
-                            var labelStyle = "margin-top: 10px;"
+                        $('.shipping-selection').append('<select class="select-rates"></select>');
 
-                            $('.shipping-selection').append('<span style="padding:10px;">'+provider+'</span>');
+                        $.each(providers, function(index, provider) {
+                            $('.select-rates').append('<optgroup label="'+provider+'"></optgroup>');
+
+                            var ratesOfProvider = rates[provider];
+                            var group = $('.select-rates').find('optgroup:last');
 
                             $.each(ratesOfProvider, function(index, rate) {
                                 var service = rate.service;
                                 var alias = service.split(' ').join('-');
+                                var option = '<option class="shipping-option id="'+alias+'" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'">'+service+'<em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></option>';
 
-                                $('.shipping-selection').append('<label for="'+alias+'" style="'+labelStyle+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
-                                labelStyle = '';
+                                group.append(option);
                             });
+
+                            // var ratesOfProvider = rates[provider];
+                            // var labelStyle = "margin-top: 10px;"
+
+                            // $('.shipping-selection').append('<span style="padding:10px;">'+provider+'</span>');
+
+                            // $.each(ratesOfProvider, function(index, rate) {
+                            //     var service = rate.service;
+                            //     var alias = service.split(' ').join('-');
+
+                            //     $('.shipping-selection').append('<label for="'+alias+'" style="'+labelStyle+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
+                            //     labelStyle = '';
+                            // });
                         });
 
-
-                        // $.each(rates, function(index, rate) {
-                        //     var service = rate.service;
-                        //     var alias = service.split(' ').join('-');
-
-                        //     $('.shipping-selection').append('<label for="'+alias+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
-                        // });
-
                         $('.display-on-rates-checked').show();
-                        $('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
+                        $('.select-rates').find('option:first').prop('selected', 'selected');
+                        $('.select-rates').trigger('change');
+                        // $('.select-rates').val($('.select-rates').find('option:first').val());
+
+                        //$('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
 
                         setShipmentData();
                     } else {
@@ -83,7 +96,7 @@ var retrieveShipmentRates = function(form, event) {
  var refreshShipmentData = function() {
     $('.display-on-rates-checked').hide();
     
-    if ($('.shipping-selection').find('.shipping-option').length > 0) {
+    if ($('.shipping-selection').find('.select-rates').length > 0) {
         retrieveShipmentRates($('#shipment-form'));
     }
 }
@@ -131,13 +144,14 @@ var setShipmentData = function() {
         $('#field-shipping-postcode').val()
     ]
 
-    var shipmentOption = $('input[name="shipping-option"]:checked');
+    var shipmentValue = $('.select-rates').val();
+    var shipmentOption = $('.select-rates').find(':selected');
 
     shipmentData = {
         name : $('#shipping-name').val(),
         email : $('#shipping-email').val(),
         address : address.join(', '),
-        shipment: shipmentOption.val()+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')'
+        shipment: shipmentValue+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')'
     }
 }
 
@@ -162,8 +176,20 @@ var storeShipmentDataInSession = function(key_values) {
     }); 
 }
 
-$('.shipping-selection').on('click', '.shipping-option', function() {
-    var shippingAmount = parseFloat($(this).attr('amount'));
+// $('.shipping-selection').on('click', '.shipping-option', function() {
+//     var shippingAmount = parseFloat($(this).attr('amount'));
+    
+//     updateShipment(shippingAmount);
+
+//     var data = {
+//         cost : shippingAmount,
+//         method : $(this).val()
+//     }
+// });
+
+$('.shipping-selection').on('change', '.select-rates', function() {
+    var selected = $(this).find(':selected');
+    var shippingAmount = parseFloat(selected.attr('amount'));
     
     updateShipment(shippingAmount);
 
@@ -171,8 +197,6 @@ $('.shipping-selection').on('click', '.shipping-option', function() {
         cost : shippingAmount,
         method : $(this).val()
     }
-
-    //storeShipmentDataInSession(data);
 });
 
 $('#shipment-form').off('submit').on('submit', function(e) {
@@ -205,9 +229,10 @@ $('.edit-shipping').off('click').on('click', function() {
 $('#shipping-country').on('change', function() {
     var value = $(this).val();
 
-    $('#shipping-province, select[name="state"]').hide();
-    $('#shipping-province, select[name="state"]').attr('disabled', 'disabled');
-    $('#shipping-province, select[name="state"]').removeAttr('required');
+    $('.state-container').show();
+    $('select[name="state"]').hide();
+    $('select[name="state"]').attr('disabled', 'disabled');
+    $('select[name="state"]').removeAttr('required');
 
     var data = {};
     data[$(this).attr('name')] = value;
@@ -225,9 +250,10 @@ $('#shipping-country').on('change', function() {
 
         data['state'] = $('#shipping-canada-regions').val();
     } else {
-        $('#shipping-province').show();
-        $('#shipping-province').removeAttr('disabled');
-        $('#shipping-province').attr('required', 'required');
+        $('.state-container').hide();
+        // $('#shipping-province').show();
+        // $('#shipping-province').removeAttr('disabled');
+        // $('#shipping-province').attr('required', 'required');
     }
 
     storeShipmentDataInSession(data);

@@ -53,6 +53,7 @@ class ShippoService
     {
         $parcels = $this->makeParcelsForPackages($packages);
         $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo);
+
         sleep(3);
 
         $rates = $this->__sortRates($this->checkShipmentRates($shipments, $packages));

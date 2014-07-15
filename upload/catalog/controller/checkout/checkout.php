@@ -190,7 +190,7 @@ class ControllerCheckoutCheckout extends Controller {
                 'name' => $this->request->post['name'],
                 'street1' => $this->request->post['address'],
                 'city'    => $this->request->post['city'],
-                'state'   => $this->request->post['state'],
+                'state'   => isset($this->request->post['state']) ? $this->request->post['state'] : '',
                 'zip'     => $this->request->post['postcode'],
                 'country' => $this->request->post['country'],
                 'email'   => $this->request->post['email']
