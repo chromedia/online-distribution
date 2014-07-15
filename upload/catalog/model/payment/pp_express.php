@@ -22,7 +22,7 @@ class ModelPaymentPPExpress extends Model {
 	
 		// todo: make dynamic
 		$settings = array(
-			'USER' => PAYPAL_USER_NAME,
+			'USER' => PAYPAL_USERNAME,
 			'PWD' => PAYPAL_PWD,
 			'SIGNATURE' => PAYPAL_SIGNATURE,
 			'VERSION' => '65.2',
