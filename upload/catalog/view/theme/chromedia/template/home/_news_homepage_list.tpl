@@ -1,7 +1,6 @@
-<span id="latest-news" style="margin:50px;"></span>
-<div>
+<div id="latest-news">
     <?php if(!empty($news)): ?>
-        <section class="row news-section">
+        <section class="row news-section" style="padding:10px;">
             <div class="small-12 columns" style="margin:-20px auto -30px auto">
                 <h1 style="float:left;" name="latest_news">Latest News</h1>
                 <!-- <a href="<?php //echo $this->url->link('information/news', '', 'SSL'); ?>" class="view-all-news">View All Updates</a> -->

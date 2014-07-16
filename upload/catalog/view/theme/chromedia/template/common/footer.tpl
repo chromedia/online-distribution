@@ -61,10 +61,9 @@
                 var target = $($(this).attr('scroll-target'));
 
                 if (target.length > 0) {
-                    $('body').stop().scrollTo(target, 1000);
-                    // console.log(target);
-                    // console.log(target.offset);
-                    // $('body').stop().scrollTo((target.position.top - 300) +'px', 1000);
+                    //$('body').stop().scrollTo(target, 1000);
+                    var offset = target.offset();
+                    $('body').stop().scrollTo((offset.top - 60) +'px', 1000);
                 } else {
                     window.location = $(this).attr('href');
                 }
@@ -78,10 +77,16 @@
                     var anchor = url.split('#')[1];
 
                     if ($.inArray(anchor, homepageFocusable) != -1) {
-                        $('body').stop().scrollTo($('#'+anchor), 1000);
+                        var target = $('#'+anchor);
+                        var offset = target.offset();
+
+                        $('body').stop().scrollTo((offset.top - 60)+'px', 1000);
                     }
                 } 
             }, 1);
+
+
+
         </script>
 
     </body>
