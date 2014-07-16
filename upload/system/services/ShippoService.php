@@ -148,10 +148,10 @@ class ShippoService
             "address_to" => $addressTo['object_id'],
             "parcel" => $parcel['object_id'],
             "submission_type" => "PICKUP",
-            "insurance_currency" => "USD",
+            "insurance_currency" => "USD"/*,
             "extra" => json_encode(array(
                 "signature_confirmation" => true
-            ))
+            ))*/
         );
 
         // Call Data

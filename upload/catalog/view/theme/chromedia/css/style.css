@@ -475,7 +475,7 @@ since original intent of this class is unknown */
   float: left;
 }
 #home-footer, .page-wrap:after {
-  height: 295px;
+  height: 298px;
 }
 @media only screen and (min-width: 40.063em) and (max-width: 64em) { 
   .page-wrap {
