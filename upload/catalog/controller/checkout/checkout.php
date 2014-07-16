@@ -148,8 +148,6 @@ class ControllerCheckoutCheckout extends Controller {
             'TOKEN' => $this->session->data['paypal']['token'],
         );
 
-        // TODO: Check name, etc of paypal owner
-
         $result = $this->model_payment_pp_express->call($data);
         $this->session->data['paypal']['payerid']   = $result['PAYERID'];
         $this->session->data['paypal']['result']    = $result;

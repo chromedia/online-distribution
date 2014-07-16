@@ -132,11 +132,21 @@
                     $tracking_number = $package['tracking_number'];
                     $tracking_link = $package['tracking_url_provider'];
                     $content = $package['content'];
+                    $messages = $package['messages'];
 	            	?>
     	            	<!-- Display Label URL & Tracking Number & Tracking Link & Item of Package -->
     	              <div><a href="<?php echo $label_url; ?>">Shipping Label</a></div>
                     <div><?php echo $tracking_number; ?></div>
                     <div><a href="<?php echo $tracking_link; ?>">Tracking Link</a></div>
+
+                    <?php if(0 == strlen($label_url)): ?>
+                      <?php foreach($messages as $message): ?>
+                        <div> Source: <?php echo isset($message['source']) ? $message['source'] : ''; ?></div>
+                        <div> Code: <?php echo isset($message['code']) ? $message['code'] : ''; ?></div>
+                        <div> Text: <?php echo isset($message['text']) ? $message['text'] : ''; ?></div>
+                      <?php endforeach; ?>
+                    <?php endif;?>
+
 		            		<div>
                       <ul>
                         <li>Name: <?php echo $content['product_name']; ?></li>

@@ -99,7 +99,7 @@
 
     <div class="row">
         <div class="large-12 columns">
-            <input type="checkbox" name="enable-signature-confirmation" value="1" checked/> Use signature confirmation?
+            <input type="checkbox" name="enable-signature-confirmation"/> Use signature confirmation?
         </div>
     </div>
     <input type="submit" value="Check Shipping Rates" class="btn btn-small" />
