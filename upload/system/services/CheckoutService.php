@@ -24,7 +24,7 @@ class CheckoutService
     /**
      * Prepares packages
      */
-    public function preparePackages($products)
+    public function preparePackages($products, $tax, $config)
     {
         $packages = array();
 
@@ -37,7 +37,7 @@ class CheckoutService
                         'product_id'   => $product['product_id'],
                         'product_name' => $product['name'],
                         'quantity'     => 1,
-                        'price'        => $product['price']
+                        'price'        => $tax->calculate($product['price'], $product['tax_class_id'], $config->get('config_tax'))//$product['price']
                     ),
                     'length'          => $product['length'],
                     'width'           => $product['width'],

@@ -181,7 +181,7 @@ class ControllerCheckoutCheckout extends Controller {
         try {
             // Get items in cart
             $checkoutService = CheckoutService::getInstance();
-            $packages = $checkoutService->preparePackages($this->cart->getProducts());
+            $packages = $checkoutService->preparePackages($this->cart->getProducts(), $this->tax, $this->config);
 
             // Get To Address
             $toAddressData = array(
