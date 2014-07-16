@@ -49,10 +49,10 @@ class ShippoService
     /**
      * Gets shipment info
      */
-    public function getShipmentInfo($packages, $addressFrom, $addressTo)
+    public function getShipmentInfo($packages, $addressFrom, $addressTo, $enableSignatureConfirmation = true)
     {
         $parcels = $this->makeParcelsForPackages($packages);
-        $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo);
+        $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo, $enableSignatureConfirmation);
 
         sleep(3);
 
@@ -79,12 +79,12 @@ class ShippoService
     /**
      * Make shipments for packages
      */
-    public function makeShipmentsForParcels($parcels, $addressFrom, $addressTo)
+    public function makeShipmentsForParcels($parcels, $addressFrom, $addressTo, $enableSignatureConfirmation = true)
     {
         $shipments = array();
 
         foreach ($parcels as $key => $parcel) {
-            $shipments[$key] = $this->makeShipmentCall($parcel, $addressFrom, $addressTo);
+            $shipments[$key] = $this->makeShipmentCall($parcel, $addressFrom, $addressTo, $enableSignatureConfirmation);
         }
 
         return $shipments;
@@ -139,8 +139,10 @@ class ShippoService
     /**
      * Make shipment call
      */
-    public function makeShipmentCall($parcel, $addressFrom, $addressTo)
+    public function makeShipmentCall($parcel, $addressFrom, $addressTo, $enableSignatureConfirmation = true)
     {
+
+
         // Shipment Data
         $data = array(
             "object_purpose" => "PURCHASE",
@@ -148,11 +150,15 @@ class ShippoService
             "address_to" => $addressTo['object_id'],
             "parcel" => $parcel['object_id'],
             "submission_type" => "PICKUP",
-            "insurance_currency" => "USD"/*,
-            "extra" => json_encode(array(
-                "signature_confirmation" => true
-            ))*/
+            "insurance_currency" => "USD"
         );
+
+        if ($enableSignatureConfirmation) {
+            $data['extra'] =   json_encode(array(
+                "signature_confirmation" => true
+            ));  
+        }
+
 
         // Call Data
         $url = self::END_POINT.'shipments/';
@@ -160,6 +166,12 @@ class ShippoService
         // Run call
         $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
         $shipment = json_decode($response, true);
+
+        // $url = 'https://api.goshippo.com/v1/shipments/' . $shipment['object_id'];
+        // $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION, false);
+
+        // var_dump(json_decode($response, true));exit;
+        // var_dump($shipment);exit;
 
         return $shipment;
     }

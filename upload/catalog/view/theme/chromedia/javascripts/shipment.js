@@ -75,12 +75,22 @@ var retrieveShipmentRates = function(form, event) {
                         setShipmentData();
                     } else {
                         $('.display-on-rates-checked:first').show();
-                        $('<div data-alert class="alert-box alert radius">Sorry, no shipping is available for the provided address or the amount of products.</div>').insertAfter($('.shipping-selection').children('h3'));
+
+                        if ($('input[name="enable-signature-confirmation"]').is(':checked')) {
+                            $('<div data-alert class="alert-box alert radius">Shipment options are unavailable. Please <a href="#" class="shipment-retrieval">retry</a> checking of rates with disabled signature confirmation.</div>').insertAfter($('.shipping-selection').children('h3'));
+                            $('input[name="enable-signature-confirmation"]').prop('checked', false);
+                        } else {
+                            $('<div data-alert class="alert-box alert radius">Sorry, shipment service is unavailable in the specified location.</div>').insertAfter($('.shipping-selection').children('h3'));
+                        }
+
+                        updateShipment(0);
                     }
 
                 } else {
                     var message = jsondata.errorMsg ? jsondata.errorMsg : 'An error occured. Please make sure data are correct.';
                     showCheckoutGeneralError(message);
+
+                    updateShipment(0);
                 }
             },
             error: function(error) {
@@ -176,17 +186,6 @@ var storeShipmentDataInSession = function(key_values) {
     }); 
 }
 
-// $('.shipping-selection').on('click', '.shipping-option', function() {
-//     var shippingAmount = parseFloat($(this).attr('amount'));
-    
-//     updateShipment(shippingAmount);
-
-//     var data = {
-//         cost : shippingAmount,
-//         method : $(this).val()
-//     }
-// });
-
 $('.shipping-selection').on('change', '.select-rates', function() {
     var selected = $(this).find(':selected');
     var shippingAmount = parseFloat(selected.attr('amount'));
@@ -203,6 +202,13 @@ $('#shipment-form').off('submit').on('submit', function(e) {
     e.preventDefault();
 
     retrieveShipmentRates($(this));
+});
+
+$('#step-shipping').on('click', '.shipment-retrieval', function(e) {
+    e.preventDefault();
+
+    $('input[name="enable-signature-confirmation"]').prop('checked', false);
+    retrieveShipmentRates($('#shipment-form'));
 });
 
 

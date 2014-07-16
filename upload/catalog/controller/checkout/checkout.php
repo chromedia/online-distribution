@@ -206,7 +206,8 @@ class ControllerCheckoutCheckout extends Controller {
 
             // Get Shipping Rates
             if (isset($fromAddress['object_id']) && isset($toAddress['object_id'])) {
-                $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress);
+                $enableSignatureConfirmation = isset($this->request->post['enable-signature-confirmation']);
+                $info = $shippoService->getShipmentInfo($packages, $fromAddress, $toAddress, $enableSignatureConfirmation);
 
                 // Temporarily Store User Shipping Info and Retrieved Rates
                 $this->__addShippingInformation($toAddressData, $info['sorted_by_amount']);
