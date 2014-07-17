@@ -98,7 +98,7 @@
   </div>
 
     <div class="row">
-        <div class="large-12 columns">
+        <div class="large-12 columns" style="font-size: small;">
             <input type="checkbox" name="enable-signature-confirmation"/> Use signature confirmation?
         </div>
     </div>
