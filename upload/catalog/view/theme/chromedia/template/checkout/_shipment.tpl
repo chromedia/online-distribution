@@ -15,7 +15,7 @@
       </label>
     </div>
   </div>
- 
+
   <div class="row">
     <div class="large-12 columns">
       <label for="shipping-street-address">
@@ -61,11 +61,11 @@
 
     <?php $has_country = isset($shipping['country']);?>
     <div class="large-6 columns state-container" <?php if($has_country && ($shipping['country'] != 'CA' && $shipping['country'] != 'US')): ?> style="display:none;" <?php endif;?> />
-      
+
       <label for="state">
         State / Region
       </label>
-      
+
         <select name="state" id="shipping-us-states" required="required" <?php if($has_country && $shipping['country'] != 'US'): ?>style="display:none;" disabled<?php endif;?>>
 
           <?php foreach($us_states as $state): ?>
@@ -83,7 +83,7 @@
 
           <?php foreach($canada_regions as $region): ?>
             <?php if(isset($shipping['state'])): ?>
-              <option value="<?php echo $region['iso_code_2'];?>" 
+              <option value="<?php echo $region['iso_code_2'];?>"
                 <?php if($shipping['state'] == $region['iso_code_2']): ?>selected="selected"<?php endif;?>
               >
                 <?php echo $region['name'];?>
@@ -94,12 +94,12 @@
           <?php endforeach;?>
         </select>
     </div>
-    
+
   </div>
 
     <div class="row">
         <div class="large-12 columns" style="font-size: small;">
-            <input type="checkbox" name="enable-signature-confirmation"/> Use signature confirmation?
+            <input type="checkbox" name="enable-signature-confirmation"/> Require signature on delivery
         </div>
     </div>
     <input type="submit" value="Check Shipping Rates" class="btn btn-small" />
@@ -119,9 +119,8 @@
       <div class="mt20">
         <div class="large-12 columns">
           <a href="javascript:void(0);" id="step2-trigger-btn" class="btn">Next: Enter your credit card details</a>
-        </div>  
+        </div>
       </div>
   </div>
 
   <input type="hidden" id="shipment-cost" value="<?php echo isset($shipping['cost']) ? $shipping['cost'] : 0; ?>"/>
-

@@ -6,7 +6,7 @@ var retrieveShipmentRates = function(form, event) {
 
     shipmentFormStatus(form, false);
     $('.display-on-rates-checked').hide();
-    
+
     if (!hasError) {
         var data = form.serialize();
 
@@ -23,7 +23,7 @@ var retrieveShipmentRates = function(form, event) {
             success: function(jsondata) {
                 $('.shipping-selection').find('.alert-box').remove();
                 $('.shipping-selection').remove('label');
-                
+
                 shipmentFormStatus(form, true);
 
                 if (jsondata.success && jsondata.rates) {
@@ -77,7 +77,7 @@ var retrieveShipmentRates = function(form, event) {
                         $('.display-on-rates-checked:first').show();
 
                         if ($('input[name="enable-signature-confirmation"]').is(':checked')) {
-                            $('<div data-alert class="alert-box alert radius">Shipment options are unavailable. Please <a href="#" class="shipment-retrieval">retry</a> checking of rates with disabled signature confirmation.</div>').insertAfter($('.shipping-selection').children('h3'));
+                            $('<div data-alert class="alert-box alert radius">Rates could not be retrieved. Please verify your shipping address and <a href="#" class="shipment-retrieval">try again</a> without signature on delivery.</div>').insertAfter($('.shipping-selection').children('h3'));
                             $('input[name="enable-signature-confirmation"]').prop('checked', false);
                         } else {
                             $('<div data-alert class="alert-box alert radius">Sorry, shipment service is unavailable in the specified location.</div>').insertAfter($('.shipping-selection').children('h3'));
@@ -97,7 +97,7 @@ var retrieveShipmentRates = function(form, event) {
                 shipmentFormStatus(form, true);
                 alert('error');
             }
-        }); 
+        });
     } else {
         shipmentFormStatus(form, true);
     }
@@ -105,7 +105,7 @@ var retrieveShipmentRates = function(form, event) {
 
  var refreshShipmentData = function() {
     $('.display-on-rates-checked').hide();
-    
+
     if ($('.shipping-selection').find('.select-rates').length > 0) {
         retrieveShipmentRates($('#shipment-form'));
     }
@@ -183,13 +183,13 @@ var storeShipmentDataInSession = function(key_values) {
         data: { data : key_values },
         dataType: 'json',
 
-    }); 
+    });
 }
 
 $('.shipping-selection').on('change', '.select-rates', function() {
     var selected = $(this).find(':selected');
     var shippingAmount = parseFloat(selected.attr('amount'));
-    
+
     updateShipment(shippingAmount);
 
     var data = {
@@ -213,7 +213,7 @@ $('#step-shipping').on('click', '.shipment-retrieval', function(e) {
 
 
 $('#shipment-form').find('input').on('change', function(e) {
-    e.preventDefault(); 
+    e.preventDefault();
 
     var data = {};
     data[$(this).attr('name')] = $(this).val();
@@ -224,7 +224,7 @@ $('#shipment-form').find('input').on('change', function(e) {
 $('select:not("#shipping-country")').on('change', function() {
     var data = {};
     data[$(this).attr('name')] = $(this).val();
-    
+
     storeShipmentDataInSession(data);
 });
 

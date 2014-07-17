@@ -212,7 +212,7 @@ class ControllerCheckoutCheckout extends Controller {
 
                 echo json_encode(array(
                     'success'     => true,
-                    'rates'       => $info['group_by_provider'], 
+                    'rates'       => $info['group_by_provider'],
                     'providers'   => array_keys($info['group_by_provider']),
                     'rates_count' => count($info['sorted_by_amount'])
                 ));
