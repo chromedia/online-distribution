@@ -27,7 +27,7 @@
 </div>
 
 <div class="row">
-    <div class="large-8 columns tabs-content" style="display:none;">
+    <div class="large-12 columns tabs-content" style="display:none;">
         <div class="product-description active" id="product-overview"> 
             <?php echo $description; ?>
         </div>
