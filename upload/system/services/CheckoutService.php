@@ -94,7 +94,7 @@ class CheckoutService
 
                 if (isset($transaction['tracking_number']) && !empty($transaction['tracking_number'])) {
                     $trackingNumber = $transaction['tracking_number'];
-                    $labelUrl = $transaction['label_url'];
+                    $trackingUrl = $transaction['tracking_url_provider'];
                 }
 
                 $product = $package['content'];
@@ -103,7 +103,7 @@ class CheckoutService
                     'productPrice'     => $product['price'],
                     'productQuantity'  => $product['quantity'],
                     'trackingNumber'   => $trackingNumber,
-                    'labelUrl'         => $labelUrl,
+                    'trackingUrl'      => $trackingUrl,
                     'package'          => 'Package'.$ctr
                 ));
             }
@@ -145,7 +145,7 @@ class CheckoutService
     public function getCartItemEmailTemplate($data)
     {
         $contents = file_get_contents(DIR_SYSTEM . 'email_templates/_order_information.php');
-        $contents = sprintf($contents, $data['labelUrl'], $data['package'], $data['productName'], $data['productQuantity'], $data['productPrice'], $data['trackingNumber']);
+        $contents = sprintf($contents, $data['trackingUrl'], $data['package'], $data['productName'], $data['productQuantity'], $data['productPrice'], $data['trackingNumber']);
 
         return $contents;
     }
