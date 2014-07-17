@@ -75,7 +75,7 @@ class VimeoUtil
     {
         if (!empty($this->url)) {
             $pattern = '/^http:\/\/(www\.)?vimeo\.com\/(clip\:)?(\d+).*$/';
-            preg_match($pattern, $url, $matches);
+            preg_match($pattern, $this->url, $matches);
 
             return isset($matches[3]) ? $matches[3] : '';
         }
