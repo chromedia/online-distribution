@@ -26,7 +26,7 @@
 
     <?php if(!empty($video_tag)): ?>
         <div class="product-video row product-video-trigger" embed-video='<?php echo $video_tag;?>'>
-            <a href="javascript:void(0);"><img src="catalog/view/theme/chromedia/image/icon-play.png" alt=""></a>
+            <a href="javascript:void(0);"><img class="video-indicator" src="catalog/view/theme/chromedia/image/icon-play.png" alt=""></a>
         </div>
     <?php endif;?>  
 
@@ -100,9 +100,9 @@
             
             if (json.success) {
                 $('.green').html('<div class="success">' + json['success'] + '</div>');
-                    
                 $('.green').fadeIn('slow');  
                 $('html, body').animate({ scrollTop: 0 }, 'slow'); 
+                $('.video-indicator').css('margin', '96px auto 0px');
             }  
         }
     });

@@ -43,11 +43,11 @@ class ProductService
 
         foreach($products as $product) {
             if ($product['image']) {
-                $image = $this->imageTool->resize($product['image'], 301, 170);
+                $image = $this->imageTool->resize($product['image'], 301, 170, 'w');
             }
 
             if (!isset($image) || empty($image) || is_null($image)) {
-                $image = $this->imageTool->resize('no_image.jpg', 301, 170);
+                $image = $this->imageTool->resize('no_image.jpg', 301, 170, 'w');
             }
 
             if (($this->config->get('config_customer_price') && $customer->isLogged()) || !$this->config->get('config_customer_price') && isset($product['price'])) {
@@ -101,11 +101,11 @@ class ProductService
             }
 
             if ($product['image']) {
-                $image = $this->imageTool->resize($product['image'], 55, 55/*$this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height')*/);
+                $image = $this->imageTool->resize($product['image'], 55, 55, 'h');
             }
 
             if (!isset($image) || empty($image) || is_null($image)) {
-                $image = $this->imageTool->resize('no_image.jpg', 55, 55);
+                $image = $this->imageTool->resize('no_image.jpg', 55, 55, 'h');
             }
 
             $price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));

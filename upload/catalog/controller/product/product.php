@@ -60,8 +60,10 @@ class ControllerProductProduct extends Controller {
 
 				$this->load->model('tool/image');
 
+				//$this->model_tool_image->resize($product_info['image'], 600, 300, 'w');
+
 				if ($product_info['image']) {
-					$this->data['header_img'] = $this->model_tool_image->resize($product_info['image'], 700, 200);
+					$this->data['header_img'] = DIR_HOME.'image/'.$product_info['image'];
 					$this->data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));
 					$this->data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));
 				} else {

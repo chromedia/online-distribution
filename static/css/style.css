@@ -450,13 +450,13 @@ label.use-cc-info{
 .product-video a img {
   height: 100px;
   width: 100px;
-  margin: 100px auto 0;
+  margin: 130px auto 0;
   opacity: 0.8;
 }
 .product-video a:hover img {
   height: 100px;
   width: 100px;
-  margin: 100px auto 0;
+  margin: 130px auto 0;
   opacity: 1;
 }
 /* Sticky footer */
