@@ -4,7 +4,7 @@
 		<a href="/">Home</a>
 	</li>
 	<li>
-		<a href="/">News List</a>
+		<a href="/news">News List</a>
 	</li>
 	<li>
 		<?php the_title(); ?>
