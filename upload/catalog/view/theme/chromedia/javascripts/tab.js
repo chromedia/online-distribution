@@ -24,7 +24,7 @@
                 var offset = tab.offset();
 
                 $('html, body').animate({
-                  scrollTop: offset.top - 10
+                  scrollTop: offset.top - 80
                 }, 1000);   
             }
         }
