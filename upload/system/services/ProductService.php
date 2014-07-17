@@ -43,7 +43,7 @@ class ProductService
 
         foreach($products as $product) {
             if ($product['image']) {
-                $image = $this->imageTool->resize($product['image'], 301, 170, 'w');
+                $image = $this->imageTool->resize($product['image'], 301, 170);
             }
 
             if (!isset($image) || empty($image) || is_null($image)) {
