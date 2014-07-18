@@ -31,7 +31,11 @@
                             <a href="http://twitter.com/home?status=<?php echo urlencode($newsItem['title'].' '.$shortenedUrl);?>" TARGET="_blank"><i class="fi-social-twitter"></i></a>
                         </li>
                         <li>
-                            <a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=<?php echo $shortenedUrl;?>&p[images][0]=<?php echo $url_util->shortenUrl($newsItem['featured_image']); ?>&p[title]=<?php echo urlencode($newsItem['title']);?>&p[summary]=<?php echo $truncatedContent;?>" TARGET="_blank"><i class="fi-social-facebook"></i></a>
+                            <?php if(0): ?>
+                                <a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=<?php echo $shortenedUrl;?>&p[images][0]=<?php echo $url_util->shortenUrl($newsItem['featured_image']); ?>&p[title]=<?php echo urlencode($newsItem['title']);?>&p[summary]=<?php echo $truncatedContent;?>" TARGET="_blank"><i class="fi-social-facebook"></i></a>
+                            <?php endif;?>
+
+                            <a href="https://www.facebook.com/dialog/share?app_id=642514455845428&display=page&href=<?php echo $shortenedUrl;?>&redirect_uri=<?php echo $shortenedUrl;?>" TARGET="_blank" ><i class="fi-social-facebook"></i></a>
                         </li>
                     </ul>
                 </div>
