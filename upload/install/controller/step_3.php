@@ -46,7 +46,10 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'PAYPAL_PASSWORD\', \'' . addslashes($this->request->post['paypal_password']) . '\');' . "\n";
 			$output .= 'define(\'PAYPAL_SIGNATURE\', \'' . addslashes($this->request->post['paypal_signature']) . '\');' . "\n\n";
 
-			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n";
+			$output .= 'define(\'SHIPPO_AUTHORIZATION\', \'' . addslashes($this->request->post['shippo_authorization']) . '\');' . "\n\n";
+
+			$output .= 'define(\'CARRIERS\', \'USPS,UPS,FedEx,Canada Post,DHL Express,DHL Germany,Parcel2Go UK,GLS\');' . "\n";
+
 			$output .= '?>';				
 
 			$file = fopen(DIR_OPENCART . 'config.php', 'w');

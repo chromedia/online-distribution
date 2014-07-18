@@ -11,6 +11,8 @@ class ShippoService
 
     private $curlUtil;
 
+    private $carriers;
+
     /**
      * Returns instance
      */
@@ -29,6 +31,12 @@ class ShippoService
     public function __construct()
     {
         $this->curlUtil = new CurlUtil();
+
+        if (!defined('CARRIERS')) {
+            $this->carriers = array('USPS', 'UPS');
+        } else {
+            $this->carriers = explode(',', CARRIERS);
+        }
     }
 
     /**
@@ -193,7 +201,7 @@ class ShippoService
                 // Get rate provider
                 $provider = $rate['provider'];
                 // Filter by rate provider
-                //if ($provider == "UPS") {
+                if (in_array($provider, $this->carriers)) {
                     $serviceName = $rate['servicelevel_name'];
                     $rateId = $rate['object_id'];
 
@@ -217,7 +225,7 @@ class ShippoService
                         'days'       => $rate['days'],
                         'duration_terms' => $rate['duration_terms']
                     );
-                //}
+                }
             }
         }
 
