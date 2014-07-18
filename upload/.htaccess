@@ -3,13 +3,13 @@
     RewriteEngine On
 
     ### Collaborate Page
-    #RewriteRule index.php?route=collaborate/products /active-projects.html [R=301,L]
+    #RewriteRule index.php?route=collaborate/products /active [R=301,L]
 
     ### Learn more Page
-    #RewriteRule index.php?route=information/learnmore  /about-us.html [R=301,L]
+    #RewriteRule index.php?route=information/learnmore  /about [R=301,L]
 
     ### Cart
-    #RewriteRule index.php?route=checkout/cart /cart.html [R=301,L]
+    #RewriteRule index.php?route=checkout/cart /cart [R=301,L]
 
     ### for seo enabled
     RewriteBase /
