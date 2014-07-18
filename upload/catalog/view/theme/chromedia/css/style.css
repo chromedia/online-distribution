@@ -7,6 +7,16 @@ body{
 .news {
   height: 9em;
 }
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { 
+  .news {
+    height: 18em;
+  } 
+}
+@media only screen and (max-width: 40em) { 
+  .news {
+    height: 18em;
+  }
+}
 .news img {
   height: 9em;
 }
