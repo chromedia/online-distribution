@@ -7,6 +7,9 @@ body{
 .news {
   height: 9em;
 }
+.news img {
+  height: 9em;
+}
 .news-section h1{
   font-weight: 300;
   margin-top: 50px;
@@ -475,7 +478,7 @@ since original intent of this class is unknown */
   float: left;
 }
 #home-footer, .page-wrap:after {
-  height: 295px;
+  height: 295px !important;
 }
 @media only screen and (min-width: 40.063em) and (max-width: 64em) { 
   .page-wrap {
