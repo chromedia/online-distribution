@@ -67,6 +67,7 @@ var payAjaxLoad = function(isDone) {
 
         $('.pay-via-paypal').show();
         $('.btn-checkout').show();
+        $('.edit-shipping').show();
     } else {
         form.children('div.row:last-child').children('.mt20').removeClass('mt20');
         FormManager.disableFormFields(form);
@@ -75,6 +76,7 @@ var payAjaxLoad = function(isDone) {
 
         $('.pay-via-paypal').hide();
         $('.btn-checkout').hide();
+        $('.edit-shipping').hide();
     }
 }
 

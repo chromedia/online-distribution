@@ -50,29 +50,13 @@ var retrieveShipmentRates = function(form, event) {
 
                                 group.append(option);
                             });
-
-                            // var ratesOfProvider = rates[provider];
-                            // var labelStyle = "margin-top: 10px;"
-
-                            // $('.shipping-selection').append('<span style="padding:10px;">'+provider+'</span>');
-
-                            // $.each(ratesOfProvider, function(index, rate) {
-                            //     var service = rate.service;
-                            //     var alias = service.split(' ').join('-');
-
-                            //     $('.shipping-selection').append('<label for="'+alias+'" style="'+labelStyle+'"><input class="shipping-option" type="radio" id="'+alias+'" name="shipping-option" amount="'+rate.total+'" value="'+service+'" days="'+rate.days+'"> '+service+'  <em>(average of '+rate.days+' day/s - <b>'+rate.total+'</b>)</em></label>');
-                            //     labelStyle = '';
-                            // });
                         });
+
+                        setShipmentData();
 
                         $('.display-on-rates-checked').show();
                         $('.select-rates').find('option:first').prop('selected', 'selected');
                         $('.select-rates').trigger('change');
-                        // $('.select-rates').val($('.select-rates').find('option:first').val());
-
-                        //$('.shipping-selection').find('.shipping-option:first').prop('checked', true).trigger('click');
-
-                        setShipmentData();
                     } else {
                         $('.display-on-rates-checked:first').show();
 
@@ -154,15 +138,20 @@ var setShipmentData = function() {
         $('#field-shipping-postcode').val()
     ]
 
-    var shipmentValue = $('.select-rates').val();
-    var shipmentOption = $('.select-rates').find(':selected');
-
     shipmentData = {
         name : $('#shipping-name').val(),
         email : $('#shipping-email').val(),
-        address : address.join(', '),
-        shipment: shipmentValue+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')'
+        address : address.join(', ')
     }
+
+    setShipmentCarrier();
+}
+
+var setShipmentCarrier = function() {
+    var shipmentValue = $('.select-rates').val();
+    var shipmentOption = $('.select-rates').find('option[value="'+shipmentValue+'"]');
+
+    shipmentData['shipment'] = shipmentValue+' (average of '+shipmentOption.attr('days')+' days for '+shipmentOption.attr('amount')+')';
 }
 
 var getShipmentData = function() {
@@ -191,11 +180,7 @@ $('.shipping-selection').on('change', '.select-rates', function() {
     var shippingAmount = parseFloat(selected.attr('amount'));
     
     updateShipment(shippingAmount);
-
-    var data = {
-        cost : shippingAmount,
-        method : $(this).val()
-    }
+    setShipmentCarrier();
 });
 
 $('#shipment-form').off('submit').on('submit', function(e) {
@@ -209,6 +194,7 @@ $('#step-shipping').on('click', '.shipment-retrieval', function(e) {
 
     $('input[name="enable-signature-confirmation"]').prop('checked', false);
     retrieveShipmentRates($('#shipment-form'));
+
 });
 
 
@@ -275,5 +261,3 @@ var currentShipmentCost = parseFloat($('#shipment-cost').val());
 if (currentShipmentCost > 0) {
     updateShipment(currentShipmentCost);
 }
-
-setShipmentData();
