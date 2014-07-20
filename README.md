@@ -173,6 +173,20 @@ define('DB_BLOG_DATABASE', 'BLOG_DATABASE_NAME');
 ...
 ```
 
+- Log into wordpress admin
+- Plugins > Activate Plugins:
+```
+jQuery Archive List Widget
+Simple Share Buttons Adder
+WordPress Importer
+WP Open Graph
+```
+- Appearance > Widgets
+- Drag to "...":
+```
+...
+```
+
 ### Mail Settings
 - Go to /admin and log in. System > Settings > Edit (Your Store) > Mail Tab
 - Fill out these fields:
