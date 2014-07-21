@@ -70,7 +70,7 @@ class MailUtil
     private function setMailTransport()
     {
         // Create the SMTP configuration
-        $this->transport = Swift_SmtpTransport::newInstance($this->config->get('config_smtp_host'), $this->config->get('config_smtp_port'), 'sslv3');
+        $this->transport = Swift_SmtpTransport::newInstance($this->config->get('config_smtp_host'), $this->config->get('config_smtp_port'), 'tls');
         $this->transport->setUsername($this->config->get('config_smtp_username'));
         $this->transport->setPassword($this->config->get('config_smtp_password'));   
     }

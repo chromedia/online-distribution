@@ -74,9 +74,7 @@
             <li><a href="/index.php?route=collaborate/products">Collaborate</a></li>
 
             <li><a class="scrollTo"  href="/index.php?route=common/home#shop">Shop</a></li>
-	        <li><a class="cart-link" href="/index.php?route=checkout/cart">
-	            Cart
-	      </a></li>
+	        <li><a class="cart-link" href="/index.php?route=checkout/cart">Cart</a></li>
 	    </ul>
 	  </section>
 
