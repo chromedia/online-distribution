@@ -59,7 +59,7 @@
                 <strong><?php echo $subTotal; ?></strong>
             </div>
             <div class="total-payment">
-                <em>Total</em>
+                <em>Total (USD)</em>
                 <strong><?php echo $total; ?></strong>
             </div>
         </div>
