@@ -10,7 +10,7 @@
     <?php if(!empty($products)): ?>
       <h1 style="margin: 1em auto 1em auto;" name="latest_news">All Offered Products</h1>
       <?php foreach ($products as $product): ?>
-        <div class="large-4 columns">
+        <div  class="small-12 medium-6 columns blog-box-left">
           <div class="card-bordered">
             <div class="card-title">
               <a href="<?php echo  $this->url->link('product/product', 'product_id=' . $product['product_id']); ?>"><?php echo $product['name']; ?></a>  

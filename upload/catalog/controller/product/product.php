@@ -10,18 +10,18 @@ class ControllerProductProduct extends Controller {
 
 		$this->data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('text_home'),
-			'href'      => $this->url->link('common/home'),
+			'href'      => $this->url->link('common/home').'#shop',
 			'separator' => false
 		);
 
 
-		if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] == $this->url->link('product/display/all')) {
-			$this->data['breadcrumbs'][] = array(
-				'text'      => $this->language->get('text_product_list'),
-				'href'      => $this->url->link('product/display/all'),
-				'separator' => $this->language->get('text_separator')
-			);
-		}
+		// if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] == $this->url->link('product/display/all')) {
+		// 	$this->data['breadcrumbs'][] = array(
+		// 		'text'      => $this->language->get('text_product_list'),
+		// 		'href'      => $this->url->link('product/display/all'),
+		// 		'separator' => $this->language->get('text_separator')
+		// 	);
+		// }
 
 		$this->load->model('catalog/category');
 
