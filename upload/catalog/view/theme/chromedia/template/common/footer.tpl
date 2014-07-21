@@ -13,7 +13,7 @@
                             <li><a href="https://github.com/OpenTechCollaborative"><i class="fi-social-github" style="color: #69D2E7;"></i></a></li>
                             <li><a href="https://twitter.com/OpenTechCo"><i class="fi-social-twitter" style="color: #A7DBD8;"></i></a></li>
                             <li><a href="https://www.facebook.com/opentechforever"><i class="fi-social-facebook" style="color: #E0E4CC;"></i></a></li>
-                            <li><a href="http://vimeo.com/opentechforever"><i class="fi-social-vimeo" style="color: #F38630;"></i></a></li>
+                            <li><a href="http://vimeo.com/opentechcollaborative"><i class="fi-social-vimeo" style="color: #F38630;"></i></a></li>
                             <li><a href="mailto:info@opentechcollaborative.cc"><i class="fi-mail" style="color: #FA6900;"></i></a></li>
                         </ul>
                     </div>
