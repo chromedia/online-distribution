@@ -94,7 +94,7 @@ class CheckoutService
 
                 if (isset($transaction['tracking_number']) && !empty($transaction['tracking_number'])) {
                     $trackingNumber = $transaction['tracking_number'];
-                    $trackingUrl = $transaction['tracking_url_provider'];
+                    $trackingUrl = 'test_url'; //$transaction['tracking_url_provider'];
                 }
 
                 $product = $package['content'];
