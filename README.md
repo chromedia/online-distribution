@@ -7,9 +7,13 @@ Ecommerce website code for self-hosted online stores
 
 - Work in Progress
 
-##Basics
+##Summary
 
-- Written with PHP, Javascript, HTML, CSS
+Written with PHP, Javascript, HTML, CSS. 
+
+## Installation
+
+
 
 ##Resources
 
@@ -19,7 +23,6 @@ Ecommerce website code for self-hosted online stores
 - [Mozilla's Javascript Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript?redirectlocale=en-US&redirectslug=JavaScript)
 - [JQuery Official Docs (JS)](http://jquery.com/)
 - [Foundation by Zurb (HTML/CSS/JS Package)](http://foundation.zurb.com/)
-
 - [Htaccess Guide](http://htaccess-guide.com/)
 
 ##Development Tools
@@ -102,6 +105,7 @@ install/view/image/
 ```
 news/
 - Contains wordpress source which handles opentech's news and updates.
+```
 
 
 ```
