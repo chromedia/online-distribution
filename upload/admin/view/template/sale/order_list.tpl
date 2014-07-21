@@ -197,7 +197,7 @@
 </div>
 
 <!-- Import Orders Javascript -->
-<script type="text/javascript" src="<?php echo HTTP_SERVER;?>view/javascript/orders.js"></script>
+<script type="text/javascript" src="view/javascript/orders.js"></script>
 
 <!-- Filter -->
 <script type="text/javascript"><!--
