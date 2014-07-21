@@ -713,6 +713,8 @@
               <input type="hidden" name="video_id"/>
 
               <a id="check-video"  class="button">Go Check</a>
+              <img src="view/image/loading.gif" class="loading" style="padding-left: 5px; display:none;" />
+              <span class="error video-error" style="display:none;"></span>
             </div>
           </div>
         <!-- Cusomtization end -->
@@ -1385,21 +1387,35 @@ function addProfile() {
 //--></script>
 
 <script type="text/javascript">
+  var onInvalidVideoUrl = function(error)
+  {
+    $('.video-container').html('');
+    $('.video-link-input').val('');
+    $('.video-error')
+      .html(error)
+      .show();
+  }
+
+  var onLoadVideo = function(isLoading) {
+    if (isLoading) {
+      $('#check-video').hide();
+      $('#check-video').next('img').show();
+    } else {
+      $('#check-video').show();
+      $('#check-video').next('img').hide();
+    }
+  }
+
+
   var video = '';
 
   $('#check-video').off('click').on('click', function() {
+    $('.video-error').hide();
+
     var link = $('.video-link-input').val();
 
     if (link.length > 0) {
-      var onInvalidVideoUrl = function()
-      {
-        $('.video-container').html('');
-        $('.video-link-input').val('');
-
-        if (!$('.video-link-input').hasClass('error')) {
-          $('.video-link-input').addClass('error');
-        }
-      }
+      onLoadVideo(true);
 
       $.ajax({
             type: "POST",
@@ -1407,6 +1423,7 @@ function addProfile() {
             data: { video_link : link, width: 700, height: 350 },
             dataType: 'json',
             success: function(jsondata) {
+
               if (jsondata.success) {
                 video = jsondata.url;
 
@@ -1416,16 +1433,19 @@ function addProfile() {
                 $('.video-container').html(jsondata.videoTag);
 
               } else {
-                onInvalidVideoUrl();
+                onInvalidVideoUrl(jsondata.error);
               }
+
+              onLoadVideo(false);
               
             },
             error: function(error) {
-              onInvalidVideoUrl();
+              onInvalidVideoUrl(error);
+              onLoadVideo(false);
             }
         });
     } else {
-      $('.video-container').html('');
+      onInvalidVideoUrl('Please provide url.');
     }
   });
 </script>

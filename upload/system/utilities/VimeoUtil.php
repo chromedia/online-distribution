@@ -32,7 +32,7 @@ class VimeoUtil
     {
         try {
             if (!empty($videoId)) {
-                return 'http://player.vimeo.com/video/'.$videoId;
+                return 'https://player.vimeo.com/video/'.$videoId;
             }
 
             throw new \Exception("Can't retrieve embed url");
@@ -60,7 +60,7 @@ class VimeoUtil
     {
         try {
             if (!empty($videoId)) {
-                $data = json_decode(file_get_contents('http://vimeo.com/api/v2/video/'.$videoId.'.json'));
+                $data = json_decode(file_get_contents('https://vimeo.com/api/v2/video/'.$videoId.'.json'));
                 
                 return $data[0]->thumbnail_large;
             }
@@ -74,7 +74,7 @@ class VimeoUtil
     public function getVideoId()
     {
         if (!empty($this->url)) {
-            $pattern = '/^http:\/\/(www\.)?vimeo\.com\/(clip\:)?(\d+).*$/';
+            $pattern = '/^https:\/\/(www\.)?vimeo\.com\/(clip\:)?(\d+).*$/';
             preg_match($pattern, $this->url, $matches);
 
             return isset($matches[3]) ? $matches[3] : '';

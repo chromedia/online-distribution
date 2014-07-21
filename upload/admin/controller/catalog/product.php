@@ -1483,10 +1483,9 @@ class ControllerCatalogProduct extends Controller {
 	// Custom codes
 	public function checkVideo()
 	{
-		$factory = VideoUtilTypeFactory::getInstance($this->request->post['video_link']);
-		$videoUtil = $factory->getVideoUtility();
-
 		try {
+			$factory = VideoUtilTypeFactory::getInstance($this->request->post['video_link']);
+			$videoUtil = $factory->getVideoUtility();
 			$videoId = $videoUtil->getVideoId();
 
 			if ($videoId) {

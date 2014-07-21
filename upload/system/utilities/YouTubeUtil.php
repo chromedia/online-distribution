@@ -32,7 +32,7 @@ class YouTubeUtil
     {
         try {
             if (!empty($videoId)) {
-                return 'http://www.youtube.com/embed/'.$videoId;
+                return 'https://www.youtube.com/embed/'.$videoId;
             }
 
             throw new \Exception("Can't retrieve embed url");
@@ -59,7 +59,7 @@ class YouTubeUtil
     {
         try {
             if (!empty($videoId)) {
-                return 'http://img.youtube.com/vi/'.$videoId.'/hqdefault.jpg';
+                return 'https://img.youtube.com/vi/'.$videoId.'/hqdefault.jpg';
             }
 
             throw new \Exception("Can't retrieve thumbnail");
