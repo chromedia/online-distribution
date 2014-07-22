@@ -113,7 +113,7 @@ $('.pay-via-paypal').off('click').on('click', function() {
                 window.location = jsondata.url;
             } else {
                 payAjaxLoad(true);
-                showCheckoutGeneralError(jsondata.errorMsg);
+                showCheckoutGeneralError('Paypal account setting is not complete. Contact admin for more information.');
             }
         },
         error: function() {
