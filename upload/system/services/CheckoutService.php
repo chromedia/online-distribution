@@ -85,7 +85,7 @@ class CheckoutService
             $products = $emailData['products'];
             $itemsBody = '';
             $trackingNumber = 'Unknown - Please verify from admin for more information.';
-            $labelUrl = '';
+            $trackingUrl = '';
             $ctr = 0;
 
             foreach ($packages as $key => $package) {
