@@ -16,16 +16,15 @@
 <div class="mtb40"> 
   <div class="row">
     <div class="large-6 columns ">
-      <h3>Thank you! Payment is successful</h3>
-      <p>You have successfully purchased the items listed below. 
-          You will receive a summary of your orders through your email. 
+      <h3>Thank you! Your order has been placed.</h3>
+      <p>You will receive a summary receipt with tracking numbers in your email.
           If you have any questions just email us at <a href="mailto:shipping@opentechcollaborative.cc">shipping@opentechcollaborative.cc</a>
       </p>
-      <p>Thank you, <br> OpenTechCollaborative</p>
+      <p>Thank you, <br>Open Tech Collaborative</p>
     </div>
     <div class="large-5 columns" style="margin-left: 80px;">
         
-        <span>You have <strong><?php echo $products_in_cart_count; ?></strong> <?php echo $products_in_cart_count > 1 ? 'items' : 'item';?> in your shopping cart</span>
+        <span>You have purchased the following <strong><?php echo $products_in_cart_count; ?></strong> <?php echo $products_in_cart_count > 1 ? 'items' : 'item';?></span>
         <ul class="cart-list">
             <?php foreach($products as $product): ?>
                 <li class="group">
