@@ -26,10 +26,10 @@
             	<?php echo strip_tags(substr(get_the_content(), 0,150))."..."; ?>
             	<br>
             	<a href="<?php the_permalink(); ?>">(Read More)</a>
-							<ul class="inline-list blog-box-social">
+							<!--<ul class="inline-list blog-box-social">
 					      <li><a href="http://twitter.com/share?url=<?php the_permalink(); ?>"  target="_blank"><i class="fi-social-twitter"></i></a></li>
 					      <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php the_permalink(); ?>&amp;p[title]=<?php the_title(); ?>&amp;p[summary]=" target="_blank"><i class="fi-social-facebook"></i></a></li>
-					    </ul>
+					    </ul>-->
             </div>
 
           </div>
