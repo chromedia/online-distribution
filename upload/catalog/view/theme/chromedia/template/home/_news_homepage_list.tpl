@@ -24,7 +24,7 @@
                         <a href="<?php echo $newsItem['url']; ?>">(read more)</a>
                     </p>
 
-                    <ul class="inline-list blog-box-social">
+                    <!--<ul class="inline-list blog-box-social">
                         <?php $shortenedUrl = $url_util->shortenUrl($newsItem['url']); ?>
 
                         <li>
@@ -37,7 +37,7 @@
 
                             <a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=<?php echo $shortenedUrl;?>" TARGET="_blank"><i class="fi-social-facebook"></i></a>
                         </li>
-                    </ul>
+                    </ul>-->
                 </div>
             <?php endforeach;?>
         </section>  
