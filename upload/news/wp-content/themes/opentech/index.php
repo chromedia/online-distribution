@@ -43,6 +43,10 @@
     </div>
 </section>
 
+<section class="row mtb-20 news-section">
+
 <?php get_sidebar(); ?>
+
+</section>
 
 <?php  get_footer(); ?>
