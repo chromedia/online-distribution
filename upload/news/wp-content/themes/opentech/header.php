@@ -5,12 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 
 <head profile="http://gmpg.org/xfn/11">
-	
+
 	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 	<?php wp_head(); ?>
-	
+
 	<?php if (is_search()) { ?>
-	   <meta name="robots" content="noindex, nofollow" /> 
+	   <meta name="robots" content="noindex, nofollow" />
 	<?php } ?>
 
 	<title>
@@ -33,9 +33,9 @@
 		         echo ' - page '. $paged; }
 		   ?>
 	</title>
-	
+
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-	
+
 	<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/normalize.css" type="text/css" />
 	<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/foundation.min.css" type="text/css" />
 		<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/app.css" type="text/css" />
@@ -48,7 +48,7 @@
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 
 	<?php if ( is_singular() ) wp_enqueue_script( 'comment-reply' ); ?>
-	
+
 	<script type="text/javascript" src="<?php bloginfo('template_directory') ?>/js/vendor/jquery.js"></script>
 </head>
 
@@ -60,18 +60,18 @@
 	    <li class="name">
 	      <h1><a href="/"><img src="<?php bloginfo('template_directory') ?>/images/ICON-LOGO.png" width="46px" alt="" style="margin-top: -4px; margin-right: 10px;">Open Tech Collaborative</a></h1>
 	    </li>
-	  </ul>	  
+	  </ul>
 	  <section class="top-bar-section">
 	    <!-- Right Nav Section -->
 	    <ul class="right">
-	      
+
             <li><a href="/index.php?route=information/learnmore">Learn More</a></li>
 
             <li><a class="scrollTo" href="/index.php?route=common/home#latest-news">Latest News</a></li>
 
             <li><a href="/index.php?route=information/learnmore#contact-us">Contact Us</a></li>
 
-            <li><a href="/index.php?route=collaborate/products">Collaborate</a></li>
+            <!--<li><a href="/index.php?route=collaborate/products">Collaborate</a></li>-->
 
             <li><a class="scrollTo"  href="/index.php?route=common/home#shop">Shop</a></li>
 	        <li><a class="cart-link" href="/index.php?route=checkout/cart">Cart</a></li>
@@ -84,6 +84,3 @@
 <!-- END TOP BAR -->
 
 <div class="page-wrap" style="margin-top: 75px;">
-
-
-

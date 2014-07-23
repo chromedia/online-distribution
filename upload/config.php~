@@ -1,0 +1,39 @@
+<?php
+// HTTP
+define('HTTP_SERVER', 'http://192.168.1.130/');
+
+// HTTPS
+define('HTTPS_SERVER', 'https://192.168.1.130:8443/');
+
+// DIR
+define('DIR_APPLICATION', '/home/user/Projects/online-distribution/upload/catalog/');
+define('DIR_SYSTEM', '/home/user/Projects/online-distribution/upload/system/');
+define('DIR_DATABASE', '/home/user/Projects/online-distribution/upload/system/database/');
+define('DIR_LANGUAGE', '/home/user/Projects/online-distribution/upload/catalog/language/');
+define('DIR_TEMPLATE', '/home/user/Projects/online-distribution/upload/catalog/view/theme/');
+define('DIR_CONFIG', '/home/user/Projects/online-distribution/upload/system/config/');
+define('DIR_IMAGE', '/home/user/Projects/online-distribution/upload/image/');
+define('DIR_CACHE', '/home/user/Projects/online-distribution/upload/system/cache/');
+define('DIR_DOWNLOAD', '/home/user/Projects/online-distribution/upload/download/');
+define('DIR_LOGS', '/home/user/Projects/online-distribution/upload/system/logs/');
+
+// DB
+define('DB_DRIVER', 'mysqli');
+define('DB_HOSTNAME', 'localhost');
+define('DB_USERNAME', 'admin_user');
+define('DB_PASSWORD', 'admintest');
+define('DB_DATABASE', 'admin_default');
+define('DB_BLOG_DATABASE', '');
+define('DB_PREFIX', 'oc_');
+
+// Third Party API Credentials
+define('STRIPE_PRIVATE_KEY', 'sk_test_onU3AYfEq66TNT21x6pON6Nz');
+define('STRIPE_PUBLIC_KEY', 'pk_test_cMvhSMI0lnSwx9ct2NkadDfO');
+
+define('PAYPAL_ENVIRONMENT', 'sandbox');
+define('PAYPAL_USERNAME', 'admin');
+define('PAYPAL_PASSWORD', 'admin');
+define('PAYPAL_SIGNATURE', 'admin');
+
+define('SHIPPO_AUTHORIZATION', 'ykang404@gmail.com:justshippo1!');
+?>
