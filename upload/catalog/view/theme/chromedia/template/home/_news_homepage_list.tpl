@@ -15,29 +15,25 @@
                         <?php endif;?>
                     </a>
 
-                    <h3><a href="<?php echo $newsItem['url']; ?>"><?php echo $newsItem['title']; ?></a></h3>
+                    <h3><a href="<?php echo $newsItem['url']; ?>"><?php echo $string_util->truncateString(strip_tags($newsItem['title']), 65); ?></a></h3>
                     
                     <p> 
-                        <?php $truncatedContent = $string_util->truncateString(strip_tags($newsItem['content']), 310);?>
+                        <?php $truncatedContent = $string_util->truncateString(strip_tags($newsItem['content']), 250);?>
                         <?php echo $truncatedContent; ?>
                         
                         <a href="<?php echo $newsItem['url']; ?>">(read more)</a>
                     </p>
 
-                    <!--<ul class="inline-list blog-box-social">
+                    <ul class="inline-list blog-box-social">
                         <?php $shortenedUrl = $url_util->shortenUrl($newsItem['url']); ?>
 
                         <li>
                             <a href="http://twitter.com/home?status=<?php echo urlencode($newsItem['title'].' '.$shortenedUrl);?>" TARGET="_blank"><i class="fi-social-twitter"></i></a>
                         </li>
                         <li>
-                            <?php if(0): ?>
-                                <a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=<?php echo $shortenedUrl;?>&p[images][0]=<?php echo $url_util->shortenUrl($newsItem['featured_image']); ?>&p[title]=<?php echo urlencode($newsItem['title']);?>&p[summary]=<?php echo $truncatedContent;?>" TARGET="_blank"><i class="fi-social-facebook"></i></a>
-                            <?php endif;?>
-
                             <a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=<?php echo $shortenedUrl;?>" TARGET="_blank"><i class="fi-social-facebook"></i></a>
                         </li>
-                    </ul>-->
+                    </ul>
                 </div>
             <?php endforeach;?>
         </section>  
