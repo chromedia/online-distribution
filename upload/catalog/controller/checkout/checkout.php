@@ -191,7 +191,8 @@ class ControllerCheckoutCheckout extends Controller {
                 'state'   => isset($this->request->post['state']) ? $this->request->post['state'] : '',
                 'zip'     => $this->request->post['postcode'],
                 'country' => $this->request->post['country'],
-                'email'   => $this->request->post['email']
+                'email'   => $this->request->post['email'],
+                'phone'   => ''
             );
 
             // Get From Address
@@ -335,7 +336,7 @@ class ControllerCheckoutCheckout extends Controller {
             'country' => $country['iso_code_2'],
             'state'   => $zone['code'],
             'zip'     => $this->config->get('shipping_zip'),
-            'phone'   => $this->config->get('config_telephone'),
+            'phone'   => '', //$this->config->get('config_telephone'),
             'email'   => $this->config->get('config_email')
         );
     }
