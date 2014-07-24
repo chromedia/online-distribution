@@ -335,7 +335,7 @@ class ControllerCheckoutCheckout extends Controller {
             'country' => $country['iso_code_2'],
             'state'   => $zone['code'],
             'zip'     => $this->config->get('shipping_zip'),
-            //'phone'   => $this->config->get('config_telephone'),
+            'phone'   => $this->config->get('config_telephone'),
             'email'   => $this->config->get('config_email')
         );
     }
