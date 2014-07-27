@@ -1,4 +1,4 @@
-<?php   
+<?php
 class ControllerCommonHeader extends Controller {
     protected function index() {
         // $this->data['title'] = $this->document->getTitle();
@@ -23,9 +23,9 @@ class ControllerCommonHeader extends Controller {
             $this->data['no_collaborate_link'] = true;
         }
 
-        if ("information/learnmore" == $currentRoute) {
+        /* if ("information/learnmore" == $currentRoute) {
             $this->data['sticky_header'] = false;
-        }
+        } */
 
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/header.tpl')) {
             $this->template = $this->config->get('config_template') . '/template/common/header.tpl';
@@ -34,5 +34,5 @@ class ControllerCommonHeader extends Controller {
         }
 
         $this->render();
-    }   
+    }
 }
