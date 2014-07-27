@@ -63,7 +63,7 @@
                 if (target.length > 0) {
                     //$('body').stop().scrollTo(target, 1000);
                     var offset = target.offset();
-                    $('body').stop().scrollTo((offset.top - 60) +'px', 1000);
+                    $('body').stop().scrollTo((offset.top - 60) +'px', 300);
                 } else {
                     window.location = $(this).attr('href');
                 }
@@ -82,7 +82,7 @@
 
                         $('body').stop().scrollTo((offset.top - 60)+'px', 1000);
                     }
-                } 
+                }
             }, 1);
 
 
