@@ -7,7 +7,7 @@
                 <a href="/news" class="view-all-news">View All News</a>
             </div>
 
-            <?php foreach($news as $newsItem): ?>
+            <?php foreach(array_slice($news, 0, 2) as $newsItem): ?>
                 <div class="small-12 medium-6 columns blog-box-left news-item">
                     <a href="<?php echo $newsItem['url']; ?>">
                         <?php if($newsItem['featured_image']): ?>
