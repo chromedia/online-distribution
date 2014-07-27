@@ -1,7 +1,19 @@
 <div class="large-11 columns large-centered">
     <a name="open-source-hardware"></a>
-    <h3 data-magellan-destination="open-source-hardware" class="blog-header-large">Open Source Hardware</h3>
-    <p class="blog-p"><a href="http://www.oshwa.org/definition/">Open Source Hardware (OSHW) Statement of Principles 1.0:</a>
-      <blockquote>"Open source hardware is hardware whose design is made publicly available so that anyone can study, modify, distribute, make, and sell the design or hardware based on that design. The hardware’s source, the design from which it is made, is available in the preferred format for making modifications to it. Ideally, open source hardware uses readily-available components and materials, standard processes, open infrastructure, unrestricted content, and open-source design tools to maximize the ability of individuals to make and use hardware. Open source hardware gives people the freedom to control their technology while sharing knowledge and encouraging commerce through the open exchange of designs."<cite>The Open Source Hardware Association</cite></blockquote>
-    </p>
+    <h3 data-magellan-destination="open-source-hardware" class="blog-header-large">Values</h3>
+
+<p class="blog-p"><strong>Innovation</strong> is to improve upon our understanding of the world in order to create new and better ways to do and interact.</p>
+
+<p class="blog-p"><strong>Transparency</strong> goes together with openness in sharing our knowledge, technologies, processes, and happenings.</p>
+
+<p class="blog-p"><strong>Sustainability</strong> is to create and facilitate reliable systems with a holistic consideration that work well into the future.</p>
+
+<p class="blog-p"><strong>Efficiency</strong> improves how we do things in less time and resources, with greater ease for people and a refined scientific model.</p>
+
+<p class="blog-p"><strong>Autonomy</strong> is to facilitate our self-management and integrity in upholding our values, principles, and responsibilities.</p>
+
+<p class="blog-p"><strong>Solidarity</strong> is to empathize with each other and globally unite in that common spirit.</p>
+
+<p class="blog-p"><strong>Celebration</strong> is to appreciate our progress and acknowledge our efforts at each milestone, for both ourselves and others around the world.</p>
+
 </div>

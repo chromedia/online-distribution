@@ -10,24 +10,24 @@
 
     <!-- Right Nav Section -->
     <ul class="right">
-        <!-- data-speed="500" data-easing="linear" href="#latest-news" -->
-
-        <!-- Learn More -->
-        <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL'); ?>">Learn More</a></li>
 
         <!-- Latest News -->
         <li><a class="scrollTo" scroll-target="#latest-news" href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#latest-news">Latest News</a></li>
 
-        <!-- Contact Us -->
-        <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL').'#contact-us'; ?>">Contact Us</a></li>
+        <!-- Shop -->
+        <li><a class="scrollTo"  scroll-target="#shop"  href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">Products</a></li>
 
         <!-- Collaborate -->
         <?php if(!$no_collaborate_link): ?>
           <li><a href="<?php echo $this->url->link('collaborate/products', '', 'SSL'); ?>">Collaborate</a></li>
         <?php endif;?>
 
-        <!-- Shop -->
-        <li><a class="scrollTo"  scroll-target="#shop"  href="<?php echo $this->url->link('common/home', '', 'SSL'); ?>#shop">Shop</a></li>
+        <!-- Learn More -->
+        <!--<li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL'); ?>">Learn More</a></li>-->
+
+        <!-- Contact Us -->
+        <!-- <li><a href="<?php echo $this->url->link('information/learnmore', '', 'SSL').'#contact-us'; ?>">Contact Us</a></li> -->
+        <li><a href="" data-dropdown="contact-us">Contact Us</a></li>
 
         <!-- Cart -->
         <li><a href="<?php echo $this->url->link('checkout/cart', '', 'SSL'); ?>">

@@ -43,5 +43,6 @@
             <!-- END TOP BAR -->
 
             <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/common_modal.tpl'); ?>
+            <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_contact_us.tpl'); ?>
 
             <div class="page-wrap">
