@@ -8,8 +8,8 @@
             <div class="small-12 large-8 small-centered columns" >
                  <img src="catalog/view/theme/chromedia/image/ICON_LOGO.png" alt="Open Tech Forever Logo" width="150px" style="margin: 2em auto 0 auto;" class="show-for-medium-up">
                 <!-- <img src="catalog/view/theme/chromedia/image/ICON_LOGO.png" alt="Open Tech Forever Logo" width="80px" style="margin: 2em auto 0em auto;" class="show-for-small-only"> -->
-                <h1>Open Tech Collaborative</h1>
-                <h3 class="show-for-medium-up subheader">Manufacture Locally, Collaborate Globally</h3>
+                <h1>Open Tech Collaborative</h1><br>
+                <h3 class="show-for-medium-up subheader"></h3>
                 <ul class="button-inline">
                     <li>
                         <a href="<?php echo 'index.php?route=information/learnmore'; ?>" class="button-box" alt="learn more">LEARN MORE</a>
@@ -40,7 +40,7 @@
       <div class="mc-field-group input-group"></div>
       <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="your@email.com">
     </div>
-    
+
       <div id="mce-responses" class="clear">
         <div class="response" id="mce-error-response" style="display:none"></div>
         <div class="response" id="mce-success-response" style="display:none"></div>
@@ -56,14 +56,14 @@
   </div>
 </div>
 <!-- END EMAIL SECTION -->
- 
+
 <!-- DISPLAY PRODUCTS -->
-  <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/home/_products_homepage_list.tpl'); ?> 
+  <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/home/_products_homepage_list.tpl'); ?>
 <!-- END DISPLAY PRODUCTS -->
-  
+
 
 <!-- BEG LATEST NEWS SECTION -->
-  <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/home/_news_homepage_list.tpl'); ?> 
+  <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/home/_news_homepage_list.tpl'); ?>
 <!-- END LATEST NEWS SECTION -->
 
 <!-- BEG NEWS SECTION -->
@@ -90,8 +90,3 @@
 <!-- END NEWS SECTION -->
 
 <?php echo $footer;?>
-
-
-
-
-                    

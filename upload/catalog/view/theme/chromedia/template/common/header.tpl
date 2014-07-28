@@ -25,7 +25,7 @@
         </script>
 
     </head>
-    
+
     <body>
 
         <!-- <div class="wrapper" style="position:relative; min-height:100%;"> -->
@@ -35,15 +35,14 @@
                 <!-- BEG TOP BAR -->
             <?php if(isset($sticky_header) && $sticky_header): ?>
                 <div class="fixed">
-                    <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?> 
+                    <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?>
                 </div>
             <?php else: ?>
-                <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?> 
+                <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_header_nav.tpl'); ?>
             <?php endif;?>
             <!-- END TOP BAR -->
 
-            <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/common_modal.tpl'); ?> 
+            <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/common_modal.tpl'); ?>
+            <?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/common/_contact_us.tpl'); ?>
 
             <div class="page-wrap">
-
-            
