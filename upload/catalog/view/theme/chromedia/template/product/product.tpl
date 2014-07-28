@@ -107,8 +107,10 @@
         }
     });
 
-    // Show Active Tab Display
-    $('.product-tabs li a .active').tab();
+    //
+    $('.product-tabs li a').tab();
+    $('#details').hide();
+    $('#documentation').hide();
 
     // Toggle Video Modal
   $('.product-video-trigger').off('click').on('click', function() {
