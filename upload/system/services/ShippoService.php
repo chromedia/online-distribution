@@ -55,18 +55,79 @@ class ShippoService
     }
 
     /**
+     * Gets shipment info using nested shipment call in Shippo
+     */
+    public function getShipmentInfoNestedly($packages, $fromAddressData, $toAddressData, $enableSignatureConfirmation = true)
+    {
+        try {
+            foreach ($packages as $key => $package) {
+                $fromAddressData['object_purpose'] = 'PURCHASE';
+                $toAddressData['object_purpose'] = 'PURCHASE';
+
+                $parcelData = array(
+                    'length'    => number_format($package['length'], 2, '.', ''),
+                    'width'     => number_format($package['width'], 2, '.', ''),
+                    'height'    => number_format($package['height'], 2, '.', ''),
+                    'distance_unit' => $package['length_unit'],
+                    'weight'    => number_format($package['weight'], 2, '.', ''),
+                    'mass_unit' => $package['weight_unit'],
+                    'metadata'  => $package['content']['product_id']
+                );
+
+                $data = array(
+                    "object_purpose" => "PURCHASE",
+                    "address_from" => $fromAddressData,
+                    "address_to"   => $toAddressData,
+                    "parcel"       => $parcelData,
+                    "submission_type" => "PICKUP",
+                    "insurance_currency" => ""
+                );
+
+                if ($enableSignatureConfirmation) {
+                    $data['extra'] =   json_encode(array(
+                        "signature_confirmation" => true
+                    ));  
+                }
+
+                $url = self::END_POINT.'shipments/';
+
+                // Run call
+                $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
+                $shipment = json_decode($response, true);
+
+                $shipments[] = $shipment;
+            }
+
+            sleep(3);
+
+            $rates = $this->checkRatesUsingShipmentId($shipments, $packages);
+            
+            return $this->__sortRates($rates);
+
+        } catch(Exception $e) {
+            throw $e->getMessage();
+        }
+
+    }
+
+    /**
      * Gets shipment info
      */
     public function getShipmentInfo($packages, $addressFrom, $addressTo, $enableSignatureConfirmation = true)
     {
-        $parcels = $this->makeParcelsForPackages($packages);
-        $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo, $enableSignatureConfirmation);
+        try {
+            $parcels = $this->makeParcelsForPackages($packages);
+            $shipments = $this->makeShipmentsForParcels($parcels, $addressFrom, $addressTo, $enableSignatureConfirmation);
 
-        sleep(3);
+            sleep(3);
 
-        $rates = $this->__sortRates($this->checkShipmentRates($shipments, $packages));
+            $rates = $this->checkShipmentRates($shipments, $packages);
 
-        return $rates;
+            return $this->__sortRates($rates);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -117,6 +178,31 @@ class ShippoService
     }
 
     /**
+     * Checking rates for parcel shipments using shipment id
+     */
+    public function checkRatesUsingShipmentId($shipments, $packages)
+    {
+        $ratesInfo = array('carriers' => array(), 'options' => array());
+
+        foreach ($shipments as $key => $shipment) {
+            $url = self::END_POINT.'shipments/'.$shipment['object_id'].'/rates/USD';
+
+            $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
+
+            if (empty($ratesInfo['options'])) {
+                // call rates one more time
+                $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
+            }
+
+            $packages[$key]['rates'] = $ratesInfo['options'];
+        }
+
+        $_SESSION['packages'] = $packages;
+
+        return $ratesInfo['carriers'];
+    }
+
+    /**
      * Make parcel call
      *
      * @return array
@@ -138,7 +224,7 @@ class ShippoService
         $url = self::END_POINT.'parcels/';
 
         // Run call
-        $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
+        $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
         $parcel = json_decode($response, true);
 
         return $parcel;
@@ -171,7 +257,7 @@ class ShippoService
         $url = self::END_POINT.'shipments/';
 
         // Run call
-        $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
+        $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
         $shipment = json_decode($response, true);
 
         return $shipment;
@@ -255,14 +341,10 @@ class ShippoService
                     $url = self::END_POINT.'transactions/';
 
                     // Run call (label purchase request)
-                    $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
+                    $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
                     $object = json_decode($response, true);
 
                     $transactionIds[$key] = $object['object_id'];
-
-                    // Verify transaction request and save
-                    // $package['shipping_transaction'] = $this->__verifyTransaction($object['object_id']);
-                    // $newPackages[$key] = $package;
                 }
             }
 
@@ -288,7 +370,7 @@ class ShippoService
             $packagesWithAdditionalInfo[$packageKey] = $package;
         }
 
-        $_SESSION['packages'] = $newPackages;
+        $_SESSION['packages'] = $packagesWithAdditionalInfo;
     }
 
 
@@ -311,11 +393,13 @@ class ShippoService
 
             if ($status == "WAITING" || $status == "QUEUED") {
                 sleep(1);
+                // echo 'waiting/queue';
                 $wait = true;
             } else if ($status == "ERROR") {
                 $wait = false;
             } else if ($status == "SUCCESS") {
                 break;
+                // echo 'success';
                 $wait = false;
             }
         }

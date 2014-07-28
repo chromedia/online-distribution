@@ -176,7 +176,7 @@ class ControllerCheckoutCheckout extends Controller {
      * Checks shipping info
      * Gets shipping rates
      */
-    public function checkShippingInfo()
+    public function checkShippingInfo1()
     {
         try {
             // Get items in cart
@@ -227,6 +227,53 @@ class ControllerCheckoutCheckout extends Controller {
 
         exit;
     }
+
+    /**
+     * Another version of checking of shipping info
+     */ 
+    public function checkShippingInfo()
+    {
+        try {
+            // Get items in cart
+            $checkoutService = CheckoutService::getInstance();
+            $packages = $checkoutService->preparePackages($this->cart->getProducts(), $this->tax, $this->config);
+
+            // Get To Address
+            $toAddressData = array(
+                'name' => $this->request->post['name'],
+                'street1' => $this->request->post['address'],
+                'city'    => $this->request->post['city'],
+                'state'   => isset($this->request->post['state']) ? $this->request->post['state'] : '',
+                'zip'     => $this->request->post['postcode'],
+                'country' => $this->request->post['country'],
+                'email'   => $this->request->post['email'],
+                'phone'   => ''
+            );
+
+            // Get From Address
+            $fromAddressData = $this->__getFromAddressOfShipment();
+            $shippoService = ShippoService::getInstance();
+            
+            $enableSignatureConfirmation = isset($this->request->post['enable-signature-confirmation']);
+            $info = $shippoService->getShipmentInfoNestedly($packages, $fromAddressData, $toAddressData, $enableSignatureConfirmation);
+
+            // Temporarily Store User Shipping Info and Retrieved Rates
+            $this->__addShippingInformation($toAddressData, $info['sorted_by_amount']);
+
+            echo json_encode(array(
+                'success'     => true,
+                'rates'       => $info['group_by_provider'],
+                'providers'   => array_keys($info['group_by_provider']),
+                'rates_count' => count($info['sorted_by_amount'])
+            ));
+
+        } catch(Exception $e) {
+            echo json_encode(array('success' => false, 'errorMsg' => $e->getMessage()));
+        }
+
+        exit;
+    }
+    // temporary
 
     /**
      * Displays shipping form
