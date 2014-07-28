@@ -150,7 +150,6 @@ class ShippoService
     public function makeShipmentCall($parcel, $addressFrom, $addressTo, $enableSignatureConfirmation = true)
     {
 
-
         // Shipment Data
         $data = array(
             "object_purpose" => "PURCHASE",
@@ -174,12 +173,6 @@ class ShippoService
         // Run call
         $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
         $shipment = json_decode($response, true);
-
-        // $url = 'https://api.goshippo.com/v1/shipments/' . $shipment['object_id'];
-        // $response = $this->curlUtil->call($url, 'GET', SHIPPO_AUTHORIZATION, false);
-
-        // var_dump(json_decode($response, true));exit;
-        // var_dump($shipment);exit;
 
         return $shipment;
     }
@@ -242,7 +235,7 @@ class ShippoService
     {
         if(isset($_SESSION['packages'])) {
             $packages = $_SESSION['packages'];
-            $newPackages = array();
+            $transactionIds = array();
 
             foreach ($packages as $key => $package) {
                 $possibleRates = $package['rates'];
@@ -265,19 +258,39 @@ class ShippoService
                     $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data);
                     $object = json_decode($response, true);
 
+                    $transactionIds[$key] = $object['object_id'];
+
                     // Verify transaction request and save
-                    $package['shipping_transaction'] = $this->__verifyTransaction($object['object_id']);
-                    $newPackages[$key] = $package;
+                    // $package['shipping_transaction'] = $this->__verifyTransaction($object['object_id']);
+                    // $newPackages[$key] = $package;
                 }
             }
 
-            $_SESSION['packages'] = $newPackages;
+            $this->__getTransactionData($packages, $transactionIds);
 
             return true;
         }
 
         throw new Exception('Session timeout while processing shipping due to inactivity. Please repeat process.');
     }
+
+    /**
+     * Get transaction data
+     */
+    private function __getTransactionData($packages, $transactionIds)
+    {
+        $packagesWithAdditionalInfo = array();
+
+        foreach ($transactionIds as $packageKey => $transactionId) {
+            $package = $packages[$packageKey];
+            $package['shipping_transaction'] = $this->__verifyTransaction($transactionId);
+
+            $packagesWithAdditionalInfo[$packageKey] = $package;
+        }
+
+        $_SESSION['packages'] = $newPackages;
+    }
+
 
     /**
      * Verify shipping transaction status
