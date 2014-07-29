@@ -1,11 +1,11 @@
 <?php echo $header;?>
 
   <!-- Product Variables Being Passed to Cart via POST method
-  
+
   *description = POST name*
   quantity to add = quantity
   product id = product_id
-  
+
   options = (option input names)
 
   ADD TO CART SUMMARY
@@ -13,9 +13,9 @@
   1. Add to Cart is CLICKED
   2. Javascript calls public function add in cart.php
   3. Product.php (model) gets product info from database
-  4. 
+  4.
 -->
-<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?> 
+<?php include_once(DIR_APPLICATION . 'view/theme/chromedia/template/modal/video_modal.tpl'); ?>
 
 <?php include(DIR_APPLICATION . 'view/theme/chromedia/template/common/breadcrumbs.tpl'); ?>
 
@@ -28,7 +28,7 @@
         <div class="product-video row product-video-trigger" embed-video='<?php echo $video_tag;?>'>
             <a href="javascript:void(0);"><img class="video-indicator" src="catalog/view/theme/chromedia/image/icon-play.png" alt=""></a>
         </div>
-    <?php endif;?>  
+    <?php endif;?>
 
     <div class="product-title">
         <div class="row">
@@ -42,20 +42,20 @@
         <li><a href="javascript:void(0);" data-content="#product-overview" class="active">Overview</a></li>
         <li><a href="javascript:void(0);" data-content="#details">Details</a></li>
         <li><a href="javascript:void(0);" data-content="#documentation">Documentation</a></li>
-    </ul>  
+    </ul>
 </div>
 
 <div class="row">
     <div class="large-8 columns tabs-content" style="display:none;">
-        <div class="product-description active" id="product-overview"> 
+        <div class="product-description active" id="product-overview">
             <?php echo $description; ?>
         </div>
 
-        <div class="product-description" id="details"> 
+        <div class="product-description" id="details">
             <?php echo $details; ?>
         </div>
 
-        <div class="product-description" id="documentation"> 
+        <div class="product-description" id="documentation">
             <?php  echo $documentation; ?>
         </div>
     </div>
@@ -71,9 +71,8 @@
                 <dd><?php echo $stock; ?></dd>
             </dl>
             <dl class="product-list-details">
-                <dt>Quantity</dt>
-                <dd>
-                  <input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" class="qty-input"></dd>
+                <dt></dt>
+                <dd><input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" class="qty-input"></dd>
             </dl>
 
             <!-- Hidden Product ID -->
@@ -96,14 +95,14 @@
             $('#notification, .green').hide();
             if (json.error) {
                 alert('An error occured while processing request.');
-            } 
-            
+            }
+
             if (json.success) {
                 $('.green').html('<div class="success">' + json['success'] + '</div>');
-                $('.green').fadeIn('slow');  
-                $('html, body').animate({ scrollTop: 0 }, 'slow'); 
+                $('.green').fadeIn('slow');
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
                 $('.video-indicator').css('margin', '96px auto 0px');
-            }  
+            }
         }
     });
 
