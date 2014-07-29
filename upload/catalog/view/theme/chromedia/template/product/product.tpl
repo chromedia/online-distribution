@@ -82,12 +82,12 @@
     </div>
 </div>
 
-
 <!-- Add to Cart Javascript -->
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/cart.js"></script>
 <script type="text/javascript" src="catalog/view/theme/chromedia/javascripts/tab.js"></script>
 
 <script type="text/javascript">
+	// Add to Cart
     $('.add-to-cart-btn').addToCart({
         'product_id'     : $('input[name="product_id"]').val(),
         'quantity_input' : $('input[name="quantity"]'),
@@ -106,9 +106,12 @@
         }
     });
 
+    //
     $('.product-tabs li a').tab();
+    $('#details').hide();
+    $('#documentation').hide();
 
-
+    // Toggle Video Modal
   $('.product-video-trigger').off('click').on('click', function() {
     $('#videoModal').find('.flex-video').html($(this).attr('embed-video'));
     $('#videoModal').foundation('reveal', 'open');
