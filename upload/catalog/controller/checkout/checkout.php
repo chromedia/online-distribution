@@ -33,9 +33,13 @@ class ControllerCheckoutCheckout extends Controller {
     public function processOrder()
     {
         try {
+            // Calculate Total Shipping Cost for Selected Rate
             $this->__prepareSelectedShipping($this->request->post['service_name']);
+
+            // Calculate Total Cost of Items in Order
             $cartTotal = $this->cart->getTotal();
 
+            // Charge Credit Card for Order Total in USD
             $amount = $cartTotal + $this->session->data['shipping']['cost'];
             $email = $this->request->post['customer_email'];
             $response = array();
@@ -48,10 +52,13 @@ class ControllerCheckoutCheckout extends Controller {
                 'description' => $email
             ));
 
+            // On Successful Payment
             if ($charge['paid'] === true) {
+                // Purchase Shipping Service and Retrieve Label Data for each Package in Order
                 $shippoService = ShippoService::getInstance();
                 $shippoService->requestShipping($this->session->data['shipping']['method']);
 
+                // Save Order Info into Database
                 $paymentInfo = array(
                     'firstname' => '',//$this->request->post['customer_name'],
                     'email'     => '',//$email,
@@ -59,6 +66,8 @@ class ControllerCheckoutCheckout extends Controller {
                 );
 
                 $this->__saveOrder($paymentInfo/*, $shippingInfo*/);
+
+                // Respond to User Browser with Checkout Success
                 $response = array('success' => true);
             } else {
                 $response = array('success' => false, 'errorMsg' => 'Payment System Error!');
@@ -409,8 +418,8 @@ class ControllerCheckoutCheckout extends Controller {
         $this->load->model('checkout/order');
         $orderService = OrderService::getInstance($this->model_checkout_order);
 
-
         // since we don't have saving of visitor or customer, payment info will be the customer info
+        // Save user info, order info, packages info
         $orderId = $orderService->saveOrder($this->config, $this->request, array(
             'products'    => $this->cart->getProducts(),
             'payment'     => $paymentInfo,
