@@ -107,7 +107,7 @@ class ShippoService
                 $shipments[$key] = $shipment;
             }
 
-            sleep(3);
+            sleep(2);
 
             $rates = $this->checkRatesUsingShipmentId($shipments, $packages);
             
@@ -191,23 +191,6 @@ class ShippoService
      */
     public function checkRatesUsingShipmentId($shipments, $packages)
     {
-        // $ratesInfo = array('carriers' => array(), 'options' => array());
-
-        // foreach ($shipments as $key => $shipment) {
-        //     $url = self::END_POINT.'shipments/'.$shipment['object_id'].'/rates/USD';
-
-        //     $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
-
-        //     if (empty($ratesInfo['options'])) {
-        //         // call rates one more time
-        //         $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
-        //     }
-
-        //     $packages[$key]['rates'] = $ratesInfo['options'];
-        // }
-
-        // $_SESSION['packages'] = $packages;
-
         $ratesInfo = array('carriers' => array(), 'options' => array());
 
         foreach ($shipments as $key => $shipment) {
@@ -216,10 +199,10 @@ class ShippoService
 
             $ratesInfo = $this->checkRates($url, $ratesInfo['carriers'], $quantity);
 
-            // if (empty($ratesInfo['options'])) {
-            //     // call rates one more time
-            //     $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
-            // }
+            if (empty($ratesInfo['options'])) {
+                // call rates one more time
+                $ratesInfo = $this->checkRates($url, $ratesInfo['carriers'], $quantity);
+            }
 
             $packages[$key]['rates'] = $ratesInfo['options'];
         }
