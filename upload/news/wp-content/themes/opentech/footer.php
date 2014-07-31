@@ -7,7 +7,7 @@
     <div class="row" style="margin: 2em auto;">
         <div class="large-8 small-12 columns">
           <h4 style="font-weight: 800;">Open Tech Collaborative</h4>
-          <p>Manufacture Locally, Collaborate Globally</p>
+          <!--<p>Manufacture Locally, Collaborate Globally</p>--></div><br>
           <ul class="inline-list footer-social">
             <li><a href="https://github.com/OpenTechCollaborative"><i class="fi-social-github" style="color: #69D2E7;"></i></a></li>
             <li><a href="https://twitter.com/OpenTechCo"><i class="fi-social-twitter" style="color: #A7DBD8;"></i></a></li>
