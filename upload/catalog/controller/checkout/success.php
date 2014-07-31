@@ -77,6 +77,52 @@ class ControllerCheckoutSuccess extends Controller {
         }
 	}
 
+    /**
+     * Triggers on success checkout
+     */
+    public function updateData()
+    {
+        $orderId = isset($this->request->post['order_id']) ? $this->request->post['order_id'] : 0;
+
+        if ($orderId) {
+            $products = $this->cart->getProducts();
+
+            if ($products) {   
+                $this->load->model('tool/image');
+
+                $productService = ProductService::getInstance($this->config, $this->currency, $this->model_tool_image, $this->tax, $this->url);
+                $this->data['products'] = $productService->getProductCheckoutInfo($products);
+            }
+
+            $cartTotalPrice = $this->cart->getTotal();
+            $this->data['products_in_cart_count'] = $this->cart->countProducts();
+            $this->data['subTotal'] = $this->currency->format($cartTotalPrice);
+            $this->data['shippingCost'] = $this->currency->format($this->session->data['shipping']['cost']);
+            $this->data['total'] = $this->currency->format($cartTotalPrice + $this->session->data['shipping']['cost']);
+
+            $emailData = array(
+                'recipient' => $this->session->data['shipping']['email'],//$this->session->data['guest']['email'],
+                'total'     => $this->data['total'],
+                'subTotal'  => $this->data['subTotal'],
+                'shippingCost' => $this->data['shippingCost'],
+                'products'  => $this->data['products']
+            );
+
+            $checkoutService = CheckoutService::getInstance();
+
+            try {
+                $checkoutService->emailCustomerForConfirmation($emailData, MailUtil::getInstance($this->config), ShippoService::getInstance());
+            } catch(\Exception $e) {
+                $this->log->write($e->getMessage());
+            }
+
+            $this->cart->clear();
+            $this->__unsetSessionVariablesInCheckout();
+        }
+
+        exit;
+    }
+
 	/**
      * Unsets all session involves in checkout
      */

@@ -44,11 +44,14 @@ var stripeResponseHandler = function(status, response) {
                 data: data,
                 dataType: 'json',     
                 success: function(jsondata){
-                    payAjaxLoad(true);
 
-                    if (jsondata.success) {
-                        window.location = 'index.php?route=checkout/success';
+                    if (jsondata.success && jsondata.orderId) {
+                        doUpdateData(jsondata.orderId);
+                        activateStep3();
+
+                        // window.location = 'index.php?route=checkout/success';
                     } else {
+                        payAjaxLoad(true);
                         showCheckoutGeneralError(jsondata.errorMsg);
                     }
                 }

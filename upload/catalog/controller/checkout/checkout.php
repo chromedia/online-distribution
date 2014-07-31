@@ -58,8 +58,8 @@ class ControllerCheckoutCheckout extends Controller {
                     'method'    => 'Stripe'
                 );
 
-                $this->__saveOrder($paymentInfo/*, $shippingInfo*/);
-                $response = array('success' => true);
+                $orderId = $this->__saveOrder($paymentInfo/*, $shippingInfo*/);
+                $response = array('success' => true, 'orderId' => $orderId);
             } else {
                 $response = array('success' => false, 'errorMsg' => 'Payment System Error!');
             }
@@ -423,6 +423,8 @@ class ControllerCheckoutCheckout extends Controller {
         ));
 
         $this->session->data['order_id'] = $orderId;
+
+        return $orderId;
         //$this->session->data['guest']['email'] = $paymentInfo['email'];
     }
 
