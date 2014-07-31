@@ -137,6 +137,37 @@ class OrderService
      */
     private function __getShippingCode()
     {
+        // $packages = $_SESSION['packages'];
+        // $shipping = array();
+
+        // foreach($packages as $package) {
+        //     $labelUrl = '';
+        //     $trackingNumber = '';
+        //     $trackingUrlProvider = '';
+        //     $messages = array();
+
+        //     if (isset($package['shipping_transaction'])) {
+        //         $transaction = json_decode($package['shipping_transaction'], true);
+        //         $labelUrl = isset($transaction['label_url']) ? $transaction['label_url'] : '';
+        //         $trackingNumber = isset($transaction['tracking_number']) ? $transaction['tracking_number'] : '';
+        //         $trackingUrlProvider = isset($transaction['tracking_url_provider']) ? $transaction['tracking_url_provider'] : '';
+        //         $messages = isset($transaction['messages']) ? $transaction['messages'] : array();
+        //     }
+
+        //     $shipping[] = array(
+        //         'content'               => $package['content'],
+        //         'messages'              => $messages,
+        //         'label_url'             => $labelUrl,
+        //         'tracking_number'       => $trackingNumber,
+        //         'tracking_url_provider' => $trackingUrlProvider 
+        //     );
+        // }
+
+        // $shippingCode = base64_encode(serialize($shipping));
+
+        // return $shippingCode;
+
+
         $packages = $_SESSION['packages'];
         $shipping = array();
 
@@ -147,20 +178,33 @@ class OrderService
             $messages = array();
 
             if (isset($package['shipping_transaction'])) {
-                $transaction = json_decode($package['shipping_transaction'], true);
-                $labelUrl = isset($transaction['label_url']) ? $transaction['label_url'] : '';
-                $trackingNumber = isset($transaction['tracking_number']) ? $transaction['tracking_number'] : '';
-                $trackingUrlProvider = isset($transaction['tracking_url_provider']) ? $transaction['tracking_url_provider'] : '';
-                $messages = isset($transaction['messages']) ? $transaction['messages'] : array();
-            }
 
-            $shipping[] = array(
-                'content'               => $package['content'],
-                'messages'              => $messages,
-                'label_url'             => $labelUrl,
-                'tracking_number'       => $trackingNumber,
-                'tracking_url_provider' => $trackingUrlProvider 
-            );
+                $transactions = $package['shipping_transaction'];
+
+                foreach ($transactions as $transaction) {
+                    $transaction = json_decode($transaction, true);
+                    $labelUrl = isset($transaction['label_url']) ? $transaction['label_url'] : '';
+                    $trackingNumber = isset($transaction['tracking_number']) ? $transaction['tracking_number'] : '';
+                    $trackingUrlProvider = isset($transaction['tracking_url_provider']) ? $transaction['tracking_url_provider'] : '';
+                    $messages = isset($transaction['messages']) ? $transaction['messages'] : array();
+
+                    $shipping[] = array(
+                        'content'               => $package['content'],
+                        'messages'              => $messages,
+                        'label_url'             => $labelUrl,
+                        'tracking_number'       => $trackingNumber,
+                        'tracking_url_provider' => $trackingUrlProvider 
+                    );
+                }
+            } else {
+                $shipping[] = array(
+                    'content'               => $package['content'],
+                    'messages'              => $messages,
+                    'label_url'             => $labelUrl,
+                    'tracking_number'       => $trackingNumber,
+                    'tracking_url_provider' => $trackingUrlProvider 
+                );
+            }
         }
 
         $shippingCode = base64_encode(serialize($shipping));

@@ -55,11 +55,20 @@ class ShippoService
     }
 
     /**
+     * Gets shipment info using nested call in Shippo but filtering unique products only
+     */
+    // public function getShipmentInfoNestedlyUsingUniqueProducts($packages, $fromAddressData, $toAddressData, $enableSignatureConfirmation = true)
+    // {
+
+    // }
+
+    /**
      * Gets shipment info using nested shipment call in Shippo
      */
     public function getShipmentInfoNestedly($packages, $fromAddressData, $toAddressData, $enableSignatureConfirmation = true)
     {
         try {
+            // $packages
             foreach ($packages as $key => $package) {
                 $fromAddressData['object_purpose'] = 'PURCHASE';
                 $toAddressData['object_purpose'] = 'PURCHASE';
@@ -95,7 +104,7 @@ class ShippoService
                 $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
                 $shipment = json_decode($response, true);
 
-                $shipments[] = $shipment;
+                $shipments[$key] = $shipment;
             }
 
             sleep(3);
@@ -182,17 +191,35 @@ class ShippoService
      */
     public function checkRatesUsingShipmentId($shipments, $packages)
     {
+        // $ratesInfo = array('carriers' => array(), 'options' => array());
+
+        // foreach ($shipments as $key => $shipment) {
+        //     $url = self::END_POINT.'shipments/'.$shipment['object_id'].'/rates/USD';
+
+        //     $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
+
+        //     if (empty($ratesInfo['options'])) {
+        //         // call rates one more time
+        //         $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
+        //     }
+
+        //     $packages[$key]['rates'] = $ratesInfo['options'];
+        // }
+
+        // $_SESSION['packages'] = $packages;
+
         $ratesInfo = array('carriers' => array(), 'options' => array());
 
         foreach ($shipments as $key => $shipment) {
             $url = self::END_POINT.'shipments/'.$shipment['object_id'].'/rates/USD';
+            $quantity = $packages[$key]['quantity'];
 
-            $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
+            $ratesInfo = $this->checkRates($url, $ratesInfo['carriers'], $quantity);
 
-            if (empty($ratesInfo['options'])) {
-                // call rates one more time
-                $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
-            }
+            // if (empty($ratesInfo['options'])) {
+            //     // call rates one more time
+            //     $ratesInfo = $this->checkRates($url, $ratesInfo['carriers']);
+            // }
 
             $packages[$key]['rates'] = $ratesInfo['options'];
         }
@@ -266,7 +293,7 @@ class ShippoService
     /**
      * Check rates
      */
-    public function checkRates($ratesUrl, $carriers = array())
+    public function checkRates($ratesUrl, $carriers = array(), $quantity = 1)
     {
         $response = $this->curlUtil->call($ratesUrl, 'GET', SHIPPO_AUTHORIZATION);
         $response = json_decode($response, true);
@@ -290,9 +317,9 @@ class ShippoService
                     );
 
                     if (isset($carriers[$serviceName]['total'])) {
-                        $total = $carriers[$serviceName]['total'] + $rate['amount'];
+                        $total = $carriers[$serviceName]['total'] + $rate['amount'] * $quantity;
                     } else {
-                        $total = $rate['amount'];
+                        $total = $rate['amount'] * $quantity;
                     }
 
                     $carriers[$serviceName] = array(
@@ -319,6 +346,41 @@ class ShippoService
      */
     public function requestShipping($serviceName)
     {
+        // if(isset($_SESSION['packages'])) {
+        //     $packages = $_SESSION['packages'];
+        //     $transactionIds = array();
+
+        //     foreach ($packages as $key => $package) {
+        //         $possibleRates = $package['rates'];
+        //         $rateId = $this->__getRateIdOfSelectedSpeed($serviceName, $possibleRates);
+
+        //         if ($rateId) {
+        //             // Shipping Label Data
+        //             $data = array(
+        //                 "rate" => $rateId,
+        //                 "notification_email_from" => false,
+        //                 "notification_email_to" => false,
+        //                 "notification_email_other" => "",
+        //                 "metadata" => $package['content']['product_name']
+        //             );
+
+        //             // Call Data
+        //             $url = self::END_POINT.'transactions/';
+
+        //             // Run call (label purchase request)
+        //             $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
+        //             $object = json_decode($response, true);
+
+        //             $transactionIds[$key] = $object['object_id'];
+        //         }
+        //     }
+
+        //     $this->__getTransactionData($packages, $transactionIds)
+        //     return true;
+        // }
+
+        // throw new Exception('Session timeout while processing shipping due to inactivity. Please repeat process.');
+
         if(isset($_SESSION['packages'])) {
             $packages = $_SESSION['packages'];
             $transactionIds = array();
@@ -328,23 +390,27 @@ class ShippoService
                 $rateId = $this->__getRateIdOfSelectedSpeed($serviceName, $possibleRates);
 
                 if ($rateId) {
-                    // Shipping Label Data
-                    $data = array(
-                        "rate" => $rateId,
-                        "notification_email_from" => false,
-                        "notification_email_to" => false,
-                        "notification_email_other" => "",
-                        "metadata" => $package['content']['product_name']
-                    );
+                    $quantity = $package['quantity'];
 
-                    // Call Data
-                    $url = self::END_POINT.'transactions/';
+                    for ($ctr = 0; $ctr < $quantity; $ctr++) {
+                        // Shipping Label Data
+                        $data = array(
+                            "rate" => $rateId,
+                            "notification_email_from" => false,
+                            "notification_email_to" => false,
+                            "notification_email_other" => "",
+                            "metadata" => $package['content']['product_name']
+                        );
 
-                    // Run call (label purchase request)
-                    $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
-                    $object = json_decode($response, true);
+                        // Call Data
+                        $url = self::END_POINT.'transactions/';
 
-                    $transactionIds[$key] = $object['object_id'];
+                        // Run call (label purchase request)
+                        $response = $this->curlUtil->call($url, 'POST', SHIPPO_AUTHORIZATION, $data, 'application/json');
+                        $object = json_decode($response, true);
+
+                        $transactionIds[$key][$ctr] = $object['object_id'];
+                    }
                 }
             }
 
@@ -354,6 +420,8 @@ class ShippoService
         }
 
         throw new Exception('Session timeout while processing shipping due to inactivity. Please repeat process.');
+
+
     }
 
     /**
@@ -361,11 +429,25 @@ class ShippoService
      */
     private function __getTransactionData($packages, $transactionIds)
     {
+        // $packagesWithAdditionalInfo = array();
+
+        // foreach ($transactionIds as $packageKey => $transactionId) {
+        //     $package = $packages[$packageKey];
+        //     $package['shipping_transaction'] = $this->__verifyTransaction($transactionId);
+
+        //     $packagesWithAdditionalInfo[$packageKey] = $package;
+        // }
+
+        // $_SESSION['packages'] = $packagesWithAdditionalInfo;
+
         $packagesWithAdditionalInfo = array();
 
-        foreach ($transactionIds as $packageKey => $transactionId) {
+        foreach ($transactionIds as $packageKey => $ids) {
             $package = $packages[$packageKey];
-            $package['shipping_transaction'] = $this->__verifyTransaction($transactionId);
+
+            foreach ($ids as $ctr => $id) {
+                $package['shipping_transaction'][$ctr] = $this->__verifyTransaction($id);
+            }
 
             $packagesWithAdditionalInfo[$packageKey] = $package;
         }
@@ -393,13 +475,10 @@ class ShippoService
 
             if ($status == "WAITING" || $status == "QUEUED") {
                 sleep(1);
-                // echo 'waiting/queue';
                 $wait = true;
             } else if ($status == "ERROR") {
                 $wait = false;
             } else if ($status == "SUCCESS") {
-                break;
-                // echo 'success';
                 $wait = false;
             }
         }

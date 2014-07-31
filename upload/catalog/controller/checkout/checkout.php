@@ -175,6 +175,8 @@ class ControllerCheckoutCheckout extends Controller {
     /**
      * Checks shipping info
      * Gets shipping rates
+     *
+     * Uses separate API calls for address, parcels and shipments
      */
     public function checkShippingInfo1()
     {
@@ -230,6 +232,7 @@ class ControllerCheckoutCheckout extends Controller {
 
     /**
      * Another version of checking of shipping info
+     * This uses the Nested API of Shippo - one call for "address, parcel and shipments"
      */ 
     public function checkShippingInfo()
     {
@@ -237,6 +240,7 @@ class ControllerCheckoutCheckout extends Controller {
             // Get items in cart
             $checkoutService = CheckoutService::getInstance();
             $packages = $checkoutService->preparePackages($this->cart->getProducts(), $this->tax, $this->config);
+
 
             // Get To Address
             $toAddressData = array(
@@ -273,7 +277,6 @@ class ControllerCheckoutCheckout extends Controller {
 
         exit;
     }
-    // temporary
 
     /**
      * Displays shipping form

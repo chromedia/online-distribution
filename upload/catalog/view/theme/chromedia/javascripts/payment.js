@@ -35,7 +35,7 @@ var stripeResponseHandler = function(status, response) {
             token : token,
             customer_name : $('#payment-name').val()
         }
-
+        
         // Send form data to server with POST method, then retrieve json data
         $(function() {
             $.ajax({
@@ -44,10 +44,11 @@ var stripeResponseHandler = function(status, response) {
                 data: data,
                 dataType: 'json',     
                 success: function(jsondata){
+                    payAjaxLoad(true);
+
                     if (jsondata.success) {
                         window.location = 'index.php?route=checkout/success';
                     } else {
-                        payAjaxLoad(true);
                         showCheckoutGeneralError(jsondata.errorMsg);
                     }
                 }
