@@ -99,7 +99,7 @@ class CheckoutService
     }
 
     /**
-     * Get amount of shipping service rate
+     * Get total shipping cost for selected service rate from session data
      */
     public function getAmountOfShippingServiceRate($serviceName)
     {
@@ -114,7 +114,7 @@ class CheckoutService
 
             $amount = $rates[$serviceName]['total'];
         } else {
-            throw new Exception('Session alredy expired due to inactivity. Please restart process.');
+            throw new Exception('Session already expired due to inactivity. Please restart process.');
         }
 
         return $amount;

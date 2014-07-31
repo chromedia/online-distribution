@@ -325,7 +325,7 @@ class ShippoService
     }
 
     /**
-     * Request shipping
+     * Request shipping: send shippo API call to purchase shipping service+label for each package in order
      */
     public function requestShipping($serviceName)
     {
@@ -412,30 +412,21 @@ class ShippoService
      */
     private function __getTransactionData($packages, $transactionIds)
     {
-        // $packagesWithAdditionalInfo = array();
-
-        // foreach ($transactionIds as $packageKey => $transactionId) {
-        //     $package = $packages[$packageKey];
-        //     $package['shipping_transaction'] = $this->__verifyTransaction($transactionId);
-
-        //     $packagesWithAdditionalInfo[$packageKey] = $package;
-        // }
-
-        // $_SESSION['packages'] = $packagesWithAdditionalInfo;
-
         $packagesWithAdditionalInfo = array();
 
         foreach ($transactionIds as $packageKey => $ids) {
             $package = $packages[$packageKey];
-
+            // For each package with shipping service requested
             foreach ($ids as $ctr => $id) {
+                // Wait for Shipping Service Requests to Process then Get Label Data
                 $package['shipping_transaction'][$ctr] = $this->__verifyTransaction($id);
             }
 
-            $packagesWithAdditionalInfo[$packageKey] = $package;
+            $packagesWithMoreInfo[$packageKey] = $package;
         }
 
-        $_SESSION['packages'] = $packagesWithAdditionalInfo;
+        // Store package data in session
+        $_SESSION['packages'] = $packagesWithMoreInfo;
     }
 
 
