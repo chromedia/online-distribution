@@ -7,7 +7,7 @@
     <div class="row" style="margin: 2em auto;">
         <div class="large-8 small-12 columns">
           <h4 style="font-weight: 800;">Open Tech Collaborative</h4>
-          <!--<p>Manufacture Locally, Collaborate Globally</p>--></div><br>
+          <!--<p>Manufacture Locally, Collaborate Globally</p>--><br>
           <ul class="inline-list footer-social">
             <li><a href="https://github.com/OpenTechCollaborative"><i class="fi-social-github" style="color: #69D2E7;"></i></a></li>
             <li><a href="https://twitter.com/OpenTechCo"><i class="fi-social-twitter" style="color: #A7DBD8;"></i></a></li>
@@ -18,7 +18,7 @@
         </div>
         <div class="large-4 small-12 columns">
             <h4>Email Sign Up</h4>
-            <p>Sign up for monthly news updates.</p>
+            <p>Sign up for news updates.</p>
               <!-- Begin MailChimp Signup Form -->
             <div id="mc_embed_signup">
             <form action="http://opentechcollaborative.us7.list-manage.com/subscribe/post?u=a2a2b02c4c16296211f9e5a11&amp;id=58a59d4727" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
