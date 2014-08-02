@@ -1,4 +1,5 @@
 <?php echo $header; ?>
+<?php header('Access-Control-Allow-Origin: *'); ?>
 
 <!-- CONTENT STARTS HERE -->
 <div class="bar">
@@ -23,6 +24,13 @@
             </span>
             <span id="step-payment" style="display:none;">
                 <?php echo $paymentForm; //include_once(DIR_APPLICATION . 'view/theme/chromedia/template/checkout/_shipment.tpl'); ?>
+            </span>
+            <span id="checkout-successful" style="display:none;">
+                <h3>Thank you! Your order has been placed.</h3>
+                <p>You will receive a summary receipt with tracking numbers in your email.
+                  If you have any questions just email us at <a href="mailto:shipping@opentechcollaborative.cc">shipping@opentechcollaborative.cc</a>
+                </p>
+                <p>Thank you, <br>Open Tech Collaborative</p>
             </span>
         </div>
 

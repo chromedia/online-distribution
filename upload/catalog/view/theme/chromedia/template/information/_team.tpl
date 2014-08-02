@@ -42,18 +42,18 @@
         </div>
     </div> -->
 
-    <div class="large-3 small-12 columns">
+    <!--<div class="large-3 small-12 columns">
         <div class="about-box">
         <img src="catalog/view/theme/chromedia/image///Johnathan_04.jpg" alt="Team Member Johnathan">
         <h5>Johnathan Yelenick</h5>
         <h6>Agriculture</h6>
         <a href="mailto:johnathan@opentechcollaborative.cc">johnathan@opentechcollaborative.cc</a>
-        <!-- <p style="padding-top: 1em;"><a href="" class="button tiny" data-dropdown="drop4">Bio</a></p>
+         <p style="padding-top: 1em;"><a href="" class="button tiny" data-dropdown="drop4">Bio</a></p>
             <div id="drop4" data-dropdown-content class="f-dropdown content large">
           <p>Johnathan is a trained soil scientist and organic farming entrepreneur managing his family’s 40 acre farm in Henderson, Colorado.  Dedicated to principles of fair share, people care and earth care, he is committed to building community and materially supportive infrastructures that empower the building of fecund soils and healthy agroecosystems.  Johnathan has a Molecular Cellular and Developmental Biology degree from the University of Colorado, Boulder, attained his Advanced Permaculture Training at the <a href="http://www.crmpi.org/CRMPI/Home.html">Central Rocky Mountain Permaculture Institute</a> in 2007, and graduated cum laude from Colorado State University with a degree in Soil Science.</p>
-            </div> -->
+            </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="large-3 small-12 columns">
         <div class="about-box">

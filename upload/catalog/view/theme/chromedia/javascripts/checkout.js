@@ -40,7 +40,7 @@ var activateStep1 = function() {
     $('.qty-in-cart').show();
     $('.qty-in-cart').next('span').hide();
 
-    $('#step-shipping').show();
+    $('#step-shipping').fadeIn('slow');
     $('#step-payment').hide();
     removeErrors($('#step-shipping').find('form'));
 
@@ -60,7 +60,7 @@ var activateStep2 = function() {
     
     removeErrors($('#step-payment').find('form'))
     $('#step-shipping').hide();
-    $('#step-payment').show();
+    $('#step-payment').fadeIn('slow');
 
     $('.steps-bar').find('.step1')
         .removeClass('active')
@@ -68,6 +68,28 @@ var activateStep2 = function() {
     $('.steps-bar').find('.step2').addClass('active');
 
     focusElement($('.steps-bar'));
+}
+
+var activateStep3 = function() {
+    $('.steps-bar').find('.step2')
+        .removeClass('active')
+        .prepend('<i class="icon-green-check"></i>');
+    $('#step-payment').hide();
+
+    $('.items-in-cart').hide().html('');
+
+    $('#checkout-successful').fadeIn('slow');
+}
+
+var doUpdateData = function(orderId) {
+    $.ajax({
+        type: "POST",
+        url: "index.php?route=checkout/success/updateData",
+        data: {order_id : orderId},
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
 var populateCCInfoBasedOnShipmentInfo = function() {
@@ -91,6 +113,8 @@ var populateShipmentReviewInfoInPaymentStep = function() {
     summaryContainer.find('.shipping-info-address').text(shipment.address);
     summaryContainer.find('.shipping-info-speed').text(shipment.shipment);
 }
+
+
 
 
 $('#step2-trigger-btn').off('click').on('click', function() {
